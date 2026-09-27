@@ -150,7 +150,8 @@ export const alexZimmer: MapDef = {
     when({ not: { flag: 'intro_gesehen' } }, [
       say('ping', 'Ping! Guten Morgen, Alex!'),
       say('ping', 'Mit den Pfeiltasten oder W A S D läufst du herum. Mit Leertaste oder Enter sprichst du mit Leuten und untersuchst Dinge.'),
-      say('ping', 'Wenn du nicht weiterweißt, drück H. Dann helfe ich dir – dafür bin ich da!'),
+      say('ping', 'Wenn du nicht weiterweißt, drück H. Dann sage ich dir, was als Nächstes dran ist, und gebe dir Tipps – dafür bin ich da!'),
+      say('ping', 'Oben rechts steht immer, welche Tasten wichtig sind: M, H und N.'),
       say('ping', 'Mit M öffnest du das Menü. Und der Kalender an der Wand? Da blätterst du ins nächste Schuljahr – aber nur mit dem Code deiner Lehrkraft.'),
       choice('Alles klar?', [
         ['Alles klar!', [say('ping', 'Prima! Gurr!')]],

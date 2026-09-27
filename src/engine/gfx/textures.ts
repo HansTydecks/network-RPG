@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
-import { TILES } from '../../content/art/tiles';
+import { TILES, type TileDef } from '../../content/art/tiles';
+import { plastisch, schlagschatten, bodenschatten } from './veredeln';
 import { EXPONAT_BILDER } from '../../content/art/exponate';
 import { kompassIcon, netzblickV4Icon, subnetzmaskeIcon } from '../../content/art/characters';
 import { postkarteIcon, quelltextIcon, reisepassIcon } from '../../content/art/characters';
@@ -81,13 +82,16 @@ function addFont(scene: Phaser.Scene) {
   });
 }
 
+/** Kachel zeichnen; Objekte bekommen automatisch Licht, Schatten und Schlagschatten. */
+export function kachelBild(t: TileDef): PixBuf {
+  const b = new PixBuf(16, 16);
+  t.draw(b);
+  return t.layer === 'deco' && !t.roh ? schlagschatten(plastisch(b)) : b;
+}
+
 function addTileset(scene: Phaser.Scene) {
   const sheet = new PixBuf(16 * TILES.length, 16);
-  TILES.forEach((t, i) => {
-    const b = new PixBuf(16, 16);
-    t.draw(b);
-    sheet.blit(b, i * 16, 0);
-  });
+  TILES.forEach((t, i) => sheet.blit(kachelBild(t), i * 16, 0));
   addImage(scene, TILESET_KEY, sheet);
 }
 
@@ -129,11 +133,8 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'prolog_bg', prologBackground());
   addSheet(scene, 'prolog_hand', [prologHand(0), prologHand(1)]);
   // Einzelne Kacheln auch als eigene Bilder (für Gegenstände, die erst später auftauchen)
-  TILES.forEach((t) => {
-    const b = new PixBuf(16, 16);
-    t.draw(b);
-    addImage(scene, `tile_${t.id}`, b);
-  });
+  TILES.forEach((t) => addImage(scene, `tile_${t.id}`, kachelBild(t)));
+  addImage(scene, 'schatten', bodenschatten());
   const px = new PixBuf(1, 1, '#ffffff');
   addImage(scene, 'pixel', px);
 }

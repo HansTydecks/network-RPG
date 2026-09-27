@@ -31,7 +31,7 @@ npm install
 npm run dev      # dann http://localhost:5173 öffnen
 ```
 
-Steuerung: Pfeiltasten/WASD laufen · Leertaste/Enter sprechen/untersuchen · Esc/Shift zurück (halten = rennen) · H Hilfe von Ping · N Netzblick-Brille · M Menü. Auf Tablets erscheinen Bildschirm-Knöpfe.
+Steuerung: Pfeiltasten/WASD laufen · Leertaste/Enter sprechen/untersuchen · Esc/Shift zurück (halten = rennen) · H Ping nennt die aktuelle Aufgabe und gibt Tipps · N Netzblick-Brille · M Menü (dort auch Musik und Geräusche an/aus). M, H und N stehen immer oben rechts im Bild und lassen sich auch anklicken. Nur auf reinen Touch-Tablets erscheint zusätzlich ein kleines Steuerkreuz.
 
 Mehr in [`docs/TECHNIK.md`](docs/TECHNIK.md#entwickeln).
 

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { audio } from '../engine/audio/Audio';
 import { PAL } from '../engine/gfx/palette';
 import { wrapText } from '../engine/gfx/fontGlyphs';
 import type { Input } from '../engine/input/Input';
@@ -53,6 +54,7 @@ export abstract class MinigameModal implements Modal {
   }
 
   protected feedback(text: string, color: string = PAL.netzKabel) {
+    if (text) audio.sfx(([PAL.orange, PAL.rot1, PAL.rot2, PAL.rot3, PAL.netzDefekt] as string[]).includes(color) ? 'falsch' : color === PAL.gruen4 ? 'richtig' : 'tippen');
     const lines = wrapText(text, FEEDBACK_WIDTH);
     if (lines.length > FEEDBACK_LINES) console.warn(`Rückmeldung zu lang (${lines.length} Zeilen): ${text}`);
     this.feedbackLines.forEach((l, i) => l.setText(lines[i] ?? '').setTint(parseInt(color.slice(1), 16)));
@@ -61,6 +63,7 @@ export abstract class MinigameModal implements Modal {
   protected finish() {
     if (this.done) return;
     this.done = true;
+    audio.sfx('geschafft');
     (window as unknown as { __minigame?: MinigameModal }).__minigame = undefined;
     this.resolve();
   }

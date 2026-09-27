@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { audio } from '../audio/Audio';
 import { measureText } from '../gfx/fontGlyphs';
 import { PAL } from '../gfx/palette';
 import type { Input } from '../input/Input';
@@ -65,12 +66,14 @@ export class ListMenu implements Modal {
 
   private move(d: number) {
     this.index = (this.index + d + this.labels.length) % this.labels.length;
+    audio.sfx('cursor');
     this.cursor.setY(this.itemsY[this.index]);
   }
 
   private finish(i: number) {
     if (this.done) return;
     this.done = true;
+    audio.sfx(i < 0 ? 'zurueck' : 'ok');
     this.resolve(i);
   }
 

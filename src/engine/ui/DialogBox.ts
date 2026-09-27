@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { wrapText } from '../gfx/fontGlyphs';
 import { PAL } from '../gfx/palette';
 import type { Input } from '../input/Input';
+import { audio } from '../audio/Audio';
 import { SCREEN_W, drawPanel, screenContainer, uiText, type Modal } from './widgets';
 
 const LINES = 3;
@@ -19,6 +20,7 @@ export class DialogBox implements Modal {
   private page = 0;
   private shown = 0;
   private blink = 0;
+  private hoehe = 0;
 
   constructor(
     scene: Phaser.Scene,
@@ -29,6 +31,8 @@ export class DialogBox implements Modal {
     private hold = false,
   ) {
     this.root = screenContainer(scene, 1100);
+    this.hoehe = name ? stimme(name) : -5;
+    if (name === 'Ping') audio.sfx('gurr');
     const g = scene.add.graphics();
     drawPanel(g, BOX.x, BOX.y, BOX.w, BOX.h);
     this.root.add(g);
@@ -76,7 +80,9 @@ export class DialogBox implements Modal {
     const total = this.pageLength();
     const complete = this.shown >= total;
     if (!complete) {
+      const vorher = Math.floor(this.shown);
       this.shown = Math.min(total, this.shown + (dt / 1000) * CHARS_PER_SECOND);
+      if (Math.floor(this.shown / 3) > Math.floor(vorher / 3)) audio.sfx('blip', this.hoehe);
       if (input.consume('a') || input.consume('b')) this.shown = total;
       this.render();
       this.arrow.setVisible(false);
@@ -85,6 +91,7 @@ export class DialogBox implements Modal {
     this.blink += dt;
     this.arrow.setVisible(Math.floor(this.blink / 350) % 2 === 0);
     if (input.consume('a') || input.consume('b')) {
+      audio.sfx('weiter');
       if (this.page < this.pages.length - 1) {
         this.page++;
         this.shown = 0;
@@ -102,4 +109,12 @@ export class DialogBox implements Modal {
   destroy() {
     this.root.destroy(true);
   }
+}
+
+/** Jede Figur klingt ein bisschen anders: Tonhöhe aus dem Namen. */
+function stimme(name: string): number {
+  if (name === 'Ping') return 12;
+  let h = 0;
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return (h % 13) - 6;
 }

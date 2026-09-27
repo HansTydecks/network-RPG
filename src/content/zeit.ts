@@ -70,7 +70,12 @@ export function zeitLabel(s: GameState): string {
 
 /** Farbton über der Karte (Farbe, Deckkraft). Nachts ist es auch drinnen dunkler. */
 export function tageszeitTint(s: GameState, draussen: boolean): [number, number] | null {
-  const z = s.flags.has('k5_start') ? kapitel5Zeit(s) : s.flags.has('k4_start') ? kapitel4Zeit(s) : s.flags.has('k3_start') ? kapitel3Zeit(s) : s.flags.has('k2_start') ? kapitel2Zeit(s) : tageszeit(s);
+  const z = aktuelleTageszeit(s);
   if (z === 'nacht') return [0x10144a, draussen ? 0.5 : 0.3];
   return z === 'nachmittag' && draussen ? [0xff8a30, 0.2] : null;
+}
+
+/** Tageszeit im aktuellen Kapitel. */
+export function aktuelleTageszeit(s: GameState): Tageszeit {
+  return s.flags.has('k5_start') ? kapitel5Zeit(s) : s.flags.has('k4_start') ? kapitel4Zeit(s) : s.flags.has('k3_start') ? kapitel3Zeit(s) : s.flags.has('k2_start') ? kapitel2Zeit(s) : tageszeit(s);
 }

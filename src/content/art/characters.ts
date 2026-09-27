@@ -1,5 +1,6 @@
 import { PAL } from '../../engine/gfx/palette';
 import { PixBuf } from '../../engine/gfx/pixbuf';
+import { dunkler, heller, mix } from '../../engine/gfx/farbe';
 
 /**
  * Figuren-Vorlage (16×16, Chibi-Stil). Rollen-Buchstaben werden pro Figur eingefärbt:
@@ -9,47 +10,47 @@ import { PixBuf } from '../../engine/gfx/pixbuf';
 const HEAD_DOWN = [
   '............',
   '...oooooo...',
-  '..ohhhhhho..',
-  '.ohhhhhhhho.',
-  '.ohhhhhhhho.',
-  '.ohssssssho.',
+  '..ohHHhhho..',
+  '.ohHhhhhhdo.',
+  '.ohhhhhhhdo.',
+  '.ohssssssdo.',
   '.osesssseso.',
-  '.ossssssssо.'.replace('о', 'o'),
-  '..oossssoo..',
+  '.osrssssrSo.',
+  '..ooSSSSoo..',
 ];
 const HEAD_UP = [
   '............',
   '...oooooo...',
-  '..ohhhhhho..',
-  '.ohhhhhhhho.',
-  '.ohhhhhhhho.',
-  '.ohhhhhhhho.',
-  '.ohhhhhhhho.',
-  '.ohhhhhhhho.',
-  '..oohhhhoo..',
+  '..ohHHhhho..',
+  '.ohHhhhhhdo.',
+  '.ohhhhhhhdo.',
+  '.ohhhhhhhdo.',
+  '.ohhhhhhddo.',
+  '.odhhhhhddo.',
+  '..oodddddo..',
 ];
 const HEAD_LEFT = [
   '............',
   '...ooooo....',
-  '..ohhhhhoo..',
-  '.ohhhhhhhho.',
-  '.ohhhhhhhho.',
-  '.osshhhhhho.',
-  '.oeshhhhhho.',
-  '.ossshhhhho.',
-  '..oossssoo..',
+  '..oHHhhhoo..',
+  '.oHhhhhhhho.',
+  '.ohhhhhhhdo.',
+  '.osshhhhhdo.',
+  '.oeshhhhhdo.',
+  '.osrshhhddo.',
+  '..ooSSssoo..',
 ];
-const BODY_FRONT = ['.occcccccco.', 'osccccccccso', 'osccccccccso', '.oppppppppo.'];
-const BODY_SIDE = ['..occcccco..', '..occcscco..', '..occcscco..', '..oppppppo..'];
+const BODY_FRONT = ['.oLccccccCo.', 'osLccccccCSo', 'osccccccCCSo', '.opppppppPo.'];
+const BODY_SIDE = ['..oLcccCCo..', '..occcsCCo..', '..occcSCCo..', '..opppppPo..'];
 const LEGS_FRONT = [
-  ['.oppo..oppo.', '.oppo..oppo.', '.offo..offo.'],
-  ['.oppo..oppo.', '.offo..oppo.', '..oo...offo.'],
-  ['.oppo..oppo.', '.oppo..offo.', '.offo...oo..'],
+  ['.oppo..oPPo.', '.oppo..oPPo.', '.offo..oFFo.'],
+  ['.oppo..oPPo.', '.offo..oPPo.', '..oo...oFFo.'],
+  ['.oppo..oPPo.', '.oppo..oFFo.', '.offo...oo..'],
 ];
 const LEGS_SIDE = [
-  ['...oppppo...', '...oppppo...', '...offffo...'],
-  ['..oppo.oppo.', '.oppo...oppo', '.offo...offo'],
-  ['...opppo....', '..oppppo....', '..offffo....'],
+  ['...opppPo...', '...opppPo...', '...offFFo...'],
+  ['..oppo.oPPo.', '.oppo...oPPo', '.offo...oFFo'],
+  ['...oppPo....', '..opppPo....', '..offFFo....'],
 ];
 
 export type CharDir = 'down' | 'up' | 'left';
@@ -69,7 +70,23 @@ function frame(dir: CharDir, step: number, col: CharColors, extra?: (b: PixBuf, 
   const legs = (dir === 'left' ? LEGS_SIDE : LEGS_FRONT)[step];
   const grid = [...head, ...body, ...legs].map((r) => r.padStart(14, '.').padEnd(16, '.'));
   const b = new PixBuf(16, 16);
-  b.grid(grid, { o: PAL.ink, s: col.s, e: col.e ?? PAL.ink, h: col.h, c: col.c, p: col.p, f: col.f });
+  b.grid(grid, {
+    o: PAL.ink,
+    s: col.s,
+    S: dunkler(col.s, 0.18),
+    r: mix(col.s, PAL.rot3, 0.3),
+    e: col.e ?? PAL.ink,
+    h: col.h,
+    H: heller(col.h, 0.35),
+    d: dunkler(col.h, 0.25),
+    c: col.c,
+    L: heller(col.c, 0.25),
+    C: dunkler(col.c, 0.22),
+    p: col.p,
+    P: dunkler(col.p, 0.25),
+    f: col.f,
+    F: dunkler(col.f, 0.3),
+  });
   extra?.(b, dir);
   return b;
 }

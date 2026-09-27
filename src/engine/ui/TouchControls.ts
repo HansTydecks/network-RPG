@@ -3,9 +3,13 @@ import { PAL, hexToInt } from '../gfx/palette';
 import type { Button, Input } from '../input/Input';
 import { uiText } from './widgets';
 
-/** Bildschirm-Knöpfe für Tablets: Steuerkreuz links, A/B rechts, Menü/Hilfe/Brille oben rechts. */
+/**
+ * Nur reine Touch-Geräte (Tablet ohne Maus/Touchpad) bekommen Bildschirm-Knöpfe.
+ * Laptops und Smartboards mit Touchscreen werden per Tastatur gespielt.
+ */
 export function isTouchDevice(): boolean {
-  return typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  return window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-pointer: fine)').matches;
 }
 
 export interface TouchControls {
@@ -13,28 +17,26 @@ export interface TouchControls {
   setDpadVisible(v: boolean): void;
 }
 
+/** Kleines Steuerkreuz unten links, A/B unten rechts. Menü/Hilfe/Brille sitzen als Knöpfe im HUD. */
 export function addTouchControls(scene: Phaser.Scene, input: Input): TouchControls {
   const depth = 1500;
   const make = (x: number, y: number, r: number, label: string, button: Button) => {
-    const c = scene.add.circle(x, y, r, hexToInt(PAL.ink), 0.35).setStrokeStyle(1, hexToInt(PAL.weiss), 0.5);
+    const c = scene.add.circle(x, y, r, hexToInt(PAL.ink), 0.3).setStrokeStyle(1, hexToInt(PAL.weiss), 0.4);
     c.setScrollFactor(0).setDepth(depth).setInteractive();
-    const t = uiText(scene, x - label.length * 3 + 1, y - 5, label).setDepth(depth + 1).setAlpha(0.8);
+    const t = uiText(scene, x - label.length * 3 + 1, y - 5, label).setDepth(depth + 1).setAlpha(0.7);
     c.on('pointerdown', () => input.press(button));
     c.on('pointerup', () => input.release(button));
     c.on('pointerout', () => input.release(button));
     return [c, t] as const;
   };
   const dpad = [
-    make(28, 128, 10, '^', 'up'),
-    make(28, 164, 10, 'v', 'down'),
-    make(10, 146, 10, '<', 'left'),
-    make(46, 146, 10, '>', 'right'),
+    make(20, 140, 7, '^', 'up'),
+    make(20, 164, 7, 'v', 'down'),
+    make(8, 152, 7, '<', 'left'),
+    make(32, 152, 7, '>', 'right'),
   ].flat();
-  make(300, 100, 13, 'A', 'a');
-  make(274, 114, 11, 'B', 'b');
-  make(304, 32, 8, 'M', 'menu');
-  make(304, 52, 8, 'H', 'help');
-  make(304, 72, 8, 'N', 'net');
+  make(306, 156, 9, 'A', 'a');
+  make(287, 166, 7, 'B', 'b');
   return {
     setDpadVisible(v: boolean) {
       for (const o of dpad) o.setVisible(v);

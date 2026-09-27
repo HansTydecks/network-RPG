@@ -72,6 +72,11 @@ Tests (Stand M2b): 102 Unit-Tests und 3 Browser-Tests; der Durchlauf spielt Kapi
 
 Browser-Tests: Kapitel 1 komplett, Kapitel 2 Teil 1, Kapitel 5 (Weltkarte, Frankfurt), Smoke-Test.
 
+**Nach dem Finale – HUD, Ton, Grafik:**
+- HUD: Die Aufgabenzeile oben ist weg. Oben rechts stehen die Tasten M, H und N (anklickbar), bei einer neuen Aufgabe blinkt kurz „Neue Aufgabe! Frag Ping mit H.". Ping nennt auf H zuerst die Aufgabe, dann die Tipps. Bildschirm-Knöpfe gibt es nur auf reinen Touch-Geräten (`isTouchDevice()` prüft `pointer: coarse` ohne feinen Zeiger).
+- Ton (`src/engine/audio/`): eigener Chiptune-Synth über WebAudio, keine Audiodateien. `musikLogic.ts` enthält die zwölf Lieder als Daten (Akkorde je Takt, handgeschriebene Melodie, Muster für Bass, Begleitung und Schlagzeug) und die Zuordnung Karte → Lied; `Audio.ts` spielt sie mit Vorausplanung ab und erzeugt die Geräusche (Sprech-Blips je Figur, Gurren von Ping, Menü, Türen, Gegenstände, richtig/falsch, geschafft, Brille). Minispiele und Kämpfe legen ihr eigenes Lied darüber, nachts und im Finale wechselt die Musik. Musik und Geräusche sind im Menü getrennt abschaltbar (gespeichert im Browser). `musik.test.ts` prüft Taktlängen, Tonumfang und dass jeder Takt mit einem Akkordton beginnt.
+- Grafik: `src/engine/gfx/veredeln.ts` gibt allen Objekt-Kacheln automatisch Licht oben links, Schatten unten rechts und einen weichen Schlagschatten; Figuren haben schattierte Haare, Wangen, Kleidung und einen Bodenschatten. Neu gezeichnet: Gras, Wege, Kopfsteinpflaster, Dielen, Parkett, Fels, Meer. `ueberlagerungen()` in `mapUtil.ts` berechnet je Karte Grasränder über Wegen, Küsten am Meer und Schatten unter Wänden (eigene Ebenen zwischen Boden und Objekten).
+
 ## Entwickeln
 
 ```bash

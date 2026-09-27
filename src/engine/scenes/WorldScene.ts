@@ -7,7 +7,7 @@ import { SPEAKERS } from '../../content/speakers';
 import { CALENDAR_CODES } from '../../content/calendarCodes';
 import { NETZBLICK_ERSTMALS } from '../../content/dialog/netzblick';
 import { PING_SCAN, SCAN_ERKLAERUNG } from '../../content/dialog/scan';
-import { tageszeitTint, zeitLabel } from '../../content/zeit';
+import { aktuelleTageszeit, tageszeitTint, zeitLabel } from '../../content/zeit';
 import { KAPITEL_START, verfuegbareStufe } from '../../content/kapitel';
 import { formatBytes } from '../../content/bytes';
 import { MINIGAMES } from '../../minigames';
@@ -31,7 +31,10 @@ import { ListMenu } from '../ui/ListMenu';
 import { UI_DEPTH, UiStack } from '../ui/widgets';
 import { addTouchControls, isTouchDevice, type TouchControls } from '../ui/TouchControls';
 import type { InteractDef, MapDef, NpcDef, ScanData } from '../world/MapDef';
-import { parseMap, type ParsedMap } from '../world/mapUtil';
+import { parseMap, ueberlagerungen, type ParsedMap } from '../world/mapUtil';
+import { audio } from '../audio/Audio';
+import { KARTEN_LIED, type LiedId } from '../audio/musikLogic';
+import { SPIEL_DEFS } from '../../content/spiele';
 
 const TILE = 16;
 const WALK_MS = 210;
@@ -42,6 +45,8 @@ const FRAME_BASE: Record<Dir, number> = { down: 0, up: 3, left: 6, right: 6 };
 
 interface Actor {
   sprite: Phaser.GameObjects.Sprite;
+  /** Weicher Bodenschatten unter der Figur. */
+  schatten: Phaser.GameObjects.Image;
   key: string;
   x: number;
   y: number;
@@ -87,10 +92,10 @@ export class WorldScene extends Phaser.Scene {
     this.state = this.registry.get('state');
     this.inp = this.registry.get('input');
     this.ui = new UiStack();
-    this.hud = new Hud(this);
+    this.hud = new Hud(this, this.inp);
     this.touch = isTouchDevice() ? addTouchControls(this, this.inp) : undefined;
     this.loadMap(this.state.mapId, this.state.x, this.state.y, this.state.dir);
-    this.hud.setQuest(this.state.questId ? QUESTS[this.state.questId].titel : null);
+    this.hud.setQuest(this.state.questId, false);
     this.cameras.main.fadeIn(300);
     this.runEnterScript();
     (window as unknown as { __netzblick: unknown }).__netzblick = { scene: this, state: this.state };
@@ -116,6 +121,9 @@ export class WorldScene extends Phaser.Scene {
     const ts = map.addTilesetImage('tiles', TILESET_KEY, TILE, TILE, 0, 0)!;
     const ground = map.createBlankLayer('ground', ts)!.setDepth(0);
     ground.putTilesAt(this.parsed.ground, 0, 0);
+    const extra = ueberlagerungen(this.parsed);
+    map.createBlankLayer('kanten', ts)!.setDepth(1).putTilesAt(extra.kanten, 0, 0);
+    map.createBlankLayer('schatten', ts)!.setDepth(2).putTilesAt(extra.schatten, 0, 0);
     const deco = map.createBlankLayer('deco', ts)!.setDepth(10);
     deco.putTilesAt(this.parsed.deco, 0, 0);
     this.tilemap = map;
@@ -139,8 +147,10 @@ export class WorldScene extends Phaser.Scene {
     const sprite = this.add.sprite(x * TILE, y * TILE, key, isChar ? FRAME_BASE[dir] : 0).setOrigin(0, 0);
     if (isChar) sprite.setFlipX(dir === 'right');
     if (anim) sprite.play(anim);
-    list.push(sprite);
-    const a: Actor = { sprite, key, x, y, dir, moving: false, fromX: x, fromY: y, t: 0, dur: WALK_MS };
+    const schatten = this.add.image(0, 0, 'schatten').setOrigin(0).setDepth(5);
+    if (!isChar) schatten.setScale(key === 'ping' ? 0.75 : 1, 1);
+    list.push(sprite, schatten);
+    const a: Actor = { sprite, schatten, key, x, y, dir, moving: false, fromX: x, fromY: y, t: 0, dur: WALK_MS };
     this.syncActor(a);
     return a;
   }
@@ -162,8 +172,9 @@ export class WorldScene extends Phaser.Scene {
       py = this.player.y;
     }
     const sprite = this.add.sprite(px * TILE, py * TILE, 'ping', 0).setOrigin(0, 0).play('ping_idle');
-    this.mapObjects.push(sprite);
-    this.ping = { sprite, key: 'ping', x: px, y: py, dir: 'down', moving: false, fromX: px, fromY: py, t: 0, dur: WALK_MS };
+    const schatten = this.add.image(0, 0, 'schatten').setOrigin(0).setDepth(5).setScale(0.75, 1);
+    this.mapObjects.push(sprite, schatten);
+    this.ping = { sprite, schatten, key: 'ping', x: px, y: py, dir: 'down', moving: false, fromX: px, fromY: py, t: 0, dur: WALK_MS };
     this.syncActor(this.ping);
   }
 
@@ -215,6 +226,7 @@ export class WorldScene extends Phaser.Scene {
     const hop = a.key === 'ping' && a.moving ? -Math.sin(k * Math.PI) * 3 : 0;
     a.sprite.setPosition(Math.round(px), Math.round(py + hop - (a.key === 'ping' ? 2 : 0)));
     a.sprite.setDepth(100 + py / TILE + (a.key === 'ping' ? -0.1 : 0));
+    a.schatten.setPosition(Math.round(px) + (a.key === 'ping' ? 4 : 2), Math.round(py) + 13);
   }
 
   private face(a: Actor, dir: Dir) {
@@ -249,6 +261,7 @@ export class WorldScene extends Phaser.Scene {
 
   update(_time: number, dt: number) {
     this.touch?.setDpadVisible(!this.ui.active);
+    audio.musik(this.liedFuerOrt());
     if (this.ui.active) {
       this.ui.update(this.inp, dt);
     } else if (!this.scriptRunning) {
@@ -304,6 +317,7 @@ export class WorldScene extends Phaser.Scene {
     const [dx, dy] = VEC[dir];
     if (this.blocked(this.player.x + dx, this.player.y + dy)) {
       this.face(this.player, dir);
+      audio.sfx('stoss');
       return;
     }
     const dur = inp.isDown('b') ? RUN_MS : WALK_MS;
@@ -372,6 +386,7 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
     const on = !this.net!.on;
+    audio.sfx(on ? 'netz_an' : 'netz_aus');
     this.net!.setOn(on);
     this.hud.setNet(on);
     if (on && this.net!.hasNetwork && !this.state.flags.has('netzblick_erklaert')) void this.run(NETZBLICK_ERSTMALS);
@@ -439,6 +454,7 @@ export class WorldScene extends Phaser.Scene {
   private async doWarp(map: MapId, x: number, y: number, dir: Dir, fromStep: boolean) {
     const imScript = this.scriptRunning;
     this.scriptRunning = true;
+    audio.sfx('tuer');
     await new Promise<void>((r) => {
       this.cameras.main.fadeOut(180);
       this.cameras.main.once('camerafadeoutcomplete', () => r());
@@ -455,6 +471,15 @@ export class WorldScene extends Phaser.Scene {
     if (fromStep) this.runEnterScript();
     // Warp mitten in einem Script: Begrüßung der neuen Karte läuft, wenn das Script fertig ist.
     else this.enterNachScript = true;
+  }
+
+  /** Hintergrundmusik nach Karte, Tageszeit und Spielstand. */
+  private liedFuerOrt(): LiedId {
+    const f = this.state.flags;
+    if (f.has('spiel_ende')) return 'ende';
+    const lied = KARTEN_LIED[this.def.id] ?? 'dorf';
+    if (aktuelleTageszeit(this.state) === 'nacht' && ['dorf', 'zuhause', 'stadt'].includes(lied)) return 'nacht';
+    return lied;
   }
 
   private modal<T>(make: (resolve: (v: T) => void) => import('../ui/widgets').Modal): Promise<T> {
@@ -476,9 +501,9 @@ export class WorldScene extends Phaser.Scene {
         return i;
       },
       toast: (text) => this.modal<void>((r) => new Toast(this, text, r)),
-      itemReceived: (item: ItemId) => this.modal<void>((r) => new Toast(this, `Erhalten: ${ITEMS[item].name}`, r, ITEMS[item].icon)),
-      questChanged: (id: QuestId | null) => this.hud.setQuest(id ? QUESTS[id].titel : null),
-      lexiconUnlocked: (id: LexiconId) => this.modal<void>((r) => new Toast(this, `Neu im Netzbuch: ${LEXICON[id].titel}`, r)),
+      itemReceived: (item: ItemId) => this.modal<void>((r) => new Toast(this, `Erhalten: ${ITEMS[item].name}`, r, ITEMS[item].icon, 'item')),
+      questChanged: (id: QuestId | null) => this.hud.setQuest(id),
+      lexiconUnlocked: (id: LexiconId) => this.modal<void>((r) => new Toast(this, `Neu im Netzbuch: ${LEXICON[id].titel}`, r, undefined, 'netzbuch')),
       wait: (ms) => new Promise((r) => this.time.delayedCall(ms, r)),
       warp: (map, x, y, dir) => this.doWarp(map, x, y, dir, false),
       turnPlayer: (dir) => this.face(this.player, dir),
@@ -489,7 +514,12 @@ export class WorldScene extends Phaser.Scene {
         const [name, param] = id.split(':');
         const mg = MINIGAMES[name];
         if (!mg) throw new Error(`Minispiel ${id} fehlt`);
-        await mg({ scene: this, input: this.inp, state: this.state, push: (m) => this.ui.push(m), param });
+        audio.ueberlagern(SPIEL_DEFS[name as keyof typeof SPIEL_DEFS]?.art === 'kampf' ? 'kampf' : 'minispiel');
+        try {
+          await mg({ scene: this, input: this.inp, state: this.state, push: (m) => this.ui.push(m), param });
+        } finally {
+          audio.zurueck();
+        }
       },
       faceNpc: (id, dir) => {
         const n = this.npcs.find((x) => x.def.id === id);
@@ -497,7 +527,7 @@ export class WorldScene extends Phaser.Scene {
       },
       refresh: () => this.refreshAfterScript(),
       showBild: (key) => this.showBild(key),
-      bytesChanged: (d) => this.modal<void>((r) => new Toast(this, `${d > 0 ? '+' : '–'}${formatBytes(Math.abs(d))} · Jetzt: ${formatBytes(this.state.bytes)}`, r)),
+      bytesChanged: (d) => this.modal<void>((r) => new Toast(this, `${d > 0 ? '+' : '–'}${formatBytes(Math.abs(d))} · Jetzt: ${formatBytes(this.state.bytes)}`, r, undefined, d > 0 ? 'muenze' : 'bezahlen')),
     };
   }
 
@@ -507,7 +537,10 @@ export class WorldScene extends Phaser.Scene {
     const level = this.hintLevel.get(q) ?? 0;
     const hints = QUESTS[q].hinweise;
     this.hintLevel.set(q, Math.min(level + 1, hints.length - 1));
-    const script: Script = [{ op: 'say', who: 'ping', text: hints[level] }];
+    const script: Script = [
+      { op: 'say', who: 'ping', text: `Deine Aufgabe: ${QUESTS[q].titel}` },
+      { op: 'say', who: 'ping', text: hints[level] },
+    ];
     if (level < hints.length - 1) {
       script.push({
         op: 'choice',
@@ -573,8 +606,9 @@ export class WorldScene extends Phaser.Scene {
     await this.host().say('ping', 'Schreib den Code in deinen Hefter. Damit kannst du auf jedem Computer weiterspielen!');
   }
 
-  private async openMenu() {
-    const labels = ['Weiter', 'Rucksack', 'Netzbuch', 'Speichern', 'Zum Titel'];
+  private async openMenu(): Promise<void> {
+    const ton = audio.einstellungen;
+    const labels = ['Weiter', 'Rucksack', 'Netzbuch', 'Speichern', `Musik: ${ton.musik ? 'an' : 'aus'}`, `Geräusche: ${ton.geraeusche ? 'an' : 'aus'}`, 'Zum Titel'];
     const i = await this.modal<number>((r) => new ListMenu(this, labels, r, { anchor: 'right-top', cancellable: true, title: 'Menü' }));
     if (i === 1) {
       const entries = [...this.state.items].map((id) => ({ titel: ITEMS[id].name, text: ITEMS[id].beschreibung, icon: ITEMS[id].icon }));
@@ -584,7 +618,10 @@ export class WorldScene extends Phaser.Scene {
       await this.modal<void>((r) => new InfoPanel(this, 'Netzbuch', entries, 'Noch keine Einträge. Entdecke die Welt!', r));
     } else if (i === 3) {
       await this.run([{ op: 'save' }]);
-    } else if (i === 4) {
+    } else if (i === 4 || i === 5) {
+      audio.setzen(i === 4 ? { musik: !ton.musik } : { geraeusche: !ton.geraeusche });
+      return this.openMenu();
+    } else if (i === 6) {
       autosave(this.state);
       this.cameras.main.fadeOut(200);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Title'));

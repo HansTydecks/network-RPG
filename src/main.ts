@@ -7,6 +7,7 @@ import { ContactSheetScene } from './engine/scenes/ContactSheetScene';
 import { PrologScene } from './engine/scenes/PrologScene';
 import { MinigameLabScene } from './engine/scenes/MinigameLabScene';
 import { PAL } from './engine/gfx/palette';
+import { audio } from './engine/audio/Audio';
 
 const W = 320;
 const H = 180;
@@ -17,6 +18,8 @@ function zoomFor(): number {
 }
 
 const input = new Input();
+// Ton startet erst nach der ersten Nutzeraktion (Vorgabe der Browser).
+for (const ev of ['keydown', 'pointerdown', 'touchstart']) window.addEventListener(ev, () => audio.entsperren(), { capture: true });
 
 const game = new Phaser.Game({
   type: Phaser.AUTO,

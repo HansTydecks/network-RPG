@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { audio } from '../audio/Audio';
 import { PAL, hexToInt } from '../gfx/palette';
 import { FONT_KEY } from '../gfx/textures';
 import { measureText } from '../gfx/fontGlyphs';
@@ -26,6 +27,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   create() {
+    audio.musik('titel');
     this.inp = this.registry.get('input');
     this.ui = new UiStack();
     this.cameras.main.setBackgroundColor(PAL.nacht);

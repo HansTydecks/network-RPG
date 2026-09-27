@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { audio } from '../audio/Audio';
 import { ALPHABET, groupCode, normalizeCode } from '../state/base32';
 import { PAL } from '../gfx/palette';
 import type { Input } from '../input/Input';
@@ -87,6 +88,7 @@ export class CodeInput implements Modal {
   update(input: Input, dt: number) {
     this.blink += dt;
     for (const ch of input.takeTyped()) {
+      audio.sfx('tippen');
       if (ch === '\b') this.value = this.value.slice(0, -1);
       else if (ch === '\n') return this.finish(this.value);
       else this.add(ch);

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { audio } from '../audio/Audio';
 import { PROLOG_SCREEN } from '../../content/art/prolog';
 import { PAL, hexToInt } from '../gfx/palette';
 import { FONT_KEY } from '../gfx/textures';
@@ -26,6 +27,7 @@ export class PrologScene extends Phaser.Scene {
   }
 
   create() {
+    audio.musik('nacht');
     this.inp = this.registry.get('input');
     this.t = 0;
     this.leaving = false;

@@ -1,5 +1,6 @@
 import { PAL } from '../../engine/gfx/palette';
 import { PixBuf, rng, rows } from '../../engine/gfx/pixbuf';
+import { dunkler, heller, mitAlpha, mix } from '../../engine/gfx/farbe';
 
 /**
  * Alle Kacheln (16×16) von NETZBLICK – selbst gezeichnet, als Code.
@@ -12,6 +13,8 @@ export interface TileDef {
   solid?: boolean;
   /** Beschreibung für Schilder/Untersuchen ohne eigenes Script. */
   info?: string;
+  /** Ohne automatischen Feinschliff (Licht/Schatten), z. B. für Überlagerungen. */
+  roh?: boolean;
   draw(b: PixBuf): void;
 }
 
@@ -22,30 +25,50 @@ function speckle(b: PixBuf, seed: number, colors: string[], density: number) {
   for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) if (r() < density) b.set(x, y, colors[Math.floor(r() * colors.length)]);
 }
 
+const GRAS_MITTEL = mix(PAL.gruen3, PAL.gruen2, 0.45);
+const GRAS_HELL = mix(PAL.gruen3, PAL.gruen4, 0.35);
+
+/** Grasbüschel (nahtlos über den Rand hinweg). */
+function tuft(b: PixBuf, x: number, y: number) {
+  const w = (v: number) => (v + T) % T;
+  b.set(w(x), y, PAL.gruen2).set(w(x - 1), y - 1, PAL.gruen2).set(w(x + 1), y - 1, PAL.gruen2);
+  b.set(w(x - 1), y - 2, GRAS_HELL).set(w(x + 1), y - 2, GRAS_HELL).set(w(x), y - 1, GRAS_MITTEL);
+}
+
 function grass(b: PixBuf, seed = 1) {
   b.rect(0, 0, T, T, PAL.gruen3);
-  speckle(b, seed, [PAL.gruen2], 0.12);
+  speckle(b, seed, [GRAS_MITTEL], 0.07);
+  speckle(b, seed + 50, [GRAS_HELL], 0.03);
   const r = rng(seed + 99);
-  for (let i = 0; i < 4; i++) {
-    const x = Math.floor(r() * 14) + 1;
-    const y = Math.floor(r() * 13) + 2;
-    b.set(x, y, PAL.gruen2).set(x + 1, y - 1, PAL.gruen2).set(x - 1, y - 1, PAL.gruen4);
-  }
+  for (let i = 0; i < 3; i++) tuft(b, Math.floor(r() * 16), Math.floor(r() * 12) + 3);
 }
+
+const WEG_DUNKEL = mix(PAL.braun4, PAL.braun3, 0.5);
 
 function path(b: PixBuf, seed = 5) {
   b.rect(0, 0, T, T, PAL.braun4);
-  speckle(b, seed, [PAL.braun3, PAL.creme], 0.1);
+  speckle(b, seed, [WEG_DUNKEL], 0.06);
+  speckle(b, seed + 7, [heller(PAL.braun4, 0.35)], 0.04);
+  // kleine Kiesel mit Licht oben und Schatten unten
+  const r = rng(seed + 3);
+  for (let i = 0; i < 4; i++) {
+    const x = Math.floor(r() * 14) + 1;
+    const y = Math.floor(r() * 13) + 1;
+    b.hline(x, y, 2, PAL.braun3).set(x, y - 1, PAL.creme).hline(x, y + 1, 2, dunkler(PAL.braun4, 0.25));
+  }
 }
 
 function planks(b: PixBuf) {
-  b.rect(0, 0, T, T, PAL.braun3);
-  for (let y = 3; y < T; y += 4) b.hline(0, y, T, PAL.braun2);
   const r = rng(11);
   for (let y = 0; y < T; y += 4) {
-    const x = Math.floor(r() * 12) + 2;
-    b.vline(x, y, 3, PAL.braun2);
-    b.set(Math.floor(r() * 14) + 1, y + 1, PAL.braun4);
+    const ton = [PAL.braun3, mix(PAL.braun3, PAL.braun4, 0.18), mix(PAL.braun3, PAL.braun2, 0.15)][Math.floor(r() * 3)];
+    b.rect(0, y, T, 3, ton);
+    b.hline(0, y, T, heller(ton, 0.18));
+    b.hline(0, y + 3, T, PAL.braun2);
+    // Maserung
+    for (let i = 0; i < 3; i++) b.hline(Math.floor(r() * 12), y + 1 + Math.floor(r() * 2), 2 + Math.floor(r() * 3), mix(ton, PAL.braun2, 0.45));
+    const fuge = Math.floor(r() * 12) + 2;
+    b.vline(fuge, y, 3, PAL.braun2).vline(fuge + 1, y, 3, heller(ton, 0.12));
   }
 }
 
@@ -137,7 +160,8 @@ export const TILES: TileDef[] = [
     layer: 'ground',
     draw: (b) => {
       b.rect(0, 0, T, T, PAL.grau2);
-      speckle(b, 31, [PAL.grau1, PAL.grau3], 0.08);
+      speckle(b, 31, [mix(PAL.grau2, PAL.grau1, 0.5)], 0.07);
+      speckle(b, 33, [mix(PAL.grau2, PAL.grau3, 0.4)], 0.04);
     },
   },
   {
@@ -145,7 +169,8 @@ export const TILES: TileDef[] = [
     layer: 'ground',
     draw: (b) => {
       b.rect(0, 0, T, T, PAL.grau2);
-      speckle(b, 32, [PAL.grau1, PAL.grau3], 0.08);
+      speckle(b, 32, [mix(PAL.grau2, PAL.grau1, 0.5)], 0.07);
+      speckle(b, 34, [mix(PAL.grau2, PAL.grau3, 0.4)], 0.04);
       b.rect(2, 7, 6, 2, PAL.weiss).rect(10, 7, 5, 2, PAL.weiss);
     },
   },
@@ -434,6 +459,7 @@ export const TILES: TileDef[] = [
       b.rect(0, 0, T, T, PAL.grau4);
       b.rect(0, 0, 8, 8, PAL.weiss).rect(8, 8, 8, 8, PAL.weiss);
       b.hline(0, 7, T, PAL.grau3).vline(7, 0, T, PAL.grau3).hline(0, 15, T, PAL.grau3).vline(15, 0, T, PAL.grau3);
+      b.set(1, 1, '#ffffff').set(2, 1, '#ffffff').set(1, 2, '#ffffff').set(9, 9, '#ffffff').set(10, 9, '#ffffff').set(9, 10, '#ffffff');
     },
   },
   {
@@ -646,13 +672,24 @@ export const TILES: TileDef[] = [
     id: 'pflaster',
     layer: 'ground',
     draw: (b) => {
-      b.rect(0, 0, T, T, PAL.grau3);
-      for (let y = 0; y < T; y += 4) {
-        b.hline(0, y + 3, T, PAL.grau2);
-        const off = (y / 4) % 2 ? 0 : 3;
-        for (let x = off; x < T; x += 6) b.vline(x, y, 3, PAL.grau2);
+      // Kopfsteinpflaster: abgerundete Steine mit Licht oben links, versetzt verlegt
+      b.rect(0, 0, T, T, PAL.grau2);
+      const r = rng(51);
+      for (let row = 0; row < 4; row++) {
+        const y = row * 4;
+        for (let k = -1; k < 2; k++) {
+          const x = k * 8 + (row % 2 ? 4 : 0);
+          const ton = mix(PAL.grau3, r() < 0.5 ? PAL.grau4 : PAL.grau2, r() * 0.15);
+          for (let i = 0; i < 7; i++) {
+            const px = (x + i + T) % T;
+            for (let j = 0; j < 3; j++) {
+              const ecke = (i === 0 || i === 6) && (j === 0 || j === 2);
+              if (ecke) continue;
+              b.set(px, y + j, j === 0 && i < 5 ? heller(ton, 0.2) : j === 2 || i === 6 ? dunkler(ton, 0.1) : ton);
+            }
+          }
+        }
       }
-      speckle(b, 51, [PAL.grau4], 0.05);
     },
   },
   {
@@ -744,8 +781,11 @@ export const TILES: TileDef[] = [
     layer: 'ground',
     draw: (b) => {
       b.rect(0, 0, T, T, PAL.braun2);
-      for (let y = 0; y < T; y += 4) for (let x = (y / 4) % 2 ? 0 : 4; x < T; x += 8) b.rect(x, y, 4, 4, PAL.braun3);
-      b.hline(0, 15, T, PAL.braun1);
+      for (let y = 0; y < T; y += 4)
+        for (let x = (y / 4) % 2 ? 0 : 4; x < T; x += 8) {
+          b.rect(x, y, 4, 4, PAL.braun3).hline(x, y, 4, heller(PAL.braun3, 0.2)).hline(x, y + 3, 4, dunkler(PAL.braun3, 0.12));
+          b.hline((x + 4) % T, y + 1, 3, mix(PAL.braun2, PAL.braun3, 0.35));
+        }
     },
   },
   {
@@ -1069,10 +1109,14 @@ export const TILES: TileDef[] = [
     layer: 'ground',
     solid: true,
     draw: (b) => {
-      b.rect(0, 0, T, T, PAL.grau1);
-      speckle(b, 91, [PAL.grau2, PAL.ink], 0.18);
-      b.hline(0, 15, 16, PAL.ink).vline(15, 0, 16, PAL.ink);
-      b.set(4, 5, PAL.grau4).set(11, 10, PAL.grau4);
+      // Felsbrocken mit Licht oben links
+      b.rect(0, 0, T, T, dunkler(PAL.grau1, 0.3));
+      for (const [cx, cy, r] of [[4, 4, 4.2], [12, 5, 3.6], [7, 12, 4.4], [15, 13, 3], [0, 12, 2.6]] as const) {
+        b.disc(cx, cy, r, PAL.grau1);
+        b.disc(cx - 0.8, cy - 0.8, r - 1.2, mix(PAL.grau1, PAL.grau2, 0.6));
+        b.disc(cx - 1.5, cy - 1.6, Math.max(0.8, r - 3), mix(PAL.grau2, PAL.grau3, 0.35));
+      }
+      speckle(b, 91, [PAL.grau4], 0.015);
     },
   },
   {
@@ -1080,7 +1124,7 @@ export const TILES: TileDef[] = [
     layer: 'ground',
     draw: (b) => {
       b.rect(0, 0, T, T, PAL.braun1);
-      speckle(b, 93, [PAL.braun2, PAL.grau1], 0.12);
+      speckle(b, 93, [mix(PAL.braun1, PAL.braun2, 0.5), mix(PAL.braun1, PAL.grau1, 0.5)], 0.08);
       b.hline(0, 7, 16, PAL.grau2).hline(0, 9, 16, PAL.grau2);
       for (let x = 1; x < 16; x += 5) b.rect(x, 6, 2, 5, PAL.braun2);
     },
@@ -1154,8 +1198,12 @@ export const TILES: TileDef[] = [
     solid: true,
     draw: (b) => {
       b.rect(0, 0, T, T, PAL.blau2);
-      speckle(b, 111, [PAL.blau1], 0.1);
-      b.hline(2, 5, 4, PAL.blau3).hline(9, 11, 4, PAL.blau3);
+      speckle(b, 111, [mix(PAL.blau2, PAL.blau1, 0.5)], 0.08);
+      // kleine Wellenkämme
+      for (const [x, y] of [[2, 4], [10, 10], [12, 2], [4, 13]] as const) {
+        b.hline(x, y, 3, PAL.blau3).set(x + 1, y - 1, PAL.blau4);
+        b.set(x - 1, y + 1, mix(PAL.blau2, PAL.blau1, 0.4)).set(x + 3, y + 1, mix(PAL.blau2, PAL.blau1, 0.4));
+      }
     },
   },
   {
@@ -1163,7 +1211,8 @@ export const TILES: TileDef[] = [
     layer: 'ground',
     draw: (b) => {
       b.rect(0, 0, T, T, PAL.gruen2);
-      speckle(b, 113, [PAL.gruen3, PAL.gruen1], 0.15);
+      speckle(b, 113, [mix(PAL.gruen2, PAL.gruen3, 0.5)], 0.08);
+      speckle(b, 114, [mix(PAL.gruen2, PAL.gruen1, 0.5)], 0.06);
     },
   },
   {
@@ -1230,6 +1279,53 @@ export const TILES: TileDef[] = [
       b.rect(6, 5, 3, 3, PAL.weiss);
     },
   },
+  // ---------- Überlagerungen (werden automatisch gesetzt, nie in Karten) ----------
+  ...kantenKacheln(),
+  {
+    id: 'ao_n',
+    layer: 'deco',
+    roh: true,
+    draw: (b) => [0.4, 0.26, 0.14, 0.06].forEach((a, y) => b.hline(0, y, T, mitAlpha(PAL.ink, a))),
+  },
 ];
+
+/**
+ * Grasränder über Wegen und Küsten am Meer. Bitmaske der angrenzenden Seiten: N=1, O=2, S=4, W=8.
+ */
+function kantenKacheln(): TileDef[] {
+  const tiefe = [2, 3, 2, 1, 2, 3, 3, 2, 1, 2, 3, 2, 2, 1, 2, 3];
+  type Setzer = (b: PixBuf, x: number, y: number, c: string) => void;
+  const grasNord = (b: PixBuf, set: Setzer) => {
+    for (let i = 0; i < T; i++) {
+      const d = tiefe[i];
+      for (let j = 0; j < d; j++) set(b, i, j, j === d - 1 ? (i % 3 === 0 ? GRAS_HELL : PAL.gruen3) : j === 0 ? PAL.gruen3 : GRAS_MITTEL);
+      set(b, i, d, mitAlpha(PAL.ink, 0.18));
+    }
+  };
+  const kuesteNord = (b: PixBuf, set: Setzer) => {
+    for (let i = 0; i < T; i++) {
+      const d = 1 + (tiefe[i] > 2 ? 1 : 0);
+      for (let j = 0; j < d; j++) set(b, i, j, j === 0 ? PAL.braun4 : PAL.gelb);
+      set(b, i, d, i % 4 === 1 ? PAL.weiss : PAL.blau4);
+      if (i % 5 !== 2) set(b, i, d + 1, mitAlpha(PAL.blau4, 0.45));
+    }
+  };
+  const seiten: ((b: PixBuf, x: number, y: number, c: string) => void)[] = [
+    (b, x, y, c) => void (b.get(x, y) && b.get(x, y)!.length === 7 ? null : b.set(x, y, c)),
+    (b, x, y, c) => void (b.get(T - 1 - y, x) && b.get(T - 1 - y, x)!.length === 7 ? null : b.set(T - 1 - y, x, c)),
+    (b, x, y, c) => void (b.get(x, T - 1 - y) && b.get(x, T - 1 - y)!.length === 7 ? null : b.set(x, T - 1 - y, c)),
+    (b, x, y, c) => void (b.get(y, x) && b.get(y, x)!.length === 7 ? null : b.set(y, x, c)),
+  ];
+  const out: TileDef[] = [];
+  for (const [name, zeichne] of [['kante', grasNord], ['kueste', kuesteNord]] as const)
+    for (let m = 1; m < 16; m++)
+      out.push({
+        id: `${name}_${m}`,
+        layer: 'deco',
+        roh: true,
+        draw: (b) => seiten.forEach((set, i) => m & (1 << i) && zeichne(b, set)),
+      });
+  return out;
+}
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));
