@@ -29,5 +29,7 @@ export const SPEAKERS: Record<string, string> = {
   berger: 'Frau Berger',
   weber: 'Frau Weber',
   sommer: 'Frau Sommer',
+  yilmaz: 'Dr. Yilmaz',
+  kalle: 'Kalle',
   unbekannt: '???',
 };

@@ -1,5 +1,6 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
+import { busKnotenburgK3, fmaTuerK3, pinoK3 } from '../dialog/kapitel3';
 import { bergerScript, bibTuer, fmaTuer, jonasDienstag, langeScript, passantDienstag, pinoScript, schulzScript } from '../dialog/kapitel2b';
 
 /** Mit dem Bus zurück nach Kabelitz. */
@@ -108,6 +109,7 @@ export const knotenburg: MapDef = {
       x: 2,
       y: 16,
       script: [
+        when({ stufeMin: 9 }, busKnotenburgK3, [
         when(
           { flag: 'k2_zuhause' },
           [choice('Mit dem Bus nach Kabelitz fahren?', [['Ja, nach Hause', heimfahrt], ['Nein, noch bleiben', []]])],
@@ -119,6 +121,7 @@ export const knotenburg: MapDef = {
             ),
           ],
         ),
+        ]),
       ],
     },
     {
@@ -144,7 +147,7 @@ export const knotenburg: MapDef = {
       id: 'fernmeldeamt',
       x: 23,
       y: 15,
-      script: fmaTuer,
+      script: [when({ stufeMin: 9 }, fmaTuerK3, fmaTuer)],
       scan: { name: 'fernmeldeamt', klasse: 'Gebäude', attribute: [['baujahr', '1928'], ['zustand', 'stillgelegt']], methoden: ['oeffnen (verschlossen)'] },
     },
     { kind: 'interact', id: 'fmaschild', x: 27, y: 15, script: [narrate('„Ehemaliges Fernmeldeamt Knotenburg. Betreten verboten!"')] },
@@ -194,7 +197,7 @@ export const knotenburg: MapDef = {
     },
     { kind: 'npc', id: 'berger', sprite: 'berger', x: 9, y: 9, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: bergerScript },
     { kind: 'npc', id: 'schulz', sprite: 'schulz', x: 3, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: schulzScript },
-    { kind: 'npc', id: 'pino', sprite: 'pino', x: 24, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: pinoScript },
+    { kind: 'npc', id: 'pino', sprite: 'pino', x: 24, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: [when({ stufeMin: 9 }, pinoK3, pinoScript)] },
     { kind: 'npc', id: 'lange', sprite: 'lange', x: 21, y: 9, dir: 'down', visibleIf: { flag: 'k2_mittwoch' }, script: langeScript },
     { kind: 'interact', id: 'backstand', x: 22, y: 9, tile: 'backstand', visibleIf: { flag: 'k2_mittwoch' }, script: langeScript },
   ],

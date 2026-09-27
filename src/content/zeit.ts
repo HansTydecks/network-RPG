@@ -40,15 +40,23 @@ function kapitel2Tag(s: GameState): string {
   return s.flags.has('k2_dienstag') ? 'Dienstag' : 'Montag';
 }
 
+/** Kapitel 3: zwei Tage, erst Heimnetz und Netzleitstelle, dann der Silberstollen. */
+function kapitel3Zeit(s: GameState): Tageszeit {
+  if (s.flags.has('kapitel3_fertig')) return 'nacht';
+  if (s.flags.has('k3_tag2')) return s.flags.has('k3_raum3') ? 'nachmittag' : 'vormittag';
+  return s.flags.has('k3_pakete') ? 'nachmittag' : 'vormittag';
+}
+
 export function zeitLabel(s: GameState): string {
   if (!s.flags.has('prolog_gesehen')) return '';
+  if (s.flags.has('k3_start')) return `Kl. 9 · ${s.flags.has('k3_tag2') ? 'Dienstag' : 'Montag'} · ${ZEIT_NAME[kapitel3Zeit(s)]}`;
   if (s.flags.has('k2_start')) return `Kl. 8 · ${kapitel2Tag(s)} · ${ZEIT_NAME[kapitel2Zeit(s)]}`;
   return `${WOCHENTAGE[tag(s) - 1]} · ${ZEIT_NAME[tageszeit(s)]}`;
 }
 
 /** Farbton über der Karte (Farbe, Deckkraft). Nachts ist es auch drinnen dunkler. */
 export function tageszeitTint(s: GameState, draussen: boolean): [number, number] | null {
-  const z = s.flags.has('k2_start') ? kapitel2Zeit(s) : tageszeit(s);
+  const z = s.flags.has('k3_start') ? kapitel3Zeit(s) : s.flags.has('k2_start') ? kapitel2Zeit(s) : tageszeit(s);
   if (z === 'nacht') return [0x10144a, draussen ? 0.5 : 0.3];
   return z === 'nachmittag' && draussen ? [0xff8a30, 0.2] : null;
 }

@@ -87,4 +87,19 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Lag neben FUNKSTILLEs Laptop im Fernmeldeamt. Am Kiel steckt ein kleiner Ring: „DV 07734-74-…". Der Rest ist abgerieben.',
     icon: 'icon_feder',
   },
+  netzblick_v3: {
+    name: 'NetzBlick v3',
+    beschreibung: 'Mit Paket-Lupe: Datenpakete anhalten und hineinschauen – Kopf mit Adressen und Protokoll, dazu der Inhalt. Verschlüsselte Pakete zeigen ein Schloss.',
+    icon: 'icon_netzblick_v3',
+  },
+  schluesselpaar: {
+    name: 'Schlüsselpaar',
+    beschreibung: 'Ein goldener privater Schlüssel, den nur du hast, und viele offene Vorhängeschlösser (öffentliche Schlüssel), die du verteilen darfst.',
+    icon: 'icon_schluesselpaar',
+  },
+  grubenlampe: {
+    name: 'Grubenlampe',
+    beschreibung: 'Von Kalle. Im Silberstollen ist es stockdunkel – ohne Lampe geht es nicht weiter.',
+    icon: 'icon_grubenlampe',
+  },
 };

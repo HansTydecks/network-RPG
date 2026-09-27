@@ -5,26 +5,9 @@ import type { Input } from '../engine/input/Input';
 import { uiText } from '../engine/ui/widgets';
 import { richtigeAn, seedAus } from '../engine/util/mischen';
 import { MinigameModal } from './base';
+import { tabellenBreiten, type QuizFrage } from './quizLogic';
 
-export interface QuizOption {
-  text: string;
-  ok: boolean;
-  /** Erklärung nach der Antwort (bei falscher Antwort als Denkanstoß). */
-  erklaerung: string;
-}
-
-export interface QuizFrage {
-  frage: string;
-  optionen: QuizOption[];
-  /** Optional: eigene Zeichnung im Bereich y 22–124 (z. B. eine Tabelle). Liefert erzeugte Objekte zurück. */
-  bild?: (scene: Phaser.Scene, g: Phaser.GameObjects.Graphics, fertig: boolean) => Phaser.GameObjects.GameObject[];
-  /** Wo die Antworten stehen: unter der Frage (Standard) oder rechts neben einem Bild. */
-  antwortenX?: number;
-  /** Kurze Antworten (z. B. Formeln) nebeneinander in einer Zeile. */
-  nebeneinander?: boolean;
-  /** Antworten nicht mischen (z. B. „links"/„rechts" passend zum Bild). */
-  festeReihenfolge?: boolean;
-}
+export type { QuizFrage, QuizOption } from './quizLogic';
 
 /**
  * Allgemeines Quiz-Minispiel: eine Frage nach der anderen, falsche Antworten erklären,
@@ -37,6 +20,7 @@ export class QuizModal extends MinigameModal {
   private optTexts: Phaser.GameObjects.BitmapText[] = [];
   private bildGfx: Phaser.GameObjects.Graphics;
   private bildObjekte: Phaser.GameObjects.GameObject[] = [];
+  private zusatz: Phaser.GameObjects.GameObject[] = [];
   private beantwortet = false;
   private ende = false;
 
@@ -81,6 +65,10 @@ export class QuizModal extends MinigameModal {
     this.bildObjekte = f.bild ? f.bild(this.scene, this.bildGfx, false) : [];
     for (const o of this.bildObjekte) this.root.add(o);
     let y = 22 + this.frageText.getTextBounds().local.height + 8;
+    for (const o of this.zusatz) o.destroy();
+    this.zusatz = [];
+    if (f.tabelle) y = this.zeichneTabelle(f.tabelle, y - 4) + 4;
+    if (f.code) y = this.zeichneCode(f.code, y - 4) + 4;
     let ox = x + 8;
     this.optTexts.forEach((t, i) => {
       const o = f.optionen[i];
@@ -91,6 +79,33 @@ export class QuizModal extends MinigameModal {
       else y += lines.length * 11 + 3;
     });
     this.render();
+  }
+
+  private zeichneTabelle(t: { kopf: string[]; zeilen: string[][] }, y0: number): number {
+    const breiten = tabellenBreiten(t);
+    const g = this.bildGfx;
+    [t.kopf, ...t.zeilen].forEach((zeile, r) => {
+      let x = 10;
+      zeile.forEach((zelle, c) => {
+        g.fillStyle(hexToInt(r === 0 ? PAL.grau2 : PAL.creme), 1).fillRect(x, y0 + r * 11, breiten[c] - 1, 10);
+        const tx = this.scene.add.bitmapText(x + 3, y0 + r * 11 + 1, 'kabelitz', zelle).setTint(hexToInt(PAL.ink)).setScrollFactor(0);
+        this.root.add(tx);
+        this.zusatz.push(tx);
+        x += breiten[c];
+      });
+    });
+    return y0 + (t.zeilen.length + 1) * 11 + 2;
+  }
+
+  private zeichneCode(zeilen: string[], y0: number): number {
+    const g = this.bildGfx;
+    g.fillStyle(hexToInt(PAL.nacht), 1).fillRect(8, y0, 304, zeilen.length * 10 + 4);
+    zeilen.forEach((z, i) => {
+      const tx = this.scene.add.bitmapText(12, y0 + 2 + i * 10, 'kabelitz', z).setTint(hexToInt(PAL.netzKabel)).setScrollFactor(0);
+      this.root.add(tx);
+      this.zusatz.push(tx);
+    });
+    return y0 + zeilen.length * 10 + 4;
   }
 
   private render() {
@@ -112,6 +127,8 @@ export class QuizModal extends MinigameModal {
         this.setHelp('Leertaste: weiter');
         this.optTexts.forEach((t) => t.setText(''));
         this.frageText.setText('');
+        for (const o of this.zusatz) o.destroy();
+        this.zusatz = [];
         for (const o of this.bildObjekte) o.destroy();
         this.bildGfx.clear();
         return;

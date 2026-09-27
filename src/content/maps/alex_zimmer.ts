@@ -1,5 +1,6 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { bettKapitel2 } from '../dialog/kapitel2b';
+import { adaV3, bettK3 } from '../dialog/kapitel3';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
 
 export const alexZimmer: MapDef = {
@@ -75,6 +76,7 @@ export const alexZimmer: MapDef = {
       x: 7,
       y: 1,
       script: [
+        when({ all: [{ stufeMin: 9 }, { not: { flag: 'k3_ada' } }] }, adaV3, [
         when({ all: [{ stufeMin: 8 }, { not: { flag: 'k2_ada_update' } }] }, adaUpdate(), [
         when(
           { all: [{ flag: 'kvz_repariert' }, { not: { flag: 'email_gesendet' } }] },
@@ -87,6 +89,7 @@ export const alexZimmer: MapDef = {
             ),
           ],
         ),
+        ]),
         ]),
         { op: 'save' },
       ],
@@ -164,6 +167,7 @@ export const alexZimmer: MapDef = {
 
 function bettScript(): Script {
   return [
+    when({ stufeMin: 9 }, bettK3, [
     when({ stufeMin: 8 }, bettKapitel2, [
     when(
       { all: [{ flag: 'laden_zu_gesehen' }, { not: { flag: 'tag3' } }] },
@@ -202,6 +206,7 @@ function bettScript(): Script {
         ),
       ],
     ),
+    ]),
     ]),
   ];
 }

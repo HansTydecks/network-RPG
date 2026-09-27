@@ -1063,6 +1063,90 @@ export const TILES: TileDef[] = [
       b.disc(4, 7, 2, PAL.braun4).disc(8, 7, 2, PAL.gelb).disc(12, 7, 2, PAL.braun4);
     },
   },
+  // --- Kapitel 3: Netzleitstelle, Erzgebirge, Silberstollen ---
+  {
+    id: 'fels',
+    layer: 'ground',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.grau1);
+      speckle(b, 91, [PAL.grau2, PAL.ink], 0.18);
+      b.hline(0, 15, 16, PAL.ink).vline(15, 0, 16, PAL.ink);
+      b.set(4, 5, PAL.grau4).set(11, 10, PAL.grau4);
+    },
+  },
+  {
+    id: 'stollenboden',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.braun1);
+      speckle(b, 93, [PAL.braun2, PAL.grau1], 0.12);
+      b.hline(0, 7, 16, PAL.grau2).hline(0, 9, 16, PAL.grau2);
+      for (let x = 1; x < 16; x += 5) b.rect(x, 6, 2, 5, PAL.braun2);
+    },
+  },
+  {
+    id: 'gitter',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      for (let x = 1; x < 16; x += 3) b.vline(x, 0, 16, PAL.grau3);
+      b.hline(0, 3, 16, PAL.grau2).hline(0, 12, 16, PAL.grau2);
+      b.rect(6, 6, 4, 4, PAL.orange).set(7, 8, PAL.ink);
+    },
+  },
+  {
+    id: 'lore',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(1, 4, 14, 8, PAL.grau2).rect(2, 3, 12, 2, PAL.grau4);
+      s.rect(3, 1, 4, 3, PAL.grau4).rect(8, 2, 3, 2, PAL.gelb);
+      s.disc(4, 13, 2, PAL.ink).disc(11, 13, 2, PAL.ink);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
+  {
+    id: 'glasfaser',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 5, 16, 6, PAL.grau1);
+      for (let y = 6; y < 11; y++) b.hline(0, y, 16, y % 2 ? PAL.netzKabel : PAL.blau2);
+      b.set(3, 6, PAL.weiss).set(9, 8, PAL.weiss).set(13, 10, PAL.weiss);
+    },
+  },
+  {
+    id: 'stolleneingang',
+    layer: 'deco',
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.ink);
+      b.rect(0, 0, 3, 16, PAL.braun2).rect(13, 0, 3, 16, PAL.braun2).rect(0, 0, 16, 3, PAL.braun2);
+      b.hline(3, 2, 10, PAL.braun1);
+    },
+  },
+  {
+    id: 'grossbildschirm',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 1, 16, 12, PAL.grau1).rect(1, 2, 14, 10, PAL.nacht);
+      b.hline(2, 9, 12, PAL.netzKabel).set(4, 5, PAL.gruen4).set(9, 4, PAL.gruen4).set(12, 7, PAL.netzDefekt);
+      b.hline(4, 6, 5, PAL.netzKabel).hline(8, 5, 4, PAL.netzKabel);
+      b.rect(6, 13, 4, 3, PAL.grau1);
+    },
+  },
+  {
+    id: 'stollenschild',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.vline(7, 8, 8, PAL.braun1);
+      b.rect(1, 2, 14, 7, PAL.braun3).frame(1, 2, 14, 7, PAL.braun1);
+      b.set(5, 5, PAL.ink).set(6, 4, PAL.ink).set(7, 5, PAL.ink).set(9, 5, PAL.ink).set(10, 4, PAL.ink).set(11, 5, PAL.ink);
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

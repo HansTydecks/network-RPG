@@ -3,7 +3,7 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt', 'netzleitstelle', 'silberbach', 'silberstollen'] as const;
 
 export const ITEM_IDS = [
   'netzblick_v1',
@@ -23,6 +23,10 @@ export const ITEM_IDS = [
   'echtheitslupe',
   'caesar_scheibe',
   'taubenfeder',
+  // Kapitel 3
+  'netzblick_v3',
+  'schluesselpaar',
+  'grubenlampe',
 ] as const;
 
 export const FLAG_IDS = [
@@ -140,6 +144,26 @@ export const FLAG_IDS = [
   'k2c_domains',
   'k2c_filter',
   'kapitel2_fertig',
+  // Kapitel 3
+  'k3_start',
+  'k3_ada',
+  'k3_heimnetz',
+  'k3_cam',
+  'k3_opa',
+  'k3_yilmaz',
+  'k3_pakete',
+  'k3_wlan',
+  'k3_daten',
+  'k3_ki',
+  'k3_tag2',
+  'k3_kalle',
+  'k3_raum1',
+  'k3_raum2',
+  'k3_raum3',
+  'k3_raum4',
+  'k3_raum5',
+  'k3_boss',
+  'kapitel3_fertig',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -183,6 +207,23 @@ export const LEXICON_IDS = [
   'kollaboration',
   'cybermobbing',
   'verschluesselung',
+  // Kapitel 3 (Klasse 9)
+  'heimnetz',
+  'pan_lan_wan',
+  'zwei_faktor',
+  'tcp_ip',
+  'routing',
+  'p2p',
+  'protokolle',
+  'asymmetrisch',
+  'datenbank',
+  'sql',
+  'big_data',
+  'ki_lernen',
+  'uebertragungsmedien',
+  'switch_router',
+  'dns',
+  'nachhaltigkeit',
 ] as const;
 
 export const QUEST_IDS = [
@@ -237,6 +278,16 @@ export const QUEST_IDS = [
   'k2c_schluessel',
   'k2c_fernmeldeamt',
   'k2_kapitel_ende',
+  'k3_ada',
+  'k3_router',
+  'k3_opa',
+  'k3_leitstelle',
+  'k3_wlan',
+  'k3_datenbank',
+  'k3_schlafen',
+  'k3_stollen',
+  'k3_tiefer',
+  'k3_kapitel_ende',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];

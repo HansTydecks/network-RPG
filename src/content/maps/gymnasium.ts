@@ -1,5 +1,6 @@
 import type { InteractDef, MapDef } from '../../engine/world/MapDef';
 import { lexicon, minigame, narrate, quest, say, setFlag, take, when, type Script } from '../../engine/script/Script';
+import { workK3 } from '../dialog/kapitel3';
 import { miaMittwoch, pcDienstag, sommerScript, workDienstag, workMittwoch } from '../dialog/kapitel2b';
 
 const workMontag: Script = [
@@ -68,7 +69,7 @@ const workMontag: Script = [
   ),
 ];
 
-const workScript: Script = [when({ flag: 'k2_mittwoch' }, workMittwoch, [when({ flag: 'k2_dienstag' }, workDienstag, workMontag)])];
+const workScript: Script = [when({ stufeMin: 9 }, workK3, [when({ flag: 'k2_mittwoch' }, workMittwoch, [when({ flag: 'k2_dienstag' }, workDienstag, workMontag)])])];
 
 const pcMontag: Script = [
   when(
@@ -200,7 +201,7 @@ export const gymnasium: MapDef = {
         say('ping', 'Lieber nicht! Das klingt verdächtig … Gurr.'),
       ],
     },
-    { kind: 'npc', id: 'sommer', sprite: 'sommer', x: 3, y: 4, dir: 'right', visibleIf: { flag: 'k2_mittwoch' }, script: sommerScript },
+    { kind: 'npc', id: 'sommer', sprite: 'sommer', x: 3, y: 4, dir: 'right', visibleIf: { all: [{ flag: 'k2_mittwoch' }, { not: { stufeMin: 9 } }] }, script: sommerScript },
   ],
   net: {
     devices: [

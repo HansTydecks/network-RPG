@@ -1,4 +1,5 @@
 import type { MapDef } from '../../engine/world/MapDef';
+import { opaK3 } from '../dialog/kapitel3';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
@@ -356,12 +357,14 @@ export const kabelitz: MapDef = {
 
 function opaScript() {
   return [
+    when({ stufeMin: 9 }, opaK3, [
     when({ stufeMin: 8 }, opaKapitel2(), [
     when(
       { flag: 'nacht' },
       [say('opa', 'Nanu, so spät noch unterwegs? Ab ins Bett mit dir. Ich geh auch gleich schlafen … ganz bestimmt.')],
       [when({ flag: 'kvz_repariert' }, opaNachReparatur(), opaVorher())],
     ),
+    ]),
     ]),
   ];
 }

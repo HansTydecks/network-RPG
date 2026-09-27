@@ -383,4 +383,84 @@ export const QUESTS: Record<QuestId, QuestDef> = {
       'Bis dahin kannst du Knotenburg und Kabelitz weiter erkunden.',
     ],
   },
+  k3_ada: {
+    titel: 'Tante Ada ruft an! Geh an deinen Computer.',
+    hinweise: [
+      'Dein Computer piept.',
+      'Der Computer steht in deinem Zimmer.',
+      'Stell dich davor und drück Leertaste.',
+    ],
+  },
+  k3_router: {
+    titel: 'Warum ist das Internet so langsam? Schau dir den Router an.',
+    hinweise: [
+      'Die blinkende Kiste im Wohnzimmer ist der Router.',
+      'Er steht im Wohnzimmer oben an der Wand.',
+      'Stell dich davor und drück Leertaste.',
+    ],
+  },
+  k3_opa: {
+    titel: 'Wem gehört die TAUBENSCHLAG-CAM?',
+    hinweise: [
+      'Das fremde Gerät heißt TAUBENSCHLAG-CAM.',
+      'Wer hat in Kabelitz einen Taubenschlag?',
+      'Sprich Opa Werner in seinem Garten an.',
+    ],
+  },
+  k3_leitstelle: {
+    titel: 'Frau Dr. Yilmaz erwartet dich in der Netzleitstelle.',
+    hinweise: [
+      'KnotenNetz hat das alte Fernmeldeamt zur Netzleitstelle umgebaut.',
+      'Fahr mit dem Bus nach Knotenburg. Das Gebäude ist unten rechts.',
+      'Geh hinein und sprich Frau Dr. Yilmaz an.',
+    ],
+  },
+  k3_wlan: {
+    titel: 'Wer liest im offenen WLAN mit?',
+    hinweise: [
+      'Pinos Gäste-WLAN hat kein Passwort.',
+      'Pino steht vor seiner Pizzeria oben rechts am Markt.',
+      'Sprich Pino an und schau dir die Pakete mit der Paket-Lupe an.',
+    ],
+  },
+  k3_datenbank: {
+    titel: 'Hilf Frau Dr. Yilmaz bei der Datenbank.',
+    hinweise: [
+      'Frau Dr. Yilmaz sucht in einer Datenbank nach Spuren.',
+      'Sie ist in der Netzleitstelle.',
+      'Sprich sie an.',
+    ],
+  },
+  k3_schlafen: {
+    titel: 'Fahr nach Hause und schlaf. Morgen geht es ins Erzgebirge!',
+    hinweise: [
+      'Der Bus nach Kabelitz fährt am Markt ab.',
+      'Zu Hause: ab ins Bett.',
+      'Das Bett steht links in deinem Zimmer.',
+    ],
+  },
+  k3_stollen: {
+    titel: 'Fahr nach Silberbach zum Rechenzentrum im Silberstollen.',
+    hinweise: [
+      'Der Bus nach Silberbach fährt in Knotenburg ab.',
+      'Fahr erst nach Knotenburg, dann an der Haltestelle „Silberbach" wählen.',
+      'In Silberbach wartet Kalle vor dem Stollen.',
+    ],
+  },
+  k3_tiefer: {
+    titel: 'Dring tiefer in den Silberstollen vor.',
+    hinweise: [
+      'Jede Halle hat ein Rätsel. Löst du es, öffnet sich das Gitter.',
+      'Untersuche die Geräte in jeder Halle.',
+      'Ganz hinten wartet der Paketsturm.',
+    ],
+  },
+  k3_kapitel_ende: {
+    titel: 'Kapitel 3 geschafft!',
+    hinweise: [
+      'Du hast Kapitel 3 geschafft! Weiter geht es im nächsten Schuljahr.',
+      'Deine Lehrkraft kennt den Code für den Kalender.',
+      'Bis dahin kannst du alle Orte weiter erkunden.',
+    ],
+  },
 };

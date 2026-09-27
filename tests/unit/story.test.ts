@@ -87,3 +87,41 @@ describe('Story-Simulation Kapitel 2', () => {
       expect(s.log.minispiele, id).toContain(id);
   });
 });
+
+describe('Story-Simulation Kapitel 3', () => {
+  it('vom Kalender Klasse 9 bis zum Paketsturm', async () => {
+    const s = new Story();
+    await s.kapitel(9);
+    expect(s.state.questId).toBe('k3_ada');
+    expect(s.state.items.has('fremder_stick')).toBe(false);
+    await s.an('alex_zimmer', 'computer');
+    expect(s.state.questId).toBe('k3_router');
+    await s.an('wohnzimmer', 'router');
+    expect(s.state.questId).toBe('k3_opa');
+    await s.an('kabelitz', 'opa');
+    expect(s.state.questId).toBe('k3_leitstelle');
+    await s.an('kabelitz', 'bushalt');
+    expect(s.state.mapId).toBe('knotenburg');
+    await s.an('knotenburg', 'fernmeldeamt');
+    expect(s.state.mapId).toBe('netzleitstelle');
+    await s.an('netzleitstelle', 'yilmaz');
+    expect(s.state.questId).toBe('k3_wlan');
+    await s.an('knotenburg', 'pino');
+    expect(s.state.questId).toBe('k3_datenbank');
+    await s.an('netzleitstelle', 'yilmaz');
+    expect(s.state.questId).toBe('k3_schlafen');
+    await s.an('alex_zimmer', 'bett');
+    expect(s.state.questId).toBe('k3_stollen');
+    await s.an('knotenburg', 'bushalt');
+    expect(s.state.mapId).toBe('silberbach');
+    await s.an('silberbach', 'kalle');
+    await s.an('silberbach', 'eingang');
+    expect(s.state.mapId).toBe('silberstollen');
+    for (const h of ['halle1', 'halle2', 'halle3', 'halle4', 'halle5']) await s.an('silberstollen', h);
+    await s.an('silberstollen', 'kern');
+    expect(s.hat('kapitel3_fertig')).toBe(true);
+    expect(s.state.questId).toBe('k3_kapitel_ende');
+    for (const id of ['heimnetz', 'pan_lan_wan', 'zweifaktor', 'tcp', 'routing', 'p2p', 'protokolle', 'truhe', 'asymmetrisch', 'db_abfrage', 'db_zaehlen', 'db_join', 'ki', 'medien', 'switch_router', 'schleife', 'filter', 'dns', 'paketsturm'])
+      expect(s.log.minispiele, id).toContain(id);
+  });
+});

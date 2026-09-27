@@ -408,3 +408,31 @@ export function taubenfederIcon(): PixBuf {
   b.rect(3, 12, 3, 2, PAL.gelb);
   return b;
 }
+
+// Kapitel 3
+CHARACTERS.push(
+  { id: 'yilmaz', colors: { s: PAL.haut2, h: PAL.ink, c: PAL.weiss, p: PAL.blau1, f: PAL.ink }, extra: opaBrille },
+  { id: 'kalle', colors: { s: PAL.haut1, h: PAL.grau3, c: PAL.gelb, p: PAL.grau1, f: PAL.braun1 } },
+);
+
+/** Brille v3 mit Lupe für Datenpakete. */
+export function netzblickV3Icon(): PixBuf {
+  const b = netzblickV2Icon();
+  b.disc(12, 12, 3, PAL.gelb).disc(12, 12, 2, PAL.blau4).set(15, 15, PAL.gelb).set(14, 14, PAL.gelb);
+  return b;
+}
+
+export function schluesselpaarIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(4, 4, 3, PAL.gelb).disc(4, 4, 1, PAL.ink).hline(6, 4, 6, PAL.gelb).vline(10, 5, 2, PAL.gelb);
+  b.rect(8, 9, 6, 5, PAL.grau4).frame(8, 9, 6, 5, PAL.grau1);
+  b.hline(9, 7, 4, PAL.grau3).vline(9, 7, 2, PAL.grau3).vline(12, 7, 2, PAL.grau3).set(11, 11, PAL.ink);
+  return b;
+}
+
+export function grubenlampeIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(5, 5, 6, 9, PAL.grau2).frame(5, 5, 6, 9, PAL.ink).rect(6, 7, 4, 4, PAL.gelb);
+  b.hline(6, 3, 4, PAL.grau1).vline(5, 3, 2, PAL.grau1).vline(10, 3, 2, PAL.grau1);
+  return b;
+}

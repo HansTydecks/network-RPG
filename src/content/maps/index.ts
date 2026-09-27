@@ -11,6 +11,9 @@ import { knotenburg } from './knotenburg';
 import { gymnasium } from './gymnasium';
 import { bibliothek } from './bibliothek';
 import { fernmeldeamt } from './fernmeldeamt';
+import { netzleitstelle } from './netzleitstelle';
+import { silberbach } from './silberbach';
+import { silberstollen } from './silberstollen';
 
 export const MAPS: Record<MapId, MapDef> = {
   alex_zimmer: alexZimmer,
@@ -24,4 +27,7 @@ export const MAPS: Record<MapId, MapDef> = {
   gymnasium,
   bibliothek,
   fernmeldeamt,
+  netzleitstelle,
+  silberbach,
+  silberstollen,
 };

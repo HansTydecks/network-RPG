@@ -1,7 +1,9 @@
 import type { MapDef } from '../../engine/world/MapDef';
+import { mamaK3, routerK3 } from '../dialog/kapitel3';
 import { choice, interlude, narrate, quest, say, setFlag, warp, when } from '../../engine/script/Script';
 
 const mamaScript = [
+  when({ stufeMin: 9 }, mamaK3, [
   when({ stufeMin: 8 }, [
     when(
       { all: [{ flag: 'k2_stick_abgegeben' }, { not: { flag: 'k2_zuhause' } }] },
@@ -82,6 +84,7 @@ const mamaScript = [
       ),
     ],
   ),
+  ]),
   ]),
   ]),
   ]),
@@ -183,9 +186,11 @@ export const wohnzimmer: MapDef = {
       x: 2,
       y: 0,
       script: [
-        narrate('Ein weißer Kasten mit Antennen und blinkenden Lämpchen. Eine Lampe leuchtet rot.'),
-        say('ping', 'Keine Ahnung, was der macht. Aber das rote Licht sieht nicht gut aus.'),
-        setFlag('router_gesehen'),
+        when({ stufeMin: 9 }, routerK3, [
+          narrate('Ein weißer Kasten mit Antennen und blinkenden Lämpchen. Eine Lampe leuchtet rot.'),
+          say('ping', 'Keine Ahnung, was der macht. Aber das rote Licht sieht nicht gut aus.'),
+          setFlag('router_gesehen'),
+        ]),
       ],
       scan: {
         name: 'kasten',
