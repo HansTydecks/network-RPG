@@ -466,3 +466,34 @@ export function reisepassIcon(): PixBuf {
   b.disc(8, 7, 2.5, PAL.gelb).hline(5, 11, 6, PAL.gelb);
   return b;
 }
+
+// Kapitel 5
+CHARACTERS.push(
+  { id: 'ada', colors: { s: PAL.haut2, h: PAL.rot2, c: PAL.netzKabel, p: PAL.grau1, f: PAL.ink }, extra: opaBrille },
+  { id: 'leon', colors: { s: PAL.haut1, h: PAL.braun3, c: PAL.gruen3, p: PAL.blau1, f: PAL.weiss } },
+  { id: 'sato', colors: { s: PAL.haut1, h: PAL.ink, c: PAL.rot2, p: PAL.grau1, f: PAL.ink } },
+  { id: 'sigrun', colors: { s: PAL.haut1, h: PAL.gelb, c: PAL.blau3, p: PAL.grau2, f: PAL.braun1 } },
+  { id: 'kapitaenin', colors: { s: PAL.haut3, h: PAL.weiss, c: PAL.blau1, p: PAL.blau1, f: PAL.ink } },
+);
+
+export function netzblickV4Icon(): PixBuf {
+  const b = netzblickV3Icon();
+  b.disc(3, 12, 3, PAL.blau3).set(2, 11, PAL.gruen3).set(3, 13, PAL.gruen3).set(4, 11, PAL.gruen3);
+  return b;
+}
+
+export function subnetzmaskeIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(1, 4, 14, 7, PAL.ink).frame(1, 4, 14, 7, PAL.grau3);
+  b.disc(5, 7, 2, PAL.gelb).disc(10, 7, 2, PAL.gelb);
+  b.hline(0, 6, 1, PAL.grau3).hline(15, 6, 1, PAL.grau3);
+  return b;
+}
+
+export function kompassIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(7.5, 7.5, 7, PAL.gelb).disc(7.5, 7.5, 6, PAL.creme);
+  for (let i = 0; i < 5; i++) b.set(7, 2 + i, PAL.rot3).set(8, 13 - i, PAL.grau2);
+  b.set(7, 7, PAL.ink).set(8, 8, PAL.ink);
+  return b;
+}

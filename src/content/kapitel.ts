@@ -4,6 +4,7 @@ import { LEXICON } from './lexicon';
 import { KAPITEL2_START } from './dialog/kapitel2';
 import { KAPITEL3_START } from './dialog/kapitel3';
 import { KAPITEL4_START } from './dialog/kapitel4';
+import { KAPITEL5_START } from './dialog/kapitel5';
 import { FLAG_IDS } from './registry';
 
 /**
@@ -56,6 +57,17 @@ export const KAPITEL_START: Record<number, KapitelStart> = {
     flags: [...KAPITEL1_FLAGS, ...flagsVon('k2'), 'kapitel2_fertig', ...flagsVon('k3'), 'kapitel3_fertig', 'k4_start'],
     lexicon: lexiconBis(9),
     intro: KAPITEL4_START,
+  },
+  11: {
+    startFlag: 'k5_start',
+    items: [
+      'netzblick_v1', 'netzblick_v2', 'netzblick_v3', 'binaer_karte', 'block_fernbedienung', 'zettel_funkstille', 'usb_stick', 'echtheitslupe',
+      'caesar_scheibe', 'taubenfeder', 'schluessel7', 'schluesselpaar', 'grubenlampe', 'postkarte', 'quelltext_linse', 'reisepass',
+    ],
+    wegnehmen: ['fremder_stick'],
+    flags: [...KAPITEL1_FLAGS, ...flagsVon('k2'), 'kapitel2_fertig', ...flagsVon('k3'), 'kapitel3_fertig', ...flagsVon('k4'), 'kapitel4_fertig', 'k5_start'],
+    lexicon: lexiconBis(10),
+    intro: KAPITEL5_START,
   },
 };
 

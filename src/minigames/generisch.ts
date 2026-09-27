@@ -137,7 +137,9 @@ class KampfModal extends MinigameModal {
     this.draw = scene.add.graphics().setScrollFactor(0);
     this.root.add(this.draw);
     if (k.bild) {
-      this.bild = scene.add.image(270, 52, k.bild).setScrollFactor(0);
+      this.bild = scene.add.image(270, 56, k.bild, 0).setScrollFactor(0);
+      // Kleine Figuren (16×16) groß zeigen – pixelgenau mit ganzzahligem Faktor
+      if (this.bild.width <= 16) this.bild.setScale(3);
       this.root.add(this.bild);
     }
     this.angriffText = uiText(scene, 10, 24, '', PAL.rot3);

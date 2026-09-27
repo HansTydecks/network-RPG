@@ -117,4 +117,19 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Alex\' Reisepass. Tante Ada sagt: „Pack deinen Koffer."',
     icon: 'icon_reisepass',
   },
+  netzblick_v4: {
+    name: 'NetzBlick v4 „Weltsicht"',
+    beschreibung: 'Zeigt die Wege der Pakete über den ganzen Globus, DNS-Anfragen, Zertifikate als Siegel und VPN-Tunnel.',
+    icon: 'icon_netzblick_v4',
+  },
+  subnetzmaske: {
+    name: 'Subnetzmaske',
+    beschreibung: 'Eine echte Maske von Tante Ada. Aufgesetzt verdeckt sie den Geräte-Teil jeder IP-Adresse – übrig bleibt der Netz-Teil.',
+    icon: 'icon_maske',
+  },
+  traceroute_kompass: {
+    name: 'Traceroute-Kompass',
+    beschreibung: 'Zeigt Hop für Hop, welchen Weg ein Paket genommen hat – und wie lange jeder Abschnitt dauerte.',
+    icon: 'icon_kompass',
+  },
 };

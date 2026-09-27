@@ -158,3 +158,69 @@ describe('Story-Simulation Kapitel 4', () => {
     await expect(s.an('kabelitz', 'opa')).rejects.toThrow(/nicht sichtbar/);
   });
 });
+
+describe('Story-Simulation Kapitel 5 und Finale', () => {
+  it('Weltreise, Taubenschlag, Keller, Streitgespräch und Abspann', async () => {
+    const s = new Story();
+    await s.kapitel(11);
+    expect(s.state.mapId).toBe('weltkarte');
+    expect(s.state.items.has('netzblick_v4')).toBe(true);
+    // Reihenfolge ist erzwungen: Sydney geht noch nicht
+    await s.an('weltkarte', 'ziel_sydney');
+    expect(s.state.mapId).toBe('weltkarte');
+    for (const [ziel, karte, npc] of [
+      ['ziel_frankfurt', 'frankfurt', 'ada_ffm'],
+      ['ziel_landestation', 'landestation', 'kapitaenin'],
+      ['ziel_island', 'island', 'sigrun'],
+      ['ziel_tokio', 'tokio', 'sato'],
+      ['ziel_sydney', 'sydney', 'leon'],
+    ] as const) {
+      await s.an('weltkarte', ziel);
+      expect(s.state.mapId).toBe(karte);
+      await s.an(karte, npc);
+    }
+    expect(s.state.questId).toBe('k5_heim');
+    await s.an('weltkarte', 'ziel_kabelitz');
+    expect(s.state.mapId).toBe('kabelitz');
+    expect(s.hat('k5_nacht')).toBe(true);
+    await s.an('kabelitz', 'taubenschlag');
+    expect(s.state.mapId).toBe('opas_keller');
+    for (const r of ['raum1', 'raum2', 'raum3', 'raum4']) await s.an('opas_keller', r);
+    await s.an('opas_keller', 'opa_keller');
+    expect(s.hat('spiel_ende')).toBe(true);
+    expect(s.state.questId).toBe('k5_ende');
+    // Nach dem Finale ist Opa wieder im Garten
+    await s.an('kabelitz', 'opa');
+    // Auch am Spielende passt der Speichercode in die Code-Eingabe
+    const { encodeSaveCode } = await import('../../src/engine/state/SaveCode');
+    const code = encodeSaveCode(s.state).replace(/-/g, '');
+    expect(code.length).toBeLessThanOrEqual(64);
+    for (const id of ['topologien', 'ipv4_binaer', 'dhcp', 'subnetz', 'lpm', 'lichtwellenleiter', 'vermittlung', 'vpn', 'schutzziele', 'backup', 'hash', 'blockchain', 'steganografie', 'dns_baum', 'cache_vergiftung', 'kodierung', 'tls', 'zertifikat', 'social_engineering', 'haeufigkeit', 'webtech', 'traceroute', 'bitschloss:4', 'raum_adressen', 'raum_schluessel', 'raum_maschinen', 'raum_wahrheit', 'streitgespraech', 'grosser_stecker'])
+      expect(s.log.minispiele, id).toContain(id);
+  });
+});
+
+describe('Alle Minispiele kommen in der Geschichte vor', () => {
+  it('jedes datenbasierte Minispiel wird von mindestens einem Script gestartet', async () => {
+    const { SPIEL_DEFS } = await import('../../src/content/spiele');
+    const { MAPS } = await import('../../src/content/maps');
+    const { KAPITEL_START } = await import('../../src/content/kapitel');
+    const benutzt = new Set<string>();
+    const walk = (sc: import('../../src/engine/script/Script').Script) => {
+      for (const c of sc) {
+        if (c.op === 'minigame') benutzt.add(c.id.split(':')[0]);
+        if (c.op === 'if') {
+          walk(c.then);
+          walk(c.else ?? []);
+        }
+        if (c.op === 'choice') for (const o of c.options) walk(o.then);
+      }
+    };
+    for (const m of Object.values(MAPS)) {
+      walk(m.onEnter ?? []);
+      for (const e of m.entities) if ('script' in e) walk(e.script);
+    }
+    for (const k of Object.values(KAPITEL_START)) walk(k.intro);
+    for (const id of Object.keys(SPIEL_DEFS)) expect(benutzt.has(id), id).toBe(true);
+  });
+});

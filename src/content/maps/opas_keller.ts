@@ -1,0 +1,57 @@
+import type { MapDef } from '../../engine/world/MapDef';
+import { narrate } from '../../engine/script/Script';
+import { kellerRaum, opaFinale } from '../dialog/kapitel5';
+
+/** Opas geheimer Keller unter dem Taubenschlag: vier Räume, einer für jede Etappe der Reise. */
+export const opas_keller: MapDef = {
+  id: 'opas_keller',
+  name: 'Der Keller unter dem Taubenschlag',
+  outside: '#0b1030',
+  legend: { W: 'innenwand', b: 'beton', K: 'klappenschrank', F: 'fernschreiber', C: 'computer', S: 'serverschrank', t: 'lesetisch', P: 'briefkasten' },
+  ground: [
+    'WWWWWWWWWWWWWWWW',
+    'WbbbbbbbbbWbbbbW',
+    'WbbbbbbbbbWbbbbW',
+    'WbbbbbbbbbbbbbbW',
+    'WWWWWWWbWWWWWWWW',
+    'WbbbbbbbbbbbbbbW',
+    'WbbbbbbbbbbbbbbW',
+    'WWWWWWWbWWWWWWWW',
+    'WbbbbbbbbbbbbbbW',
+    'WbbbbbbbbbbbbbbW',
+    'WWWWWWWbWWWWWWWW',
+    'WbbbbbbbbbbbbbbW',
+    'WbbbbbbbbbbbbbbW',
+    'WWWWWWWbWWWWWWWW',
+  ],
+  deco: [
+    '                ',
+    '           K F  ',
+    '   C            ',
+    '                ',
+    '                ',
+    '   S            ',
+    '                ',
+    '                ',
+    '   t            ',
+    '                ',
+    '                ',
+    '   P            ',
+    '                ',
+    '                ',
+  ],
+  entities: [
+    { kind: 'warp', x: 7, y: 13, to: { map: 'kabelitz', x: 23, y: 6, dir: 'down' } },
+    { kind: 'interact', id: 'raum1', x: 3, y: 11, script: kellerRaum('k5_raum_adressen', 'Raum der Adressen: An der Wand hängen ein Briefumschlag, eine ausgedruckte E-Mail, eine IP-Adresse und ein Stück vom DNS-Baum.', 'raum_adressen') },
+    { kind: 'interact', id: 'raum2', x: 3, y: 8, script: kellerRaum('k5_raum_schluessel', 'Raum der Schlüssel: Auf dem Tisch liegt Opas Masterplan. Verschlüsselt.', 'raum_schluessel') },
+    { kind: 'interact', id: 'raum3', x: 3, y: 5, script: kellerRaum('k5_raum_maschinen', 'Raum der Maschinen: Der Vergiftungs-Server brummt. Daneben steht Opas alter Telegraf. Krümel soll nur den richtigen Stecker ziehen.', 'raum_maschinen') },
+    { kind: 'interact', id: 'raum4', x: 3, y: 2, script: kellerRaum('k5_raum_wahrheit', 'Raum der Wahrheit: Auf dem Bildschirm steht FUNKSTILLEs letzte Botschaft an die Welt – bereit zum Veröffentlichen.', 'raum_wahrheit') },
+    { kind: 'interact', id: 'tuer1', x: 7, y: 10, tile: 'gitter', visibleIf: { not: { flag: 'k5_raum_adressen' } }, script: [narrate('Die Tür ist verriegelt. Das Rätsel in diesem Raum öffnet sie.')] },
+    { kind: 'interact', id: 'tuer2', x: 7, y: 7, tile: 'gitter', visibleIf: { not: { flag: 'k5_raum_schluessel' } }, script: [narrate('Verriegelt.')] },
+    { kind: 'interact', id: 'tuer3', x: 7, y: 4, tile: 'gitter', visibleIf: { not: { flag: 'k5_raum_maschinen' } }, script: [narrate('Verriegelt.')] },
+    { kind: 'interact', id: 'tuer4', x: 10, y: 3, tile: 'gitter', visibleIf: { not: { flag: 'k5_raum_wahrheit' } }, script: [narrate('Hinter dieser Tür hört man leises Schnurren. Und ein Radio.')] },
+    { kind: 'npc', id: 'opa_keller', sprite: 'opa', x: 13, y: 2, dir: 'left', script: opaFinale },
+    { kind: 'npc', id: 'morse_keller', sprite: 'morse', anim: 'morse_idle', x: 14, y: 3, dir: 'down', script: [narrate('Morse schnurrt. Sie scheint sich zu freuen, dich zu sehen.')] },
+    { kind: 'interact', id: 'klappenschrank_k', x: 11, y: 1, script: [narrate('Der alte Klappenschrank aus dem Fernmeldeamt. Opa hat ihn hierher gerettet.')] },
+  ],
+};

@@ -1147,6 +1147,89 @@ export const TILES: TileDef[] = [
       b.set(5, 5, PAL.ink).set(6, 4, PAL.ink).set(7, 5, PAL.ink).set(9, 5, PAL.ink).set(10, 4, PAL.ink).set(11, 5, PAL.ink);
     },
   },
+  // --- Kapitel 5: Weltkarte und Reiseziele ---
+  {
+    id: 'meer',
+    layer: 'ground',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.blau2);
+      speckle(b, 111, [PAL.blau1], 0.1);
+      b.hline(2, 5, 4, PAL.blau3).hline(9, 11, 4, PAL.blau3);
+    },
+  },
+  {
+    id: 'land',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.gruen2);
+      speckle(b, 113, [PAL.gruen3, PAL.gruen1], 0.15);
+    },
+  },
+  {
+    id: 'route',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.blau2);
+      speckle(b, 115, [PAL.blau1], 0.08);
+      for (let x = 1; x < 16; x += 4) b.rect(x, 7, 2, 2, PAL.netzPaket);
+      for (let y = 1; y < 16; y += 4) b.rect(7, y, 2, 2, PAL.netzPaket);
+    },
+  },
+  {
+    id: 'eis',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.weiss);
+      speckle(b, 117, [PAL.grau4, PAL.blau4], 0.1);
+    },
+  },
+  {
+    id: 'ortsmarke',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.disc(7.5, 6, 5, PAL.rot3).disc(7.5, 6, 2, PAL.weiss);
+      for (let y = 10; y < 15; y++) b.hline(7.5 - (15 - y) / 2, y, 15 - y, PAL.rot3);
+      b.rect(5, 15, 6, 1, PAL.ink);
+    },
+  },
+  {
+    id: 'sand',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.braun4);
+      speckle(b, 119, [PAL.gelb, PAL.creme], 0.2);
+    },
+  },
+  {
+    id: 'kabeltrommel',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.disc(7.5, 8, 7, PAL.braun2).disc(7.5, 8, 5, PAL.ink).disc(7.5, 8, 2, PAL.braun3);
+      for (let a = 0; a < 6; a++) b.set(Math.round(7.5 + Math.cos(a) * 4), Math.round(8 + Math.sin(a) * 4), PAL.netzKabel);
+    },
+  },
+  {
+    id: 'theke',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 5, 16, 11, PAL.braun2).hline(0, 5, 16, PAL.braun4).frame(0, 5, 16, 11, PAL.braun1);
+      b.rect(3, 1, 4, 4, PAL.weiss).rect(4, 2, 2, 2, PAL.braun1).rect(10, 2, 3, 3, PAL.rot2);
+    },
+  },
+  {
+    id: 'kaffeetisch',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.disc(7.5, 7, 6, PAL.braun3).disc(7.5, 7, 5, PAL.braun4);
+      b.vline(7, 11, 5, PAL.braun1).vline(8, 11, 5, PAL.braun1);
+      b.rect(6, 5, 3, 3, PAL.weiss);
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

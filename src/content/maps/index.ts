@@ -15,6 +15,13 @@ import { netzleitstelle } from './netzleitstelle';
 import { silberbach } from './silberbach';
 import { silberstollen } from './silberstollen';
 import { werkstatt } from './werkstatt';
+import { weltkarte } from './weltkarte';
+import { frankfurt } from './frankfurt';
+import { landestation } from './landestation';
+import { island } from './island';
+import { tokio } from './tokio';
+import { sydney } from './sydney';
+import { opas_keller } from './opas_keller';
 
 export const MAPS: Record<MapId, MapDef> = {
   alex_zimmer: alexZimmer,
@@ -32,4 +39,11 @@ export const MAPS: Record<MapId, MapDef> = {
   silberbach,
   silberstollen,
   werkstatt,
+  weltkarte,
+  frankfurt,
+  landestation,
+  island,
+  tokio,
+  sydney,
+  opas_keller,
 };

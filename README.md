@@ -10,9 +10,19 @@ Alex lebt im sächsischen Dorf Kabelitz und bekommt von Tante Ada eine Brille, d
 
 ## Status
 
-**Kapitel 1 (Klasse 7) ist komplett spielbar (M2b):** Brief-Quest, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Blockprogrammierung mit dem Saugroboter, Dorfladen mit Bytes und Einheiten, Dorffest (Dateien, Tabellen, Plakat), Reparatur des grauen Kastens, Brief gegen E-Mail und FUNKSTILLEs Drohung. Spielzeit etwa 90 bis 120 Minuten.
+**Das Spiel ist vom Prolog bis zum Abspann komplett spielbar** (5 Kapitel, 96 Minispiele, 89 Netzbuch-Einträge):
 
-**Kapitel 2 (Klasse 8), Teil 1 (M3a):** Über den Schulkalender (Code der Lehrkraft) geht es ins nächste Schuljahr: Brille v2 mit Funkwellen, Busfahrt nach Knotenburg, Gymnasium mit Herrn Work, „Algorithmus oder nicht?", Client und Server, Krümel mit Wiederholung, Verzweigung und „solange"-Schleife. Wer ohne Spielstand mit dem Code einsteigt, bekommt automatisch alles aus Kapitel 1.
+| Kapitel | Stufe | Inhalt |
+|---|---|---|
+| 1 Kabelitz | Kl. 7 | Brief an Lina, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Krümel-Blöcke (Sequenz), Dorfladen mit Bytes, Dorffest, Reparatur des grauen Kastens |
+| 2 Knotenburg | Kl. 8 | Gymnasium mit Herrn Work, Algorithmen, Schleifen und Verzweigungen, Client/Server, E-Mail (AN/CC/BCC), IP- und MAC-Adresse, Phishing-Welle, Passwörter, Datenschutz bei Pizza Pino, Suchmaschinen, Fake-Bilder, Metadaten, Caesar, Fernmeldeamt |
+| 3 Unter Tage | Kl. 9 | Heimnetz, PAN/LAN/WAN, Pakete, Routing, DNS, HTTPS, Schlüsseltausch, Datenbanken (SQL-Denken), KI, Dungeon im Silberstollen mit Boss-Kampf |
+| 4 Die Werkstatt | Kl. 10 | Textbasiertes Programmieren (Datentypen, Bedingungen, Funktionen), HTML und Barrierefreiheit, reguläre Ausdrücke, Chat-Server, Suchen und Sortieren, Maschinenentscheidungen |
+| 5 Einmal um die Welt + Finale | Oberstufe | Topologien, IPv4/IPv6, Subnetze, DHCP, Routingtabellen, Seekabel, Backups und Hashes, DNS-Hierarchie, TLS und Zertifikate, Traceroute – und die Auflösung in Opas Keller |
+
+Jedes Kapitel lässt sich über den Schulkalender in Alex' Zimmer mit dem Code der Lehrkraft direkt starten; Alex bekommt dann automatisch alles aus den früheren Kapiteln. Alte Speichercodes bleiben gültig.
+
+Für Lehrkräfte: [`docs/MINISPIELE.md`](docs/MINISPIELE.md) listet alle Minispiele mit Klassenstufe und Lehrplanbezug, [`docs/NETZBUCH.md`](docs/NETZBUCH.md) alle Merksätze als Hefter-Vorlage. Beide Dateien werden aus den Spieldaten erzeugt.
 
 ## Spielen und entwickeln
 
@@ -31,6 +41,8 @@ Mehr in [`docs/TECHNIK.md`](docs/TECHNIK.md#entwickeln).
 |---|---|
 | [`docs/TECHNIK.md`](docs/TECHNIK.md) | Technischer Plan, Architektur, Meilensteine, Tests |
 | [`docs/LEHRPLAN.md`](docs/LEHRPLAN.md) | Zuordnung Lehrplan ↔ Kapitel |
+| [`docs/MINISPIELE.md`](docs/MINISPIELE.md) | Alle Minispiele mit Klassenstufe und Lehrplanbezug |
+| [`docs/NETZBUCH.md`](docs/NETZBUCH.md) | Alle Netzbuch-Einträge (Merksätze) |
 | [`docs/PLOT.md`](docs/PLOT.md) | Figuren und vollständiger Plot mit allen Quests (**Spoiler!**) |
 | [`docs/ITEMS_UND_HILFE.md`](docs/ITEMS_UND_HILFE.md) | Hilfesystem, Items, Backtracking-Rätsel, Minispiel-Katalog |
 

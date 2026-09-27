@@ -2,6 +2,7 @@ import type { InteractDef, MapDef } from '../../engine/world/MapDef';
 import { lexicon, minigame, narrate, quest, say, setFlag, take, when, type Script } from '../../engine/script/Script';
 import { workK3 } from '../dialog/kapitel3';
 import { workK4 } from '../dialog/kapitel4';
+import { workK5 } from '../dialog/kapitel5';
 import { miaMittwoch, pcDienstag, sommerScript, workDienstag, workMittwoch } from '../dialog/kapitel2b';
 
 const workMontag: Script = [
@@ -70,7 +71,7 @@ const workMontag: Script = [
   ),
 ];
 
-const workScript: Script = [when({ stufeMin: 10 }, workK4, [when({ stufeMin: 9 }, workK3, [when({ flag: 'k2_mittwoch' }, workMittwoch, [when({ flag: 'k2_dienstag' }, workDienstag, workMontag)])])])];
+const workScript: Script = [when({ stufeMin: 11 }, workK5, [when({ stufeMin: 10 }, workK4, [when({ stufeMin: 9 }, workK3, [when({ flag: 'k2_mittwoch' }, workMittwoch, [when({ flag: 'k2_dienstag' }, workDienstag, workMontag)])])])])];
 
 const pcMontag: Script = [
   when(

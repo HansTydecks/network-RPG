@@ -541,6 +541,11 @@ export class WorldScene extends Phaser.Scene {
     autosave(this.state);
   }
 
+  /** Für Browser-Tests: aktueller Speichercode. */
+  saveCodeForTest(): string {
+    return autosave(this.state);
+  }
+
   /** Für Browser-Tests: ein Kapitel starten, ohne einen echten Kalender-Code zu kennen. */
   testStartKapitel(stufe = 8) {
     if (this.scriptRunning) return;

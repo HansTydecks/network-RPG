@@ -3,6 +3,7 @@ import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
 import { TILES } from '../../content/art/tiles';
 import { EXPONAT_BILDER } from '../../content/art/exponate';
+import { kompassIcon, netzblickV4Icon, subnetzmaskeIcon } from '../../content/art/characters';
 import { postkarteIcon, quelltextIcon, reisepassIcon } from '../../content/art/characters';
 import { grubenlampeIcon, netzblickV3Icon, schluesselpaarIcon } from '../../content/art/characters';
 import { caesarScheibeIcon, echtheitslupeIcon, fremderStickIcon, netzblickV2Icon, schluessel7Icon, taubenfederIcon } from '../../content/art/characters';
@@ -119,6 +120,9 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'icon_postkarte', postkarteIcon());
   addImage(scene, 'icon_quelltext', quelltextIcon());
   addImage(scene, 'icon_reisepass', reisepassIcon());
+  addImage(scene, 'icon_netzblick_v4', netzblickV4Icon());
+  addImage(scene, 'icon_maske', subnetzmaskeIcon());
+  addImage(scene, 'icon_kompass', kompassIcon());
   for (const [key, bild] of Object.entries(EXPONAT_BILDER)) addImage(scene, key, bild());
   addSheet(scene, 'kruemel', kruemelFrames());
   addSheet(scene, 'morse', morseFrames());

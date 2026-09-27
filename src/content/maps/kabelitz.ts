@@ -1,6 +1,7 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { opaK3 } from '../dialog/kapitel3';
 import { emilK4 } from '../dialog/kapitel4';
+import { busKabelitzK5, opaEpilog, taubenschlagFinale } from '../dialog/kapitel5';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
@@ -163,7 +164,7 @@ export const kabelitz: MapDef = {
       dir: 'down',
       // Am Samstag steht Opa auf dem Dorffest.
       // Am Samstag in Kapitel 1 steht Opa auf dem Dorffest, ab Klasse 10 ist er „zur Kur".
-      visibleIf: { all: [{ not: { all: [{ flag: 'tag4' }, { not: { flag: 'nacht' } }] } }, { not: { stufeMin: 10 } }] },
+      visibleIf: { all: [{ not: { all: [{ flag: 'tag4' }, { not: { flag: 'nacht' } }] } }, { not: { all: [{ stufeMin: 10 }, { not: { flag: 'spiel_ende' } }] } }] },
       script: opaScript(),
     },
     {
@@ -266,7 +267,9 @@ export const kabelitz: MapDef = {
       id: 'taubenschlag',
       x: 23,
       y: 5,
-      script: [narrate('Opa Werners Taubenschlag. An der Tür ist ein Tastenfeld: „Nur für Tauben". Seltsam …')],
+      script: [
+        when({ all: [{ stufeMin: 11 }, { flag: 'k5_nacht' }] }, taubenschlagFinale, [narrate('Opa Werners Taubenschlag. An der Tür ist ein Tastenfeld: „Nur für Tauben". Seltsam …')]),
+      ],
       scan: {
         name: 'taubenschlag',
         klasse: 'Taubenschlag',
@@ -312,6 +315,7 @@ export const kabelitz: MapDef = {
       y: 14,
       tile: 'bushalt',
       script: [
+        when({ stufeMin: 11 }, busKabelitzK5, [
         when(
           { stufeMin: 8 },
           [
@@ -328,6 +332,7 @@ export const kabelitz: MapDef = {
           ],
           [narrate('Bushaltestelle „Kabelitz Dorfstraße". Hier fährt der Bus nach Knotenburg ab. Heute brauchst du ihn nicht.')],
         ),
+        ]),
       ],
       scan: { name: 'bushaltestelle', klasse: 'Haltestelle', attribute: [['linie', '42 nach Knotenburg'], ['takt', 'jede Stunde']], methoden: ['warten'] },
     },
@@ -359,6 +364,7 @@ export const kabelitz: MapDef = {
 
 function opaScript() {
   return [
+    when({ flag: 'spiel_ende' }, opaEpilog, [
     when({ stufeMin: 9 }, opaK3, [
     when({ stufeMin: 8 }, opaKapitel2(), [
     when(
@@ -366,6 +372,7 @@ function opaScript() {
       [say('opa', 'Nanu, so spät noch unterwegs? Ab ins Bett mit dir. Ich geh auch gleich schlafen … ganz bestimmt.')],
       [when({ flag: 'kvz_repariert' }, opaNachReparatur(), opaVorher())],
     ),
+    ]),
     ]),
     ]),
   ];

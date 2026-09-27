@@ -53,7 +53,24 @@ Tests (Stand M2b): 102 Unit-Tests und 3 Browser-Tests; der Durchlauf spielt Kapi
 - Scripts, die die Karte wechseln, lösen danach das `onEnter` der neuen Karte aus
 - Browser-Test `kapitel2.spec.ts` spielt M3a komplett durch (Einstieg ohne Code über `testStartKapitel2()`)
 
-Nächste Schritte: **M3b** – der fremde USB-Stick, Mail-Werkstatt (AN/CC/BCC, Betreff, Adressen, IP- und MAC-Adresse, Pakete als Einblick), Phishing-Welle (Phishing-Detektiv, Passwort-Schmiede, Brute Force), Pizza Pino (personenbezogene Daten). **M3c** – Bibliothek (Suchmaschinen, SEO, KI-Bilder, Metadaten), Kollaboration und Netiquette, Caesar-Scheibe (Zettel aus Kapitel 1), Fernmeldeamt als Kapitelfinale.
+**M3b/M3c – Kapitel 2 komplett:** Dienstag und Mittwoch in Knotenburg (`src/content/dialog/kapitel2b.ts`): Mail-Werkstatt, Adressen, IP/MAC, Pakete als Einblick, Phishing-Welle mit Hilfe für Menschen in der Stadt, Passwort-Schmiede, Pizza Pino, Bibliothek (Suche, Ranking, Bild-Detektiv, Metadaten), Caesar-Scheibe (Zettel aus Kapitel 1), Fernmeldeamt als Finale.
+
+**Datengetriebene Minispiele:** Neue Minispiele sind reine Daten (`SpielDef` in `src/minigames/defs.ts`, Arten `quiz`, `reihenfolge`, `kampf`, `caesar`, `passwort`), je Kapitel in `src/content/spiele/kapitel2..5.ts`. `ausDef()` in `src/minigames/generisch.ts` baut daraus das Modal. Quizfragen können Bild, Tabelle oder Code zeigen; richtige Antworten werden deterministisch gemischt (`festeReihenfolge` schaltet das ab).
+
+**Kapitel 3 (Kl. 9):** Brille v3, Heimnetz und fremdes Gerät, Netzleitstelle mit Frau Dr. Yilmaz, Datenbank-Detektiv, KI-Filter, Silberbach und der Silberstollen als Dungeon mit Gittern, Boss-Kampf „Paketsturm".
+
+**Kapitel 4 (Kl. 10):** Werkstatt mit Kevin (`src/content/dialog/kapitel4.ts`), KrümelScript, HTML-Restaurator mit Herrn Schubert, Regex, Chat-Server, Sortieren/Suchen; Postkarten „aus Bad Elster"; Tante Ada übergibt den Reisepass.
+
+**Kapitel 5 und Finale (Oberstufe):** Brille v4 und die Weltkarte (`weltkarte`) mit Reisezielen, die nach und nach freigeschaltet werden: Frankfurt, Landestation, Island, Tokio, Sydney. Leon verrät die Wendung; nachts in Kabelitz öffnet das Bit-Schloss mit 4 Lampen den Taubenschlag, in `opas_keller` folgen vier Räume, das Streitgespräch, der Große Stecker, der Videoanruf mit Leon, Epilog und Abspann (`spiel_ende`).
+
+**Tests (Stand Finale):** Über 390 Unit-Tests, darunter
+- `story.test.ts`: Ein Story-Simulator (`tests/unit/helfer/story.ts`) spielt jedes Kapitel mit den echten Scripts bis zum Ende durch und prüft, dass jedes datengetriebene Minispiel in einem Script vorkommt.
+- `erreichbar.test.ts`: Breitensuche über alle Karten, jede Figur und jedes Objekt ist erreichbar.
+- `spiele.test.ts`: jede Quizfrage hat genau eine richtige Antwort, alle Texte passen aufs Brett, jede Aufgabe hat einen Lehrplanbezug.
+- `doku.test.ts`: hält `docs/MINISPIELE.md` und `docs/NETZBUCH.md` synchron (neu erzeugen mit `DOKU_SCHREIBEN=1 npx vitest run tests/unit/doku.test.ts`).
+- Speichercode v2 (lauflängenkodiert, am Spielende höchstens 64 Zeichen), v1-Codes bleiben lesbar.
+
+Browser-Tests: Kapitel 1 komplett, Kapitel 2 Teil 1, Kapitel 5 (Weltkarte, Frankfurt), Smoke-Test.
 
 ## Entwickeln
 

@@ -94,4 +94,4 @@ class BitschlossModal extends MinigameModal {
 }
 
 export const bitschlossMinigame: Minigame = (ctx) =>
-  new Promise((resolve) => ctx.push(new BitschlossModal(ctx.scene, Math.max(1, Math.min(3, Number(ctx.param ?? 1))), resolve)));
+  new Promise((resolve) => ctx.push(new BitschlossModal(ctx.scene, Math.max(1, Math.min(4, Number(ctx.param ?? 1))), resolve)));

@@ -3,7 +3,7 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt', 'netzleitstelle', 'silberbach', 'silberstollen', 'werkstatt'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt', 'netzleitstelle', 'silberbach', 'silberstollen', 'werkstatt', 'weltkarte', 'frankfurt', 'landestation', 'island', 'tokio', 'sydney', 'opas_keller'] as const;
 
 export const ITEM_IDS = [
   'netzblick_v1',
@@ -31,6 +31,10 @@ export const ITEM_IDS = [
   'postkarte',
   'quelltext_linse',
   'reisepass',
+  // Kapitel 5
+  'netzblick_v4',
+  'subnetzmaske',
+  'traceroute_kompass',
 ] as const;
 
 export const FLAG_IDS = [
@@ -181,6 +185,23 @@ export const FLAG_IDS = [
   'k4_stimme',
   'k4_emil',
   'kapitel4_fertig',
+  // Kapitel 5 und Finale
+  'k5_start',
+  'k5_frankfurt',
+  'k5_seekabel',
+  'k5_island',
+  'k5_tokio',
+  'k5_sydney',
+  'k5_leon',
+  'k5_nacht',
+  'k5_keller',
+  'k5_raum_adressen',
+  'k5_raum_schluessel',
+  'k5_raum_maschinen',
+  'k5_raum_wahrheit',
+  'k5_streit',
+  'k5_stecker',
+  'spiel_ende',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -256,6 +277,28 @@ export const LEXICON_IDS = [
   'suchen_sortieren',
   'maschinen_entscheiden',
   'zeitabhaengige_medien',
+  // Kapitel 5 (Oberstufe)
+  'topologien',
+  'ipv4_ipv6',
+  'dhcp',
+  'subnetting',
+  'routingtabellen',
+  'lichtwellenleiter',
+  'paketvermittlung',
+  'vpn',
+  'schutzziele',
+  'backup',
+  'hash',
+  'blockchain',
+  'steganografie',
+  'dns_hierarchie',
+  'zeichenkodierung',
+  'tls',
+  'zertifikate',
+  'social_engineering',
+  'kryptoanalyse',
+  'webtechnologien',
+  'traceroute',
 ] as const;
 
 export const QUEST_IDS = [
@@ -326,6 +369,16 @@ export const QUEST_IDS = [
   'k4_chat',
   'k4_stimme',
   'k4_kapitel_ende',
+  'k5_frankfurt',
+  'k5_seekabel',
+  'k5_island',
+  'k5_tokio',
+  'k5_sydney',
+  'k5_heim',
+  'k5_taubenschlag',
+  'k5_keller',
+  'k5_opa',
+  'k5_ende',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];

@@ -33,5 +33,9 @@ export const SPEAKERS: Record<string, string> = {
   kalle: 'Kalle',
   kevin: 'Kevin',
   schubert: 'Herr Schubert',
+  leon: 'Leon',
+  sato: 'Frau Sato',
+  sigrun: 'Sigrun',
+  kapitaenin: 'Kapitänin Moreau',
   unbekannt: '???',
 };

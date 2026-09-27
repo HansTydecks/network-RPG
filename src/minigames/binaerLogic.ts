@@ -19,6 +19,7 @@ export const BITSCHLOESSER = [
   { ziel: 5, summeZeigen: true, text: 'Schloss 1: Stell die Zahl 5 ein.' },
   { ziel: 42, summeZeigen: true, text: 'Schloss 2: Stell die Zahl 42 ein.' },
   { ziel: 200, summeZeigen: false, text: 'Schloss 3: Stell die Zahl 200 ein – diesmal ohne Anzeige der Summe!' },
+  { ziel: 42, summeZeigen: false, text: 'Tastenfeld „Nur für Tauben": Pings Ringnummer endet auf 042. Binär eingeben!' },
 ];
 
 /** Pixelwand: eine Taube, Zeile für Zeile als Binärzahl (1 = schwarz). */

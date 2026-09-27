@@ -511,4 +511,84 @@ export const QUESTS: Record<QuestId, QuestDef> = {
       'Pack schon mal den Koffer – es geht um die Welt.',
     ],
   },
+  k5_frankfurt: {
+    titel: 'Frankfurt: Tante Ada wartet am Internetknoten.',
+    hinweise: [
+      'Auf der Weltkarte liegt Frankfurt gleich neben dir.',
+      'Stell dich vor die Markierung „Frankfurt" und drück Leertaste.',
+      'Im Internetknoten sprichst du mit Tante Ada.',
+    ],
+  },
+  k5_seekabel: {
+    titel: 'Ein Seekabel ist beschädigt! Auf zur Landestation.',
+    hinweise: [
+      'Die Landestation liegt an der Atlantikküste.',
+      'Auf der Weltkarte links unterhalb von Frankfurt.',
+      'Sprich mit der Kapitänin an der Station.',
+    ],
+  },
+  k5_island: {
+    titel: 'Island: Tante Adas Forschungsdaten sind verschlüsselt!',
+    hinweise: [
+      'Das grüne Rechenzentrum steht auf Island.',
+      'Auf der Weltkarte oben links, über das Meer.',
+      'Sprich Sigrun im Rechenzentrum an.',
+    ],
+  },
+  k5_tokio: {
+    titel: 'Tokio: An der Wurzel des Internets.',
+    hinweise: [
+      'In Tokio steht ein Root-Server.',
+      'Auf der Weltkarte ganz rechts, hinter Asien.',
+      'Sprich Frau Sato an.',
+    ],
+  },
+  k5_sydney: {
+    titel: 'Sydney: Woher kommen die Pakete?',
+    hinweise: [
+      'Tante Adas Kollegin in Sydney hat den Verkehr zurückverfolgt.',
+      'Auf der Weltkarte unten rechts, Australien.',
+      'Geh ins Café und sprich den jungen Mann hinter der Theke an.',
+    ],
+  },
+  k5_heim: {
+    titel: 'Flieg nach Hause. Um Mitternacht kommt der Große Stecker!',
+    hinweise: [
+      'Die Spur führt nach Kabelitz.',
+      'Auf der Weltkarte zurück nach Deutschland, Markierung „Kabelitz" rechts neben Frankfurt.',
+      'Dort wartet der Taubenschlag.',
+    ],
+  },
+  k5_taubenschlag: {
+    titel: 'Öffne das Tastenfeld am Taubenschlag.',
+    hinweise: [
+      'Der Taubenschlag steht in Opa Werners Garten.',
+      'Rechts oben in Kabelitz. Das Tastenfeld: „Nur für Tauben".',
+      'Pings Ringnummer endet auf 042 – binär eingeben!',
+    ],
+  },
+  k5_keller: {
+    titel: 'Durchquere die vier Räume im Keller.',
+    hinweise: [
+      'Unter dem Taubenschlag liegt ein Keller mit vier Räumen.',
+      'Jeder Raum hat ein Rätsel aus einem Schuljahr.',
+      'Dahinter wartet FUNKSTILLE.',
+    ],
+  },
+  k5_opa: {
+    titel: 'Sprich mit FUNKSTILLE.',
+    hinweise: [
+      'Im letzten Raum sitzt jemand.',
+      'Geh ganz nach oben im Keller.',
+      'Sprich ihn an.',
+    ],
+  },
+  k5_ende: {
+    titel: 'Du hast NETZBLICK geschafft!',
+    hinweise: [
+      'Die Welt leuchtet im Netzblick – danke fürs Spielen!',
+      'Alle Orte kannst du weiter besuchen.',
+      'Opa Werner erzählt dir gern von früher – er ist jetzt wieder im Garten.',
+    ],
+  },
 };

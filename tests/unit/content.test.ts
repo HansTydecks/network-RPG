@@ -29,6 +29,13 @@ const MAP_STUFE: Record<string, number> = {
   silberbach: 9,
   silberstollen: 9,
   werkstatt: 10,
+  weltkarte: 11,
+  frankfurt: 11,
+  landestation: 11,
+  island: 11,
+  tokio: 11,
+  sydney: 11,
+  opas_keller: 11,
 };
 
 /** Durchläuft ein Script und merkt sich, ab welcher Klassenstufe ein Befehl erreichbar ist ({ stufeMin } in Bedingungen). */
