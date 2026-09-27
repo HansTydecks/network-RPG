@@ -46,6 +46,7 @@ export const PLAKAT_FRAGEN: QuizFrage[] = [
     ],
     bild: (scene, g) => sonnenVergleich(scene, g),
     antwortenX: 170,
+    festeReihenfolge: true,
   },
   {
     frage: 'Lina: „Die Sonne soll orange sein!" Was musst du ändern?',

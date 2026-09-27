@@ -32,6 +32,8 @@ export type Command =
   | { op: 'minigame'; id: string }
   | { op: 'face'; npc: string; dir: Dir }
   | { op: 'refresh' }
+  /** Zeigt ein Bild neben dem Dialog (null blendet es aus). */
+  | { op: 'bild'; key: string | null }
   | { op: 'earn'; amount: number }
   | { op: 'pay'; amount: number };
 
@@ -59,6 +61,7 @@ export const interlude = (text: string): Command => ({ op: 'interlude', text });
 export const minigame = (id: string): Command => ({ op: 'minigame', id });
 export const earn = (amount: number): Command => ({ op: 'earn', amount });
 export const pay = (amount: number): Command => ({ op: 'pay', amount });
+export const bild = (key: string | null): Command => ({ op: 'bild', key });
 export const faceNpc = (npc: string, dir: Dir): Command => ({ op: 'face', npc, dir });
 
 export function evalCond(c: Cond, s: GameState): boolean {

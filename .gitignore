@@ -5,3 +5,5 @@ playwright-report/
 *.local.*
 .DS_Store
 mg.tmp.mjs
+shot.tmp.mjs
+shot2.tmp.mjs

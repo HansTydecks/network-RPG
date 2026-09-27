@@ -23,6 +23,7 @@ function mockHost(choices: number[] = []) {
     faceNpc: () => {},
     refresh: () => {},
     bytesChanged: async (d) => void log.push(`bytes ${d}`),
+    showBild: (k) => void log.push(`bild ${k}`),
   };
   return { host, log };
 }

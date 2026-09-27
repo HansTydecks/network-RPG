@@ -3,6 +3,7 @@ import { PAL, hexToInt } from '../engine/gfx/palette';
 import { measureText, wrapText } from '../engine/gfx/fontGlyphs';
 import type { Input } from '../engine/input/Input';
 import { uiText } from '../engine/ui/widgets';
+import { richtigeAn, seedAus } from '../engine/util/mischen';
 import { MinigameModal } from './base';
 
 export interface QuizOption {
@@ -21,6 +22,8 @@ export interface QuizFrage {
   antwortenX?: number;
   /** Kurze Antworten (z. B. Formeln) nebeneinander in einer Zeile. */
   nebeneinander?: boolean;
+  /** Antworten nicht mischen (z. B. „links"/„rechts" passend zum Bild). */
+  festeReihenfolge?: boolean;
 }
 
 /**
@@ -37,8 +40,13 @@ export class QuizModal extends MinigameModal {
   private beantwortet = false;
   private ende = false;
 
-  constructor(scene: Phaser.Scene, title: string, private fragen: QuizFrage[], private schluss: string, resolve: () => void, intro?: string) {
+  private fragen: QuizFrage[];
+
+  constructor(scene: Phaser.Scene, title: string, fragen: QuizFrage[], private schluss: string, resolve: () => void, intro?: string) {
     super(scene, title, '↑↓ wählen · Leertaste antworten', resolve);
+    // Die richtige Antwort wandert von Frage zu Frage an eine andere Stelle.
+    const start = seedAus(title);
+    this.fragen = fragen.map((f, i) => (f.festeReihenfolge ? f : { ...f, optionen: richtigeAn(f.optionen, (o) => o.ok, start + i * 2) }));
     this.bildGfx = scene.add.graphics().setScrollFactor(0);
     this.root.add(this.bildGfx);
     this.frageText = uiText(scene, 10, 22, '');

@@ -27,7 +27,7 @@ import { InfoPanel } from '../ui/InfoPanel';
 import { Interlude } from '../ui/Interlude';
 import { ObjectCard } from '../ui/ObjectCard';
 import { ListMenu } from '../ui/ListMenu';
-import { UiStack } from '../ui/widgets';
+import { UI_DEPTH, UiStack } from '../ui/widgets';
 import { addTouchControls, isTouchDevice, type TouchControls } from '../ui/TouchControls';
 import type { InteractDef, MapDef, NpcDef, ScanData } from '../world/MapDef';
 import { parseMap, type ParsedMap } from '../world/mapUtil';
@@ -392,6 +392,15 @@ export class WorldScene extends Phaser.Scene {
 
   // ---------- Scripts ----------
 
+  private bildImage?: Phaser.GameObjects.Image;
+
+  /** Bild neben dem Dialog, z. B. zu einem Museumsexponat. */
+  private showBild(key: string | null) {
+    this.bildImage?.destroy();
+    this.bildImage = undefined;
+    if (key) this.bildImage = this.add.image(12, 58, key).setOrigin(0).setScrollFactor(0).setDepth(UI_DEPTH - 1);
+  }
+
   private async run(script: Script) {
     if (this.scriptRunning) return;
     this.scriptRunning = true;
@@ -401,6 +410,7 @@ export class WorldScene extends Phaser.Scene {
       await runScript(script, this.host());
     } finally {
       this.scriptRunning = false;
+      this.showBild(null);
       this.refreshAfterScript();
     }
   }
@@ -473,6 +483,7 @@ export class WorldScene extends Phaser.Scene {
         if (n) this.face(n.actor, dir);
       },
       refresh: () => this.refreshAfterScript(),
+      showBild: (key) => this.showBild(key),
       bytesChanged: (d) => this.modal<void>((r) => new Toast(this, `${d > 0 ? '+' : '–'}${formatBytes(Math.abs(d))} · Jetzt: ${formatBytes(this.state.bytes)}`, r)),
     };
   }

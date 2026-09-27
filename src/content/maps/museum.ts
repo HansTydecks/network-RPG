@@ -1,21 +1,32 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import type { Command, Script } from '../../engine/script/Script';
-import { choice, give, lexicon, minigame, narrate, quest, say, setFlag, when } from '../../engine/script/Script';
+import { bild, choice, give, lexicon, minigame, narrate, quest, say, setFlag, when } from '../../engine/script/Script';
+import { seedAus } from '../../engine/util/mischen';
 import type { FlagId } from '../registry';
 
-/** Ein Exponat: Tafel lesen, Frage beantworten. Richtig → Exponat zählt als gesehen. */
-function exponat(flag: FlagId, tafel: string[], frage: string, antworten: [string, boolean][], erklaerung: string): Script {
+/** Stellt die richtige Antwort je Exponat an eine andere Stelle – nicht immer nach oben. */
+function mischen(flag: FlagId, antworten: [string, boolean][]): [string, boolean][] {
+  const falsch = antworten.filter(([, ok]) => !ok);
+  const richtig = antworten.filter(([, ok]) => ok);
+  const pos = (seedAus(flag) + 1) % antworten.length;
+  return [...falsch.slice(0, pos), ...richtig, ...falsch.slice(pos)];
+}
+
+/** Ein Exponat: Bild ansehen, Tafel lesen, Frage beantworten. Richtig → Exponat zählt als gesehen. */
+function exponat(flag: FlagId, bildKey: string, tafel: string[], frage: string, antworten: [string, boolean][], erklaerung: string): Script {
   return [
+    bild(bildKey),
     ...tafel.map((t) => narrate(t)),
     when({ flag }, [narrate('(Dieses Exponat kennst du schon.)')], [
       choice(
         frage,
-        antworten.map(([label, ok]): [string, Script] => [
+        mischen(flag, antworten).map(([label, ok]): [string, Script] => [
           label,
           ok ? [say('froehlich', `Richtig! ${erklaerung}`), setFlag(flag), pioniereCheck()] : [say('froehlich', `Nicht ganz. ${erklaerung}`)],
         ]),
       ),
     ]),
+    bild(null),
   ];
 }
 
@@ -125,6 +136,7 @@ export const museum: MapDef = {
       y: 1,
       script: exponat(
         'exp_schickard',
+        'bild_schickard',
         ['„Wilhelm Schickard, 1623: die Rechenuhr. Die erste bekannte Rechenmaschine der Welt – mit Zahnrädern."'],
         'Was konnte die Rechenuhr?',
         [['Addieren und subtrahieren', true], ['Musik abspielen', false], ['Briefe verschicken', false]],
@@ -138,6 +150,7 @@ export const museum: MapDef = {
       y: 1,
       script: exponat(
         'exp_pascal',
+        'bild_pascal',
         ['„Blaise Pascal, 1642: die Pascaline. Pascal war erst 19 Jahre alt, als er sie baute."'],
         'Wofür baute Pascal seine Maschine?',
         [['Für ein Computerspiel', false], ['Als Hilfe für seinen Vater', true], ['Zum Kuchenbacken', false]],
@@ -150,6 +163,7 @@ export const museum: MapDef = {
       x: 5,
       y: 1,
       script: [
+        bild('bild_leibniz'),
         narrate('„Gottfried Wilhelm Leibniz, 1703 – geboren in Leipzig. Er beschrieb das Binärsystem: Jede Zahl lässt sich mit nur zwei Ziffern schreiben, 0 und 1."'),
         when(
           { item: 'binaer_karte' },
@@ -158,8 +172,8 @@ export const museum: MapDef = {
             say('froehlich', 'Stell dir acht Lampen nebeneinander vor. Jede Lampe hat einen Wert: 128, 64, 32, 16, 8, 4, 2 und 1.'),
             say('froehlich', 'Leuchtet eine Lampe, schreibt man 1 und zählt ihren Wert. Ist sie aus, schreibt man 0. 00000101 heißt also: 4 + 1 = 5.'),
             choice('Wie viel ist dann 00000011?', [
-              ['3', [say('froehlich', 'Genau! 2 + 1 = 3.')]],
               ['11', [say('froehlich', 'Fast! Die Ziffern sehen aus wie elf, aber es gilt: 2 + 1 = 3.')]],
+              ['3', [say('froehlich', 'Genau! 2 + 1 = 3.')]],
               ['2', [say('froehlich', 'Nicht ganz: Beide Lampen ganz rechts leuchten, also 2 + 1 = 3.')]],
             ]),
             say('froehlich', 'Hier, nimm die Binär-Karte mit. Darauf stehen die Werte – damit schaffst du auch die Archivtür rechts!'),
@@ -179,6 +193,7 @@ export const museum: MapDef = {
       y: 4,
       script: exponat(
         'exp_lovelace',
+        'bild_lovelace',
         ['„Ada Lovelace, 1843: Sie schrieb als Erste ein Programm für eine Rechenmaschine – lange bevor es Computer gab."'],
         'Was schrieb Ada Lovelace auf?',
         [['Eine E-Mail', false], ['Ein Kochrezept', false], ['Ein Programm', true]],
@@ -192,6 +207,7 @@ export const museum: MapDef = {
       y: 4,
       script: exponat(
         'exp_turing',
+        'bild_turing',
         ['„Alan Turing, 1936: die Turingmaschine. Ein Band mit Zeichen und ein paar klare Regeln – so kann man alles Berechenbare beschreiben."'],
         'Was ist eine Turingmaschine?',
         [['Ein Gedankenmodell für Rechner', true], ['Ein Staubsauger', false], ['Eine Waschmaschine', false]],
@@ -205,6 +221,7 @@ export const museum: MapDef = {
       y: 6,
       script: exponat(
         'exp_zuse',
+        'bild_zuse',
         ['„Konrad Zuse, 1941: die Z3 – der erste funktionierende programmierbare Computer. Zuse wuchs in Hoyerswerda in Sachsen auf."', 'Die Z3 klickt leise vor sich hin: Hunderte Relais schalten an und aus.'],
         'Womit rechnete die Z3?',
         [['Mit Holzkugeln', false], ['Mit Relais und Binärzahlen', true], ['Mit Dampfkraft', false]],
@@ -219,6 +236,7 @@ export const museum: MapDef = {
       y: 6,
       script: exponat(
         'exp_neumann',
+        'bild_neumann',
         ['„John von Neumann, 1945: Er beschrieb den Bauplan fast aller heutigen Computer: Prozessor, Speicher, Eingabe und Ausgabe."'],
         'Wo kennst du diesen Bauplan schon her?',
         [['Von meiner Brille (EVA + Speicher)', true], ['Von einem Fahrrad', false], ['Von einem Brief', false]],

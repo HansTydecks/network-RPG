@@ -21,6 +21,7 @@ export interface ScriptHost {
   faceNpc(npc: string, dir: Dir): void;
   refresh(): void;
   bytesChanged(delta: number): Promise<void>;
+  showBild(key: string | null): void;
 }
 
 export async function runScript(script: Script, host: ScriptHost): Promise<void> {
@@ -86,6 +87,9 @@ export async function runScript(script: Script, host: ScriptHost): Promise<void>
         break;
       case 'face':
         host.faceNpc(cmd.npc, cmd.dir);
+        break;
+      case 'bild':
+        host.showBild(cmd.key);
         break;
       case 'refresh':
         host.refresh();

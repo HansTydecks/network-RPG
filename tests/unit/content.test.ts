@@ -106,3 +106,15 @@ describe('Inhalte', () => {
     for (const c of walk(NETZBLICK_ERSTMALS)) if (c.op === 'lexicon') expect(LEXICON[c.id].stufe).toBe(7);
   });
 });
+
+describe('Museum', () => {
+  it('die richtige Antwort steht nicht bei jedem Exponat an derselben Stelle, jedes Exponat zeigt ein Bild', () => {
+    const positionen = new Set<number>();
+    for (const e of MAPS.museum.entities) {
+      if (e.kind !== 'interact' || !e.id.match(/schickard|pascal|lovelace|turing|zuse$|neumann/)) continue;
+      expect(e.script[0]).toMatchObject({ op: 'bild' });
+      for (const c of walk(e.script)) if (c.op === 'choice') positionen.add(c.options.findIndex((o) => o.then.some((t) => t.op === 'flag')));
+    }
+    expect(positionen.size).toBeGreaterThan(1);
+  });
+});

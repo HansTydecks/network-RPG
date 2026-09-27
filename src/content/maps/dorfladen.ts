@@ -14,8 +14,8 @@ export function bytesCheck(): Command {
 const terminal: Command = when({ not: { flag: 'terminal_gesehen' } }, [
   narrate('Herr Nguyen dreht das Kartenterminal zu dir. Auf dem Bildschirm steht: „Bitte hier tippen".'),
   choice('Wie merkt der Bildschirm, wo du tippst?', [
-    ['Mein Finger leitet Strom', [say('nguyen', 'Genau! Unter dem Glas liegt ein feines Netz aus Leiterbahnen. Dein Finger verändert dort winzige elektrische Felder – so weiß das Gerät, wo du tippst.')]],
     ['Eine Kamera filmt mich', [say('nguyen', 'Ha, nein, gefilmt wird hier niemand. Unter dem Glas liegt ein feines Netz aus Leiterbahnen. Dein Finger verändert dort winzige elektrische Felder.')]],
+    ['Mein Finger leitet Strom', [say('nguyen', 'Genau! Unter dem Glas liegt ein feines Netz aus Leiterbahnen. Dein Finger verändert dort winzige elektrische Felder – so weiß das Gerät, wo du tippst.')]],
     ['Er hört das Tippen', [say('nguyen', 'Knapp daneben! Unter dem Glas liegt ein feines Netz aus Leiterbahnen. Dein Finger verändert dort winzige elektrische Felder.')]],
   ]),
   say('ping', 'Ein Touchscreen ist also Eingabe und Ausgabe in einem: Er zeigt etwas an und merkt, wo du tippst. Gurr!'),
@@ -128,9 +128,9 @@ export const dorfladen: MapDef = {
                 narrate('Der Pfandautomat schluckt Flaschen – und spuckt sie wieder aus. Oder er druckt einen Bon, ohne dass eine Flasche drin war.'),
                 say('ping', 'Der Automat ist ein EVA-System. Überleg mal, was bei ihm die Eingabe ist!'),
                 choice('Was ist beim Pfandautomaten die Eingabe?', [
-                  ['Die Flasche', [say('ping', 'Genau! Ein Scanner liest den Strichcode der Flasche. Verarbeitet wird: Pfandflasche oder nicht? Ausgabe ist der Bon.')]],
-                  ['Der Bon', [say('ping', 'Der Bon kommt ja am Ende heraus – das ist die Ausgabe. Eingabe ist die Flasche: Ein Scanner liest ihren Strichcode.')]],
                   ['Der Strom', [say('ping', 'Strom braucht er, klar. Aber die Eingabe sind die Daten, die er bekommt: Der Scanner liest den Strichcode der Flasche.')]],
+                  ['Der Bon', [say('ping', 'Der Bon kommt ja am Ende heraus – das ist die Ausgabe. Eingabe ist die Flasche: Ein Scanner liest ihren Strichcode.')]],
+                  ['Die Flasche', [say('ping', 'Genau! Ein Scanner liest den Strichcode der Flasche. Verarbeitet wird: Pfandflasche oder nicht? Ausgabe ist der Bon.')]],
                 ]),
                 say('ping', 'In der Klappe hängt ein Zustandsdiagramm. Da stimmt etwas nicht …'),
                 minigame('zustand:pfand'),
