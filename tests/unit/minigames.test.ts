@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { ADRESSE, BRIEF_SLOTS } from '../../src/minigames/briefLogic';
 import { SORT_RUNDEN } from '../../src/minigames/sortierenLogic';
 import { BAUTEILE } from '../../src/minigames/evaLogic';
-import { OS_AUFGABEN } from '../../src/minigames/osLogic';
 import { MINIGAME_META } from '../../src/minigames/meta';
 import { ITEMS } from '../../src/content/items';
 
@@ -40,13 +39,6 @@ describe('Minispiel EVA-Werkbank', () => {
   it('genau der Speicherchip gehört zu „Speichern", alle anderen zu E, V oder A', () => {
     expect(BAUTEILE.filter((b) => b.fach === 'S').map((b) => b.name)).toEqual(['Speicherchip']);
     for (const f of ['E', 'V', 'A'] as const) expect(BAUTEILE.some((b) => b.fach === f)).toBe(true);
-  });
-});
-
-describe('Minispiel Betriebssystem', () => {
-  it('hat richtige und falsche Aufgaben', () => {
-    expect(OS_AUFGABEN.filter((a) => a.richtig).length).toBeGreaterThanOrEqual(3);
-    expect(OS_AUFGABEN.filter((a) => !a.richtig).length).toBeGreaterThanOrEqual(1);
   });
 });
 

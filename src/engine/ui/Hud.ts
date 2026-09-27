@@ -1,8 +1,11 @@
 import Phaser from 'phaser';
-import { measureText } from '../gfx/fontGlyphs';
+import { measureText, wrapText } from '../gfx/fontGlyphs';
 import { PAL } from '../gfx/palette';
 import { drawPanel, screenContainer, uiText, type Modal } from './widgets';
 import type { Input } from '../input/Input';
+
+/** Breite der Aufgabenzeile (Text), höchstens 2 Zeilen. */
+export const QUEST_W = 290;
 
 /** Immer sichtbare Aufgabenzeile oben links + Hinweis auf die Hilfe-Taste. */
 export class Hud {
@@ -29,10 +32,10 @@ export class Hud {
     this.panel.clear();
     this.text.setText('');
     if (!title) return;
-    const label = `▸ ${title}`;
-    const w = Math.min(312, measureText(label) + 14);
-    drawPanel(this.panel, 2, 2, w, 18);
-    this.text.setText(label);
+    const lines = wrapText(`▸ ${title}`, QUEST_W).slice(0, 2);
+    const w = Math.max(...lines.map((l) => measureText(l))) + 14;
+    drawPanel(this.panel, 2, 2, w, 8 + lines.length * 11);
+    this.text.setText(lines.join('\n'));
   }
 
   setNet(on: boolean) {
@@ -52,13 +55,15 @@ export class Toast implements Modal {
 
   constructor(scene: Phaser.Scene, text: string, private resolve: () => void, icon?: string) {
     this.root = screenContainer(scene, 1150);
-    const w = measureText(text) + (icon ? 34 : 20);
+    const lines = wrapText(text, 260);
+    const w = Math.max(...lines.map((l) => measureText(l))) + (icon ? 34 : 20);
+    const h = 16 + lines.length * 11;
     const x = Math.floor((320 - w) / 2);
     const g = scene.add.graphics();
-    drawPanel(g, x, 40, w, 26, PAL.blau1);
+    drawPanel(g, x, 40, w, h, PAL.blau1);
     this.root.add(g);
-    if (icon) this.root.add(scene.add.image(x + 16, 53, icon).setScrollFactor(0));
-    this.root.add(uiText(scene, x + (icon ? 28 : 10), 48, text, PAL.gelb));
+    if (icon) this.root.add(scene.add.image(x + 16, 40 + h / 2, icon).setScrollFactor(0));
+    this.root.add(uiText(scene, x + (icon ? 28 : 10), 48, lines.join('\n'), PAL.gelb));
   }
 
   update(input: Input, dt: number) {

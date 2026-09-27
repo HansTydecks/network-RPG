@@ -2,11 +2,13 @@ import Phaser from 'phaser';
 import { PAL, hexToInt } from '../engine/gfx/palette';
 import { wrapText } from '../engine/gfx/fontGlyphs';
 import type { Input } from '../engine/input/Input';
-import { uiText } from '../engine/ui/widgets';
+import { setWrapped, uiText } from '../engine/ui/widgets';
 import { ABSENDER, ADRESSE, ADRESS_HINWEIS, BRIEF_SLOTS } from './briefLogic';
 import { MinigameModal, shuffled, type Minigame } from './base';
 
 type Phase = 'brief' | 'umschlag' | 'fertig';
+
+const QUESTION_W = 136;
 
 class BriefModal extends MinigameModal {
   private phase: Phase = 'brief';
@@ -56,30 +58,30 @@ class BriefModal extends MinigameModal {
     const g = this.paperGfx.clear();
     this.paper.forEach((p) => p.setText(''));
     if (this.phase === 'brief') {
-      g.fillStyle(hexToInt(PAL.creme), 1).fillRect(10, 22, 156, 112);
+      g.fillStyle(hexToInt(PAL.creme), 1).fillRect(10, 22, 156, 102);
       g.lineStyle(1, hexToInt(PAL.braun4), 1);
-      for (let y = 40; y < 132; y += 11) g.lineBetween(14, y + 0.5, 162, y + 0.5);
+      for (let y = 40; y < 122; y += 11) g.lineBetween(14, y + 0.5, 162, y + 0.5);
       const lines = this.chosen.flatMap((opt, s) => wrapText(BRIEF_SLOTS[s].optionen[opt].text, 140));
-      lines.slice(0, 9).forEach((l, i) => this.paper[i].setText(l));
-      this.question.setText(BRIEF_SLOTS[this.slot].frage);
+      lines.slice(0, 8).forEach((l, i) => this.paper[i].setText(l).setPosition(18, 30 + i * 11).setTint(hexToInt(PAL.ink)));
+      setWrapped(this.question, BRIEF_SLOTS[this.slot].frage, QUESTION_W);
     } else {
       // Umschlag
-      g.fillStyle(hexToInt(PAL.weiss), 1).fillRect(10, 30, 160, 96);
-      g.lineStyle(1, hexToInt(PAL.grau3), 1).strokeRect(10.5, 30.5, 159, 95);
-      g.lineStyle(1, hexToInt(PAL.grau2), 1).strokeRect(136.5, 36.5, 26, 30);
-      this.paper[0].setText(ABSENDER).setPosition(16, 36).setTint(hexToInt(PAL.grau2));
-      this.adresse.forEach((a, i) => this.paper[1 + i].setText(a).setPosition(70, 80 + i * 12).setTint(hexToInt(PAL.ink)));
-      for (let i = this.adresse.length; i < 3; i++) this.paper[1 + i].setText('______________').setPosition(70, 80 + i * 12).setTint(hexToInt(PAL.grau3));
-      this.question.setText(this.phase === 'umschlag' ? `Zeile ${this.adresse.length + 1} der Adresse:` : 'Fertig!');
+      g.fillStyle(hexToInt(PAL.weiss), 1).fillRect(10, 26, 160, 96);
+      g.lineStyle(1, hexToInt(PAL.grau3), 1).strokeRect(10.5, 26.5, 159, 95);
+      g.lineStyle(1, hexToInt(PAL.grau2), 1).strokeRect(136.5, 32.5, 26, 30);
+      ABSENDER.forEach((l, i) => this.paper[i].setText(l).setPosition(16, 32 + i * 10).setTint(hexToInt(PAL.grau2)));
+      this.adresse.forEach((a, i) => this.paper[3 + i].setText(a).setPosition(60, 82 + i * 12).setTint(hexToInt(PAL.ink)));
+      for (let i = this.adresse.length; i < 3; i++) this.paper[3 + i].setText('______________').setPosition(60, 82 + i * 12).setTint(hexToInt(PAL.grau3));
+      setWrapped(this.question, this.phase === 'umschlag' ? `Zeile ${this.adresse.length + 1} der Adresse:` : 'Fertig!', QUESTION_W);
     }
     const opts = this.currentOptions();
-    let y = 44;
+    let y = 30 + this.question.getTextBounds().local.height + 6;
     this.options.forEach((o, i) => {
       const text = opts[i];
       const lines = text ? wrapText(text, 120) : [];
       o.setText(text ? `${i === this.cursor ? '▸ ' : '  '}${lines.join('\n  ')}` : '').setY(y);
       o.setTint(i === this.cursor ? hexToInt(PAL.gelb) : hexToInt(PAL.weiss));
-      y += lines.length * 11 + 7;
+      y += lines.length * 11 + 4;
     });
   }
 

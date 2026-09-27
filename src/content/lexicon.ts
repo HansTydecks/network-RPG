@@ -38,10 +38,11 @@ export const LEXICON: Record<LexiconId, LexiconEntry> = {
   },
   eva: {
     titel: 'Eingabe – Verarbeitung – Ausgabe',
-    text: 'Jedes Informatiksystem arbeitet nach dem EVA-Prinzip: Eingabegeräte (Kamera, Mikrofon, Taster) nehmen etwas auf, der Prozessor verarbeitet es, Ausgabegeräte (Display, Lautsprecher) geben ein Ergebnis aus. Damit sich ein Gerät etwas dauerhaft merken kann, braucht es zusätzlich einen Speicher.',
+    text: 'EVA-Prinzip: Eingabegeräte (Kamera, Mikrofon, Taster) nehmen etwas auf, der Prozessor verarbeitet es, Ausgabegeräte (Display, Lautsprecher) geben etwas aus. Damit sich ein Gerät etwas dauerhaft merkt, braucht es einen Speicher.',
     stufe: 7,
     lehrplan: 'SN Kl. 7 LB 2 – EVA-Modell, Erweiterung um Speichern',
   },
+  // derzeit ungenutzt (Minispiel entfernt), bleibt wegen der Speichercodes im Register
   betriebssystem: {
     titel: 'Betriebssystem',
     text: 'Das Betriebssystem ist das wichtigste Programm eines Computers. Es verwaltet den Speicher, steuert die Geräte an, ordnet Dateien und startet und beendet Programme. Handys, Laptops und sogar die Brille haben eins.',

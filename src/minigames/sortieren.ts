@@ -7,7 +7,7 @@ import { SORT_RUNDEN, sortHinweis } from './sortierenLogic';
 import { MinigameModal, type Minigame } from './base';
 
 const BIN_W = 96;
-const BIN_Y = 100;
+const BIN_Y = 86;
 
 class SortModal extends MinigameModal {
   private runde = 0;
@@ -34,7 +34,7 @@ class SortModal extends MinigameModal {
       const t = uiText(scene, 0, BIN_Y + 20, '');
       this.binTexts.push(t);
       this.root.add(t);
-      const zone = scene.add.zone(10 + i * (BIN_W + 4), BIN_Y, BIN_W, 36).setOrigin(0).setScrollFactor(0).setInteractive();
+      const zone = scene.add.zone(10 + i * (BIN_W + 4), BIN_Y, BIN_W, 34).setOrigin(0).setScrollFactor(0).setInteractive();
       zone.on('pointerdown', () => {
         this.cursor = i;
         this.drop();
@@ -54,28 +54,28 @@ class SortModal extends MinigameModal {
   private render() {
     const g = this.draw.clear();
     // Förderband
-    g.fillStyle(hexToInt(PAL.grau1), 1).fillRect(10, 30, 300, 58);
+    g.fillStyle(hexToInt(PAL.grau1), 1).fillRect(10, 24, 300, 56);
     g.fillStyle(hexToInt(PAL.grau2), 1);
-    for (let x = 14; x < 310; x += 12) g.fillRect(x, 32, 6, 2).fillRect(x, 84, 6, 2);
+    for (let x = 14; x < 310; x += 12) g.fillRect(x, 26, 6, 2).fillRect(x, 76, 6, 2);
     if (!this.ende) {
       const br = this.brief;
-      g.fillStyle(hexToInt(br.vonAlex ? PAL.creme : PAL.weiss), 1).fillRect(90, 38, 140, 44);
-      g.lineStyle(1, hexToInt(PAL.grau3), 1).strokeRect(90.5, 38.5, 139, 43);
+      g.fillStyle(hexToInt(br.vonAlex ? PAL.creme : PAL.weiss), 1).fillRect(80, 30, 160, 44);
+      g.lineStyle(1, hexToInt(PAL.grau3), 1).strokeRect(80.5, 30.5, 159, 43);
       if (br.vonAlex) {
-        g.fillStyle(hexToInt(PAL.blau3), 1).fillRect(210, 42, 14, 16);
-        g.fillStyle(hexToInt(PAL.grau3), 1).fillRect(214, 48, 6, 4);
+        g.fillStyle(hexToInt(PAL.blau3), 1).fillRect(220, 34, 14, 16);
+        g.fillStyle(hexToInt(PAL.grau3), 1).fillRect(224, 40, 6, 4);
       }
       const lines = [br.name, br.strasse, `${br.plz} ${br.ort}`];
-      lines.forEach((l, i) => this.card[i].setText(l).setPosition(100, 46 + i * 11));
+      lines.forEach((l, i) => this.card[i].setText(l).setPosition(88, 37 + i * 11));
     } else this.card.forEach((c) => c.setText(''));
     // Fächer
     const faecher = SORT_RUNDEN[this.runde].faecher;
     faecher.forEach((f, i) => {
       const x = 10 + i * (BIN_W + 4);
       const sel = i === this.cursor;
-      g.fillStyle(hexToInt(sel ? PAL.blau2 : PAL.blau1), 1).fillRect(x, BIN_Y, BIN_W, 36);
-      g.lineStyle(1, hexToInt(sel ? PAL.gelb : PAL.grau2), 1).strokeRect(x + 0.5, BIN_Y + 0.5, BIN_W - 1, 35);
-      this.binTexts[i].setText(f).setPosition(Math.round(x + BIN_W / 2 - measureText(f) / 2), BIN_Y + 14).setTint(hexToInt(sel ? PAL.gelb : PAL.weiss));
+      g.fillStyle(hexToInt(sel ? PAL.blau2 : PAL.blau1), 1).fillRect(x, BIN_Y, BIN_W, 34);
+      g.lineStyle(1, hexToInt(sel ? PAL.gelb : PAL.grau2), 1).strokeRect(x + 0.5, BIN_Y + 0.5, BIN_W - 1, 33);
+      this.binTexts[i].setText(f).setPosition(Math.round(x + BIN_W / 2 - measureText(f) / 2), BIN_Y + 12).setTint(hexToInt(sel ? PAL.gelb : PAL.weiss));
     });
     const total = SORT_RUNDEN[this.runde].briefe.length;
     const st = `Runde ${this.runde + 1}/3 · Brief ${Math.min(this.index + 1, total)}/${total}`;
@@ -90,7 +90,7 @@ class SortModal extends MinigameModal {
       this.feedback(`Hmm, das passt nicht. ${sortHinweis(this.runde, br)}`, PAL.orange);
       return;
     }
-    if (br.vonAlex) this.feedback('Frau Krause: „Da ist ja dein Brief an Lina! Mit Taubenbriefmarke. Morgen Mittag liegt er in ihrem Briefkasten."');
+    if (br.vonAlex) this.feedback('Frau Krause: „Da ist ja dein Brief an Lina! Morgen Mittag liegt er in ihrem Briefkasten."');
     else this.feedback('Richtig einsortiert!');
     this.index++;
     if (this.index >= SORT_RUNDEN[this.runde].briefe.length) {

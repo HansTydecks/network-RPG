@@ -21,7 +21,7 @@ class EvaModal extends MinigameModal {
     this.draw = scene.add.graphics().setScrollFactor(0);
     this.root.add(this.draw);
     BAUTEILE.forEach((_, i) => {
-      const t = uiText(scene, 16, 28 + i * 13, '');
+      const t = uiText(scene, 16, 28 + i * 12, '');
       t.setInteractive(new Phaser.Geom.Rectangle(-6, -2, 110, 12), Phaser.Geom.Rectangle.Contains);
       t.on('pointerdown', () => {
         if (!this.placed.has(i)) this.part = i;
@@ -41,12 +41,12 @@ class EvaModal extends MinigameModal {
 
   /** Fächer im 2×2-Raster rechts: Eingabe, Verarbeitung / Ausgabe, Speichern. */
   private binRect(i: number) {
-    return { x: 130 + (i % 2) * 92, y: 26 + Math.floor(i / 2) * 56, w: 88, h: 52 };
+    return { x: 130 + (i % 2) * 92, y: 24 + Math.floor(i / 2) * 51, w: 88, h: 48 };
   }
 
   private render() {
     const g = this.draw.clear();
-    g.lineStyle(1, hexToInt(PAL.grau2), 1).lineBetween(125.5, 26, 125.5, 134);
+    g.lineStyle(1, hexToInt(PAL.grau2), 1).lineBetween(125.5, 24, 125.5, 122);
     BAUTEILE.forEach((b, i) => {
       const done = this.placed.has(i);
       const sel = i === this.part && !done;
@@ -80,7 +80,7 @@ class EvaModal extends MinigameModal {
     if (b.fach === 'S' && !this.faecher.includes('S')) {
       this.faecher.push('S');
       this.fach = 3;
-      this.feedback('Der Speicherchip passt nirgends so richtig … Die Brille soll sich merken, was sie sieht – auch wenn sie aus ist. Dafür braucht sie ein viertes Fach: Speichern!', PAL.orange);
+      this.feedback('Der Speicherchip passt nirgends … Die Brille soll sich Dinge auch dann merken, wenn sie aus ist. Dafür braucht sie ein viertes Fach: Speichern!', PAL.orange);
       this.render();
       return;
     }

@@ -128,8 +128,6 @@ test('Kapitel 1 (M1): vom Prolog bis zum Zettel am grauen Kasten', async ({ page
   await advanceUntilMinigame(page);
   await page.screenshot({ path: 'test-results/m1-07-eva.png' });
   await playMinigame(page);
-  await advanceUntilMinigame(page);
-  await playMinigame(page);
   await advanceDialogs(page);
   expect(await page.evaluate(() => (window as any).__netzblick.state.items.has('netzblick_v1'))).toBe(true);
 
@@ -160,6 +158,6 @@ test('Kapitel 1 (M1): vom Prolog bis zum Zettel am grauen Kasten', async ({ page
   await advanceDialogs(page);
   expect(await flags(page)).toContain('scan_erklaert');
   const lex = await page.evaluate(() => [...(window as any).__netzblick.state.lexicon]);
-  expect(lex).toEqual(expect.arrayContaining(['information_daten', 'uebertragung', 'eva', 'betriebssystem', 'kabel', 'kabelverzweiger', 'objekt']));
+  expect(lex).toEqual(expect.arrayContaining(['information_daten', 'uebertragung', 'eva', 'kabel', 'kabelverzweiger', 'objekt']));
   expect(errors).toEqual([]);
 });

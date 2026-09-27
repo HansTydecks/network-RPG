@@ -12,6 +12,7 @@ export class BootScene extends Phaser.Scene {
     buildAnimations(this);
     const params = new URLSearchParams(location.search);
     if (params.has('kontaktbogen')) this.scene.start('ContactSheet');
+    else if (params.has('minispiel')) this.scene.start('MinigameLab');
     else this.scene.start('Title');
   }
 }

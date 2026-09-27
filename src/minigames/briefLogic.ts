@@ -64,7 +64,8 @@ export const ADRESS_HINWEIS = [
   'In die letzte Zeile gehören Postleitzahl und Ort.',
 ];
 
-export const ABSENDER = 'Alex · Dorfstraße 3 · 09421 Kabelitz';
+/** Absender (drei Zeilen, damit er neben die Briefmarke passt). */
+export const ABSENDER = ['Alex', 'Dorfstraße 3', '09421 Kabelitz'];
 
 export function briefText(auswahl: number[]): string[] {
   return auswahl.map((opt, slot) => BRIEF_SLOTS[slot].optionen[opt].text);

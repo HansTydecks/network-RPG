@@ -5,11 +5,17 @@ import type { Input } from '../engine/input/Input';
 import type { GameState } from '../engine/state/GameState';
 import { drawPanel, screenContainer, uiText, type Modal } from '../engine/ui/widgets';
 
+/** Rückmeldung: bis zu 3 Zeilen à FEEDBACK_WIDTH px. Inhalte eines Minispiels enden bei y = 124. */
+export const FEEDBACK_LINES = 3;
+export const FEEDBACK_WIDTH = 300;
+
 export interface MinigameContext {
   scene: Phaser.Scene;
   input: Input;
   state: GameState;
   push(modal: Modal): void;
+  /** Optionaler Parameter aus dem Script, z. B. das Level bei minigame('bloecke:gully'). */
+  param?: string;
 }
 
 /** Ein Minispiel ist eine Funktion, die das Minispiel zeigt und endet, wenn es geschafft ist. */
@@ -34,8 +40,8 @@ export abstract class MinigameModal implements Modal {
     this.root.add(uiText(scene, 10, 8, title, PAL.gelb));
     this.helpText = uiText(scene, 10, 166, help, PAL.grau3);
     this.root.add(this.helpText);
-    for (let i = 0; i < 2; i++) {
-      const t = uiText(scene, 10, 140 + i * 11, '', PAL.netzKabel);
+    for (let i = 0; i < FEEDBACK_LINES; i++) {
+      const t = uiText(scene, 10, 129 + i * 11, '', PAL.netzKabel);
       this.feedbackLines.push(t);
       this.root.add(t);
     }
@@ -47,7 +53,8 @@ export abstract class MinigameModal implements Modal {
   }
 
   protected feedback(text: string, color: string = PAL.netzKabel) {
-    const lines = wrapText(text, 300);
+    const lines = wrapText(text, FEEDBACK_WIDTH);
+    if (lines.length > FEEDBACK_LINES) console.warn(`Rückmeldung zu lang (${lines.length} Zeilen): ${text}`);
     this.feedbackLines.forEach((l, i) => l.setText(lines[i] ?? '').setTint(parseInt(color.slice(1), 16)));
   }
 

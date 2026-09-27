@@ -450,9 +450,10 @@ export class WorldScene extends Phaser.Scene {
       save: () => this.saveDialog(),
       interlude: (text) => this.modal<void>((r) => new Interlude(this, text, r)),
       minigame: async (id) => {
-        const mg = MINIGAMES[id];
+        const [name, param] = id.split(':');
+        const mg = MINIGAMES[name];
         if (!mg) throw new Error(`Minispiel ${id} fehlt`);
-        await mg({ scene: this, input: this.inp, state: this.state, push: (m) => this.ui.push(m) });
+        await mg({ scene: this, input: this.inp, state: this.state, push: (m) => this.ui.push(m), param });
       },
       faceNpc: (id, dir) => {
         const n = this.npcs.find((x) => x.def.id === id);

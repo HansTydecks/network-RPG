@@ -31,7 +31,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
     ],
   },
   q1_brief: {
-    titel: 'Schreib Lina einen Brief (Schreibtisch in deinem Zimmer).',
+    titel: 'Schreib Lina einen Brief.',
     hinweise: [
       'Papier und Stift liegen an deinem Schreibtisch oben in deinem Zimmer.',
       'Stell dich vor den Schreibtisch neben dem Computer und drück Leertaste.',
@@ -47,7 +47,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
     ],
   },
   q1_einwerfen: {
-    titel: 'Wirf den Brief in den Briefkasten am Dorfplatz.',
+    titel: 'Wirf den Brief in den Briefkasten.',
     hinweise: [
       'Der gelbe Briefkasten steht unten am Weg, rechts vom Dorfplatz.',
       'Geh von eurem Haus den Weg nach unten und dann nach rechts, bis du den gelben Kasten siehst.',
@@ -79,7 +79,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
     ],
   },
   q1_brille: {
-    titel: 'Setz die Brille draußen auf (Taste N).',
+    titel: 'Setz draußen die Brille auf (Taste N).',
     hinweise: [
       'Tante Ada schreibt: Draußen gibt es am meisten zu sehen.',
       'Geh aus dem Haus und drück N, um die Brille aufzusetzen.',

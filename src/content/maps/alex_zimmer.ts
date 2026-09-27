@@ -122,8 +122,6 @@ export const alexZimmer: MapDef = {
             say('ada', 'Alles Gute schon mal zum Geburtstag! Deine Tante Ada'),
             minigame('eva'),
             lexicon('eva'),
-            minigame('betriebssystem'),
-            lexicon('betriebssystem'),
             give('netzblick_v1'),
             setFlag('brille_gebaut'),
             say('ping', 'Gurr! Eine Brille, die Daten sieht? Setz sie draußen auf – mit der Taste N!'),
