@@ -3,9 +3,18 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum'] as const;
 
-export const ITEM_IDS = ['netzblick_v1', 'brief', 'briefmarke', 'zettel_funkstille'] as const;
+export const ITEM_IDS = [
+  'netzblick_v1',
+  'brief',
+  'briefmarke',
+  'zettel_funkstille',
+  'binaer_karte',
+  'block_fernbedienung',
+  'schluessel_kvz',
+  'restauriertes_foto',
+] as const;
 
 export const FLAG_IDS = [
   // M0 (Testversion)
@@ -34,6 +43,31 @@ export const FLAG_IDS = [
   'kvz_repariert',
   'papa_gesprochen',
   'router_gesehen',
+  // Kapitel 1, M2a
+  'kowalski_auftrag',
+  'froehlich_gesprochen',
+  'schloss1',
+  'schloss2',
+  'schloss3',
+  'pixelwand_geloest',
+  'geheimtext_geloest',
+  'binaer_gelernt',
+  'foto_restauriert',
+  'exp_schickard',
+  'exp_pascal',
+  'exp_leibniz',
+  'exp_lovelace',
+  'exp_zuse',
+  'exp_turing',
+  'exp_neumann',
+  'pioniere_belohnt',
+  'emil_gesprochen',
+  'kruemel_programmiert',
+  'kruemel_repariert',
+  'schluessel_gefunden',
+  'schacht_gesehen',
+  'fernschreiber_gesehen',
+  'foto_auftrag',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -44,6 +78,13 @@ export const LEXICON_IDS = [
   'eva',
   'betriebssystem',
   'objekt',
+  'binaerzahlen',
+  'bilder_als_zahlen',
+  'text_als_zahlen',
+  'pioniere',
+  'algorithmus',
+  'zustandsdiagramm',
+  'farbkanaele',
 ] as const;
 
 export const QUEST_IDS = [
@@ -62,6 +103,13 @@ export const QUEST_IDS = [
   'q1_brille',
   'q1_kasten',
   'q1_fortsetzung',
+  'q1_kowalski',
+  'q1_museum',
+  'q1_archiv',
+  'q1_zurueck_kowalski',
+  'q1_emil',
+  'q1_gully',
+  'q1_kabelbinder',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];

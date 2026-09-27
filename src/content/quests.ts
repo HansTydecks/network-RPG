@@ -94,6 +94,62 @@ export const QUESTS: Record<QuestId, QuestDef> = {
       'Der graue Kasten steht links neben der Mitte, direkt über dem Weg. Stell dich davor und drück Leertaste.',
     ],
   },
+  q1_kowalski: {
+    titel: 'Sprich mit dem Techniker am grauen Kasten.',
+    hinweise: [
+      'Am grauen Kasten steht jetzt ein Mann in Arbeitsjacke.',
+      'Der graue Kasten steht unten am Weg. Der Techniker steht links daneben.',
+      'Stell dich neben den Techniker und drück Leertaste.',
+    ],
+  },
+  q1_museum: {
+    titel: 'Lerne im Dorfmuseum Binärzahlen lesen.',
+    hinweise: [
+      'Das Dorfmuseum steht am Dorfplatz, südlich von Kabelitz. Frau Fröhlich kennt sich mit alten Zahlen aus.',
+      'Geh durch die Lücke in der Buschreihe ganz unten nach Süden. Das Museum ist das große Haus links.',
+      'Sprich im Museum mit Frau Fröhlich und schau dir das Leibniz-Exponat an.',
+    ],
+  },
+  q1_archiv: {
+    titel: 'Öffne die Archivtür und löse die Rätsel im Archiv.',
+    hinweise: [
+      'Die Archivtür rechts im Museum hat drei Bit-Schlösser. Nimm deine Binär-Karte zu Hilfe!',
+      'Jede Lampe hat einen Wert: 128, 64, 32, 16, 8, 4, 2, 1. Schalte die Lampen an, deren Werte zusammen die Zahl ergeben.',
+      'Im Archiv: die Pixelwand (1 = schwarz ausmalen) und das Pult mit dem Geheimtext (Zahl = Platz im Alphabet).',
+    ],
+  },
+  q1_zurueck_kowalski: {
+    titel: 'Geh zurück zu Herrn Kowalski.',
+    hinweise: [
+      'Du kannst jetzt Binärzahlen lesen! Herr Kowalski wartet am grauen Kasten.',
+      'Geh zurück nach Kabelitz, zum grauen Kasten unten am Weg.',
+      'Sprich Herrn Kowalski an.',
+    ],
+  },
+  q1_emil: {
+    titel: 'Frag Emil, ob Krümel helfen kann.',
+    hinweise: [
+      'Emils Saugroboter Krümel passt durch jede Ritze. Emil wohnt im Haus rechts unten in Kabelitz.',
+      'Emil spielt vor seinem Haus. Er sieht traurig aus.',
+      'Sprich Emil vor seinem Haus an. Hör genau zu, wie Krümel fahren soll.',
+    ],
+  },
+  q1_gully: {
+    titel: 'Hol mit Krümel den Schlüssel aus dem Gully.',
+    hinweise: [
+      'Der Gully ist direkt neben dem grauen Kasten.',
+      'Stell dich neben das Gitter im Weg, rechts vom grauen Kasten, und schau es an.',
+      'Plane Krümels Weg im Gully Schritt für Schritt: vor, drehen, aufheben.',
+    ],
+  },
+  q1_kabelbinder: {
+    titel: 'Kauf Kabelbinder im Dorfladen.',
+    hinweise: [
+      'Der Dorfladen ist am Dorfplatz, rechts.',
+      'Der Laden hat gerade geschlossen. In der nächsten Version geht es hier weiter!',
+      'Bis dahin: Hast du im Museum schon alle Exponate angeschaut?',
+    ],
+  },
   q1_fortsetzung: {
     titel: 'Fortsetzung folgt …',
     hinweise: [

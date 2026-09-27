@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { advanceDialogs, advanceUntilMinigame, face, flags, playMinigame, player, walk } from './helpers';
 
-test.setTimeout(240_000);
+test.setTimeout(420_000);
 
-test('Kapitel 1 (M1): vom Prolog bis zum Zettel am grauen Kasten', async ({ page }) => {
+test('Kapitel 1: vom Prolog bis zum geschlossenen Dorfladen (M1 + M2a)', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
@@ -159,5 +159,115 @@ test('Kapitel 1 (M1): vom Prolog bis zum Zettel am grauen Kasten', async ({ page
   expect(await flags(page)).toContain('scan_erklaert');
   const lex = await page.evaluate(() => [...(window as any).__netzblick.state.lexicon]);
   expect(lex).toEqual(expect.arrayContaining(['information_daten', 'uebertragung', 'eva', 'kabel', 'kabelverzweiger', 'objekt']));
+
+  // ---------- M2a ----------
+  const talk = async (dir: 'up' | 'down' | 'left' | 'right') => {
+    await face(page, dir);
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(250);
+  };
+  await page.keyboard.press('KeyN'); // Brille ab, sonst zeigt Leertaste Objektkarten
+  await page.waitForTimeout(200);
+
+  // Herr Kowalski
+  await walk(page, 'left', 8);
+  await talk('left');
+  await advanceDialogs(page);
+  expect(await flags(page)).toContain('kowalski_auftrag');
+
+  // Zum Dorfplatz und ins Museum
+  await walk(page, 'right', 4);
+  await walk(page, 'down', 5);
+  expect((await player(page)).map).toBe('dorfplatz');
+  await walk(page, 'down', 7);
+  await walk(page, 'left', 10);
+  await walk(page, 'up', 2);
+  expect((await player(page)).map).toBe('museum');
+  await walk(page, 'up', 2);
+  await walk(page, 'right', 1);
+  await talk('up');
+  await advanceDialogs(page);
+
+  // Leibniz: Binär-Karte
+  await walk(page, 'right', 1);
+  await walk(page, 'up', 3);
+  await talk('up');
+  await advanceDialogs(page);
+  expect(await page.evaluate(() => (window as any).__netzblick.state.items.has('binaer_karte'))).toBe(true);
+
+  // Archivtür: drei Bit-Schlösser
+  await walk(page, 'right', 2);
+  await walk(page, 'down', 2);
+  await talk('right');
+  // Die drei Schlösser folgen direkt aufeinander – playMinigame spielt alle drei.
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m2-01-bitschloss.png' });
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect(await flags(page)).toContain('schloss3');
+
+  // Archiv: Pixelwand und Geheimtext
+  await walk(page, 'right', 2);
+  await walk(page, 'up', 3);
+  await walk(page, 'right', 1);
+  await talk('up');
+  await advanceUntilMinigame(page);
+  await playMinigame(page);
+  await advanceDialogs(page);
+  await walk(page, 'left', 1);
+  await walk(page, 'down', 2);
+  await talk('right');
+  await advanceUntilMinigame(page);
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect(await flags(page)).toContain('binaer_gelernt');
+  await page.screenshot({ path: 'test-results/m2-02-museum.png' });
+
+  // Raus und zurück nach Kabelitz
+  await walk(page, 'down', 1);
+  await walk(page, 'left', 2);
+  await walk(page, 'down', 3);
+  await walk(page, 'left', 4);
+  await walk(page, 'down', 1);
+  expect((await player(page)).map).toBe('dorfplatz');
+  await walk(page, 'down', 1);
+  await walk(page, 'right', 10);
+  await walk(page, 'up', 8);
+  expect((await player(page)).map).toBe('kabelitz');
+
+  // Emil und Krümel
+  await walk(page, 'up', 4);
+  await walk(page, 'right', 8);
+  await talk('up');
+  await advanceUntilMinigame(page);
+  await playMinigame(page);
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m2-03-zustand.png' });
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect(await page.evaluate(() => (window as any).__netzblick.state.items.has('block_fernbedienung'))).toBe(true);
+
+  // Gully: Schlüssel holen
+  await walk(page, 'left', 12);
+  await talk('right');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m2-04-gully.png' });
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect(await page.evaluate(() => (window as any).__netzblick.state.items.has('schluessel_kvz'))).toBe(true);
+
+  // Zurück zu Kowalski, dann zum (noch geschlossenen) Laden
+  await talk('left');
+  await advanceDialogs(page);
+  expect(await page.evaluate(() => (window as any).__netzblick.state.questId)).toBe('q1_kabelbinder');
+  await walk(page, 'right', 4);
+  await walk(page, 'down', 5);
+  await walk(page, 'down', 6);
+  await walk(page, 'right', 7);
+  await talk('up');
+  await advanceDialogs(page);
+  await page.screenshot({ path: 'test-results/m2-05-laden.png' });
+  const lex2 = await page.evaluate(() => [...(window as any).__netzblick.state.lexicon]);
+  expect(lex2).toEqual(expect.arrayContaining(['binaerzahlen', 'bilder_als_zahlen', 'text_als_zahlen', 'algorithmus', 'zustandsdiagramm']));
   expect(errors).toEqual([]);
 });

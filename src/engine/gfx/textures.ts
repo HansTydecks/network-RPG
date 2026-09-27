@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
 import { TILES } from '../../content/art/tiles';
-import { CHARACTERS, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
+import { CHARACTERS, binaerKarteIcon, fernbedienungIcon, fotoIcon, kruemelFrames, schluesselIcon, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
 import { prologBackground, prologHand } from '../../content/art/prolog';
 
 export const FONT_KEY = 'kabelitz';
@@ -97,6 +97,11 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'icon_briefmarke', markeIcon());
   addImage(scene, 'icon_zettel', zettelIcon());
   addImage(scene, 'funkstille', funkstilleSymbol());
+  addImage(scene, 'icon_binaerkarte', binaerKarteIcon());
+  addImage(scene, 'icon_fernbedienung', fernbedienungIcon());
+  addImage(scene, 'icon_schluessel', schluesselIcon());
+  addImage(scene, 'icon_foto', fotoIcon());
+  addSheet(scene, 'kruemel', kruemelFrames());
   addSheet(scene, 'morse', morseFrames());
   addImage(scene, 'prolog_bg', prologBackground());
   addSheet(scene, 'prolog_hand', [prologHand(0), prologHand(1)]);
@@ -125,5 +130,6 @@ export function buildAnimations(scene: Phaser.Scene) {
   }
   scene.anims.create({ key: 'ping_idle', frames: [0, 0, 0, 1].map((f) => ({ key: 'ping', frame: f })), frameRate: 3, repeat: -1 });
   scene.anims.create({ key: 'morse_idle', frames: [0, 1, 0, 0].map((f) => ({ key: 'morse', frame: f })), frameRate: 2, repeat: -1 });
+  scene.anims.create({ key: 'kruemel_idle', frames: [0, 1].map((f) => ({ key: 'kruemel', frame: f })), frameRate: 2, repeat: -1 });
   scene.anims.create({ key: 'ping_flap', frames: [2, 3].map((f) => ({ key: 'ping', frame: f })), frameRate: 10, repeat: -1 });
 }

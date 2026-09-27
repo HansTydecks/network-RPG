@@ -270,3 +270,49 @@ export function funkstilleSymbol(): PixBuf {
   for (let i = 0; i < 14; i++) b.set(1 + i, 1 + i, PAL.rot3).set(2 + i, 1 + i, PAL.rot3);
   return b;
 }
+
+CHARACTERS.push(
+  { id: 'kowalski', colors: { s: PAL.haut2, h: PAL.braun1, c: PAL.orange, p: PAL.blau1, f: PAL.ink } },
+  { id: 'froehlich', colors: { s: PAL.haut1, h: PAL.weiss, c: PAL.lila2, p: PAL.lila1, f: PAL.braun1 } },
+  { id: 'emil', colors: { s: PAL.haut1, h: PAL.gelb, c: PAL.rot3, p: PAL.blau2, f: PAL.weiss } },
+);
+
+/** Krümel, der Saugroboter (von oben). Frames: 0 aus, 1 an (Lämpchen). */
+export function kruemelFrames(): PixBuf[] {
+  return [0, 1].map((f) => {
+    const s = new PixBuf(16, 16);
+    s.disc(7.5, 9, 6, PAL.grau2).disc(7.5, 8.5, 5, PAL.grau4).disc(7.5, 8.5, 2, PAL.grau3);
+    s.set(7, 4, f ? PAL.gruen4 : PAL.grau1).set(8, 4, f ? PAL.gruen4 : PAL.grau1);
+    s.hline(3, 13, 10, PAL.grau1);
+    return s.outline(PAL.ink);
+  });
+}
+
+export function binaerKarteIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(1, 4, 14, 9, PAL.creme).frame(1, 4, 14, 9, PAL.braun2);
+  for (let i = 0; i < 6; i++) b.rect(2 + i * 2, 7, 1, 3, i % 2 ? PAL.ink : PAL.grau3);
+  b.hline(3, 5, 9, PAL.blau2);
+  return b;
+}
+
+export function fernbedienungIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(4, 2, 8, 12, PAL.grau1).frame(4, 2, 8, 12, PAL.ink);
+  b.rect(6, 4, 4, 2, PAL.gruen3).rect(6, 7, 2, 2, PAL.rot3).rect(8, 7, 2, 2, PAL.gelb).rect(6, 10, 4, 2, PAL.blau3);
+  return b;
+}
+
+export function schluesselIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(5, 8, 3, PAL.gelb).disc(5, 8, 1, null);
+  b.hline(8, 8, 6, PAL.gelb).vline(12, 9, 2, PAL.gelb).vline(10, 9, 2, PAL.gelb);
+  return b.outline(PAL.ink);
+}
+
+export function fotoIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(1, 3, 14, 11, PAL.weiss).rect(2, 4, 12, 8, PAL.grau2);
+  b.disc(6, 8, 2, PAL.grau4).rect(9, 7, 3, 4, PAL.grau3);
+  return b.outline(PAL.ink);
+}

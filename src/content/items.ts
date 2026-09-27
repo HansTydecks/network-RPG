@@ -22,6 +22,26 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Eine Briefmarke mit einer Brieftaube darauf. Aus Opa Werners Sammlung.',
     icon: 'icon_briefmarke',
   },
+  binaer_karte: {
+    name: 'Binär-Karte',
+    beschreibung: 'Von Frau Fröhlich aus dem Museum. Acht Felder mit den Stellenwerten 128, 64, 32, 16, 8, 4, 2, 1. Jede 1 zählt ihren Wert, jede 0 zählt nichts. Beispiel: 00000101 = 4 + 1 = 5.',
+    icon: 'icon_binaerkarte',
+  },
+  block_fernbedienung: {
+    name: 'Block-Fernbedienung',
+    beschreibung: 'Emils Fernbedienung für den Saugroboter Krümel. Man steckt Befehlsblöcke hintereinander, Krümel führt sie der Reihe nach aus.',
+    icon: 'icon_fernbedienung',
+  },
+  schluessel_kvz: {
+    name: 'Kleiner Schlüssel',
+    beschreibung: 'Herr Kowalskis Schlüssel für das Innenfach des grauen Kastens. Krümel hat ihn aus dem Gully geholt.',
+    icon: 'icon_schluessel',
+  },
+  restauriertes_foto: {
+    name: 'Altes Foto',
+    beschreibung: '„Fernmeldeamt Knotenburg, 1974". Ein junger Mann mit Brieftauben vor einem Klappenschrank. Auf der Rückseite: „W. L."',
+    icon: 'icon_foto',
+  },
   zettel_funkstille: {
     name: 'Seltsamer Zettel',
     beschreibung: 'Lag am grauen Kasten. Darauf eine durchgestrichene Antenne und: „WUHIISXQNW DOWHV IHUQPHOGHDPW". Unlesbar – noch.',

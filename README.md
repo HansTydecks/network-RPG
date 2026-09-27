@@ -10,7 +10,7 @@ Alex lebt im sächsischen Dorf Kabelitz und bekommt von Tante Ada eine Brille, d
 
 ## Status
 
-**Testversion M1:** Prolog und der Anfang von Kapitel 1 (Klasse 7) sind spielbar, von der Brief-Quest bis zur fertig gebauten Netzblick-Brille und dem aufgebrochenen grauen Kasten. Der Rest von Kapitel 1 folgt mit M2.
+**Testversion M2a:** Kapitel 1 (Klasse 7) ist bis zum Dorfmuseum und zu Krümel spielbar: Brief-Quest, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Blockprogrammierung mit dem Saugroboter. Der Rest von Kapitel 1 folgt mit M2b.
 
 ## Spielen und entwickeln
 

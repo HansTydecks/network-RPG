@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { ALPHABET, groupCode, normalizeCode } from '../state/base32';
 import { PAL } from '../gfx/palette';
 import type { Input } from '../input/Input';
-import { drawPanel, screenContainer, uiText, type Modal } from './widgets';
+import { drawPanel, screenContainer, setWrapped, uiText, type Modal } from './widgets';
 
 const COLS = 8;
 const KEYS = [...ALPHABET, '⌫', 'OK'];
@@ -26,7 +26,7 @@ export class CodeInput implements Modal {
     input.takeTyped();
     this.root = screenContainer(scene, 1300);
     const w = 236;
-    const h = 132;
+    const h = 140;
     const x = Math.floor((320 - w) / 2);
     const y = 22;
     const g = scene.add.graphics();
@@ -39,7 +39,7 @@ export class CodeInput implements Modal {
       const col = i % COLS;
       const row = Math.floor(i / COLS);
       const kx = x + 14 + col * 26;
-      const ky = y + 44 + row * 14;
+      const ky = y + 50 + row * 14;
       const kw = k.length > 1 ? 22 : 10;
       this.keyPos.push({ x: kx, y: ky, w: kw });
       const t = uiText(scene, kx + 2, ky + 2, k);
@@ -57,8 +57,9 @@ export class CodeInput implements Modal {
   }
 
   private refresh() {
-    const shown = groupCode(this.value);
-    this.display.setText(shown + (this.value.length < this.maxLen && Math.floor(this.blink / 400) % 2 === 0 ? '_' : ''));
+    // Vierergruppen mit Leerzeichen, damit lange Codes umbrechen statt über den Rand zu laufen
+    const shown = groupCode(this.value).replace(/-/g, ' ');
+    setWrapped(this.display, shown + (this.value.length < this.maxLen && Math.floor(this.blink / 400) % 2 === 0 ? '_' : ''), 216);
     const k = this.keyPos[this.sel];
     this.cursor.clear().lineStyle(1, 0xffcd75, 1).strokeRect(k.x - 1.5, k.y - 0.5, k.w + 4, 13);
   }

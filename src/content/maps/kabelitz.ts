@@ -1,12 +1,12 @@
 import type { MapDef } from '../../engine/world/MapDef';
-import { give, interlude, lexicon, narrate, quest, say, setFlag, take, warp, when } from '../../engine/script/Script';
+import { give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, warp, when, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
   id: 'kabelitz',
   name: 'Kabelitz',
   outdoor: true,
   legend: {
-    '.': 'gras', ',': 'gras2', '=': 'weg', '*': 'blumen', '#': 'strasse', '~': 'strasse_mitte',
+    '.': 'gras', ',': 'gras2', '=': 'weg', '*': 'blumen', '#': 'strasse', '~': 'strasse_mitte', g: 'gully', l: 'ladestation',
     T: 'baum_ol', Y: 'baum_or', U: 'baum_ul', I: 'baum_ur', b: 'busch', z: 'zaun',
     '<': 'dach_l', '^': 'dach_m', '>': 'dach_r', '[': 'traufe_l', _: 'traufe_m', ']': 'traufe_r',
     '(': 'wand_l', w: 'wand_m', ')': 'wand_r', F: 'fenster', D: 'tuer',
@@ -27,12 +27,12 @@ export const kabelitz: MapDef = {
     ',.**..=.........=........,..,.',
     '......=.........=.........,.,.',
     '......=.........=.......=,....',
-    '==============================',
+    '============g=================',
     '==============================',
     '##############################',
     '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
     '##############################',
-    '...,.........,...............,',
+    '...,.........,.=.............,',
   ],
   deco: [
     'TYTYTYTYTYTYTYTYTYTYTYTYTYTYTY',
@@ -48,13 +48,13 @@ export const kabelitz: MapDef = {
     'TY       UI  b     b  <^^^> TY',
     'UI                 b  [___] UI',
     'TY                    (FDF) TY',
-    'UI S       K       P        UI',
+    'UI S       K       P     l  UI',
     'b                             ',
     'b                             ',
     'b                             ',
     'b                             ',
     'b                             ',
-    'bbb bb bb bb bb bb bb bb bb bb',
+    'bbbbbbbbbbbbbbb bbbbbbbbbbbbbb',
   ],
   extraSolid: [
     [16, 7],
@@ -62,6 +62,96 @@ export const kabelitz: MapDef = {
   ],
   entities: [
     { kind: 'warp', x: 6, y: 7, to: { map: 'wohnzimmer', x: 5, y: 7, dir: 'up' } },
+    { kind: 'warp', x: 15, y: 19, to: { map: 'dorfplatz', x: 15, y: 1, dir: 'down' } },
+    {
+      kind: 'npc',
+      id: 'kowalski',
+      sprite: 'kowalski',
+      x: 10,
+      y: 14,
+      dir: 'right',
+      visibleIf: { all: [{ flag: 'zettel_gefunden' }, { not: { flag: 'kvz_repariert' } }] },
+      script: kowalskiScript(),
+    },
+    {
+      kind: 'interact',
+      id: 'transporter_l',
+      x: 12,
+      y: 16,
+      tile: 'transporter_l',
+      visibleIf: { all: [{ flag: 'zettel_gefunden' }, { not: { flag: 'kvz_repariert' } }] },
+      script: [narrate('Der Transporter von KnotenNetz. Hinten liegen Kabelrollen und Werkzeug.')],
+      scan: { name: 'transporter', klasse: 'Auto', attribute: [['farbe', 'weiß-orange'], ['firma', 'KnotenNetz']], methoden: ['fahren', 'beladen'] },
+    },
+    {
+      kind: 'interact',
+      id: 'transporter_r',
+      x: 13,
+      y: 16,
+      tile: 'transporter_r',
+      visibleIf: { all: [{ flag: 'zettel_gefunden' }, { not: { flag: 'kvz_repariert' } }] },
+      script: [narrate('Der Transporter von KnotenNetz. Hinten liegen Kabelrollen und Werkzeug.')],
+    },
+    {
+      kind: 'interact',
+      id: 'gully',
+      x: 12,
+      y: 14,
+      script: [
+        when(
+          { flag: 'schluessel_gefunden' },
+          [narrate('Der Gully. Hier unten hat Krümel den Schlüssel gefunden.')],
+          [
+            when(
+              { not: { flag: 'kowalski_auftrag' } },
+              [narrate('Ein Gully. Unten plätschert Wasser.')],
+              [
+                when(
+                  { item: 'block_fernbedienung' },
+                  [
+                    narrate('Du setzt Krümel vorsichtig durch die Klappe am Rand des Gullys.'),
+                    minigame('bloecke:gully'),
+                    narrate('Krümel kommt mit dem Schlüssel zurück!'),
+                    give('schluessel_kvz'),
+                    setFlag('schluessel_gefunden'),
+                    say('ping', 'Krümel ist ein Held! Gurr!'),
+                    quest('q1_zurueck_kowalski'),
+                  ],
+                  [narrate('Da unten glänzt etwas – Herrn Kowalskis Schlüssel! Aber deine Hand passt nicht durch das Gitter.')],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    },
+    {
+      kind: 'npc',
+      id: 'emil',
+      sprite: 'emil',
+      x: 23,
+      y: 13,
+      dir: 'down',
+      script: emilScript(),
+    },
+    {
+      kind: 'npc',
+      id: 'kruemel',
+      sprite: 'kruemel',
+      anim: 'kruemel_idle',
+      x: 26,
+      y: 13,
+      dir: 'down',
+      visibleIf: { not: { item: 'block_fernbedienung' } },
+      script: [say('kruemel', 'Piep!'), narrate('Krümel, Emils Saugroboter. Ein kleines Lämpchen blinkt.')],
+      scan: {
+        name: 'kruemel',
+        klasse: 'Saugroboter',
+        attribute: [['akku', '80 %'], ['zustand', 'Laden'], ['besitzer', 'Emil']],
+        methoden: ['vor', 'drehen', 'aufnehmen', 'zurStation'],
+      },
+    },
+    { kind: 'interact', id: 'ladestation', x: 25, y: 13, script: [narrate('Krümels Ladestation. Ein grünes Licht leuchtet.')] },
     {
       kind: 'npc',
       id: 'opa',
@@ -107,7 +197,7 @@ export const kabelitz: MapDef = {
       script: [narrate('Das gelbe Postauto von Frau Krause. Es ist voller Pakete.')],
     },
     { kind: 'interact', id: 'opa_tuer', x: 16, y: 7, script: [narrate('Opa Werners Haustür. Abgeschlossen – Opa ist ja draußen.')] },
-    { kind: 'interact', id: 'emil_tuer', x: 24, y: 12, script: [narrate('Hier wohnt Emil mit seinen Eltern. Niemand öffnet.')] },
+    { kind: 'interact', id: 'emil_tuer', x: 24, y: 12, script: [narrate('Hier wohnt Emil mit seinen Eltern.')] },
     {
       kind: 'interact',
       id: 'schild',
@@ -201,8 +291,8 @@ export const kabelitz: MapDef = {
                 setFlag('zettel_gefunden'),
                 say('ping', '„WUHIISXQNW DOWHV IHUQPHOGHDPW"? Das ist doch kein Deutsch! Vielleicht eine Geheimschrift …'),
                 say('ping', 'Wer macht so was? Und warum? Gurr …'),
-                quest('q1_fortsetzung'),
-                narrate('Ende der Testversion. Wie es mit dem grauen Kasten weitergeht, erfährst du in der nächsten Version!'),
+                narrate('Ein weißer Transporter hält an der Straße. Ein Mann in oranger Arbeitsjacke steigt aus.'),
+                quest('q1_kowalski'),
               ],
             ),
           ],
@@ -304,6 +394,101 @@ function opaScript() {
               ],
             ),
           ],
+        ),
+      ],
+    ),
+  ];
+}
+
+/** Welche Aufgabe für Herrn Kowalski ist als Nächstes dran? */
+function naechsteAufgabe(): Command {
+  return when(
+    { not: { flag: 'binaer_gelernt' } },
+    [quest('q1_museum')],
+    [when({ not: { flag: 'schluessel_gefunden' } }, [when({ item: 'block_fernbedienung' }, [quest('q1_gully')], [quest('q1_emil')])], [quest('q1_kabelbinder')])],
+  );
+}
+
+function kowalskiScript() {
+  return [
+    when(
+      { not: { flag: 'kowalski_auftrag' } },
+      [
+        say('kowalski', 'Kowalski, von KnotenNetz. Ich soll hier die Störung beheben – ganz Kabelitz ist ja offline.'),
+        say('kowalski', 'Oh je. Aufgebrochen! Und die Kabel rausgerissen. Wer macht denn so was?'),
+        say('kowalski', 'Reparieren kann ich das. Aber mir fehlen drei Sachen.'),
+        narrate('Er zeigt in den Kasten. Neben jedem Anschluss klebt ein Schild: 00000101, 00001100, 00010011 …'),
+        say('kowalski', 'Erstens: Die alten Anschlüsse sind nur mit Nullen und Einsen beschriftet. Welches Kabel wohin gehört, steht auf meinem Tablet – und das braucht Internet. Haha.'),
+        say('kowalski', 'Zweitens: Der Schlüssel fürs Innenfach ist mir in den Gully gefallen. Da kommt keine Hand durch.'),
+        say('kowalski', 'Und drittens: Meine Kabelbinder sind alle.'),
+        say('ping', 'Nullen und Einsen … Frau Fröhlich im Dorfmuseum weiß bestimmt, was das bedeutet! Das Museum ist am Dorfplatz, südlich von hier.'),
+        setFlag('kowalski_auftrag'),
+        naechsteAufgabe(),
+      ],
+      [
+        when(
+          { not: { flag: 'binaer_gelernt' } },
+          [say('kowalski', 'Kannst du die Nullen und Einsen schon lesen? Frag im Dorfmuseum nach!')],
+          [
+            when(
+              { not: { flag: 'schluessel_gefunden' } },
+              [
+                say('kowalski', 'Du kannst jetzt Binärzahlen lesen? Klasse! Dann finden wir gleich heraus, welches Kabel wohin gehört.'),
+                when(
+                  { item: 'block_fernbedienung' },
+                  [say('kowalski', 'Und du hast einen Saugroboter dabei? Perfekt – der passt bestimmt in den Gully! Das Gitter ist gleich rechts von mir.')],
+                  [say('kowalski', 'Bleibt der Schlüssel im Gully. Da müsste was Kleines rein … So ein Staubsaugerroboter vielleicht, haha.'), say('ping', 'Emils Krümel! Emil spielt doch immer vor seinem Haus.')],
+                ),
+              ],
+              [
+                say('kowalski', 'Mein Schlüssel! Danke dir – und dem kleinen Roboter.'),
+                say('kowalski', 'Jetzt fehlen nur noch Kabelbinder. Gibt\'s hier im Dorf einen Laden?'),
+                say('ping', 'Der Dorfladen am Dorfplatz!'),
+              ],
+            ),
+          ],
+        ),
+        naechsteAufgabe(),
+      ],
+    ),
+  ];
+}
+
+function emilScript() {
+  const ausleihen: Command = when(
+    { all: [{ flag: 'kowalski_auftrag' }, { flag: 'kruemel_repariert' }, { not: { item: 'block_fernbedienung' } }, { not: { flag: 'schluessel_gefunden' } }] },
+    [
+      narrate('Du erzählst Emil vom Schlüssel im Gully.'),
+      say('emil', 'Krümel soll in den Gully? Klar, leih ihn dir aus! Und die Fernbedienung auch. Aber bring ihn heil zurück!'),
+      give('block_fernbedienung'),
+      quest('q1_gully'),
+    ],
+  );
+  return [
+    when(
+      { not: { flag: 'kruemel_repariert' } },
+      [
+        say('emil', 'Alex! Krümel ist kaputt! Er saugt immer weiter, bis der Akku leer ist, und dann bleibt er einfach liegen.'),
+        say('emil', 'Und jetzt hat Papa auch noch sein Programm gelöscht. Mit dieser Fernbedienung da.'),
+        narrate('Emil zeigt dir die Block-Fernbedienung. Darauf steckt man Befehle hintereinander – wie Bausteine.'),
+        say('emil', 'Kannst du Krümel zum Sandkasten schicken? Ich weiß genau, wie er fahren muss!'),
+        setFlag('emil_gesprochen'),
+        minigame('bloecke:garten'),
+        lexicon('algorithmus'),
+        setFlag('kruemel_programmiert'),
+        say('emil', 'Juhu, er fährt! Aber warum bleibt er nachher immer liegen?'),
+        say('ping', 'In der Anleitung ist ein Zustandsdiagramm. Vielleicht fehlt da ein Pfeil …'),
+        minigame('zustand:kruemel'),
+        lexicon('zustandsdiagramm'),
+        setFlag('kruemel_repariert'),
+        say('emil', 'Er fährt zur Ladestation! Krümel ist wieder gesund!'),
+        ausleihen,
+      ],
+      [
+        when(
+          { flag: 'schluessel_gefunden' },
+          [say('emil', 'Krümel hat den Schlüssel gefunden? Er ist der schlaueste Roboter der Welt!')],
+          [say('emil', 'Krümel fährt jetzt immer brav zur Ladestation. Danke!'), ausleihen],
         ),
       ],
     ),

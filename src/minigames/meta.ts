@@ -4,4 +4,10 @@ export const MINIGAME_META: Record<string, { titel: string; stufe: number; lehrp
   sortieren: { titel: 'Die Sortiermaschine', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Daten strukturieren (Erfahrung Adressen)' },
   eva: { titel: 'Die Brille zusammenbauen', stufe: 7, lehrplan: 'SN Kl. 7 LB 2 – EVA-Modell, Speichern' },
   briefreise: { titel: 'Die Reise deines Briefs', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Übertragung (Einstieg)' },
+  bitschloss: { titel: 'Bit-Schloss', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Dezimalzahlen als Binärzahlen' },
+  pixelwand: { titel: 'Die Pixelwand', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Bilder als Binärzahlen' },
+  geheimtext: { titel: 'Der Geheimtext', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Text als Binärzahlen' },
+  fotolabor: { titel: 'Das Fotolabor', stufe: 7, lehrplan: 'SN Kl. 7 WB 2 – Farbkanäle, Graustufen, Negativ' },
+  bloecke: { titel: 'Krümel programmieren', stufe: 7, lehrplan: 'SN Kl. 7 LB 3 – Algorithmen in Blöcken (Sequenz)' },
+  zustand: { titel: 'Zustandsdiagramm', stufe: 7, lehrplan: 'SN Kl. 7 LB 2 – Zustandsdiagramm, Übergangsgraph' },
 };

@@ -58,3 +58,62 @@ describe('Minispiel-Register', () => {
     for (const id of ids) expect(MINIGAME_META[id], id).toBeDefined();
   });
 });
+
+import { BITSCHLOESSER, GEHEIMWORT, PIXELWAND, binaerText, bitsZuZahl, buchstabeZuZahl, zahlZuBits } from '../../src/minigames/binaerLogic';
+import { KRUEMEL_LEVEL, MAX_BLOECKE, fuehreAus } from '../../src/minigames/kruemelLogic';
+import { ZUSTAND_AUFGABEN } from '../../src/minigames/zustandLogic';
+import { FOTO_START, fotoRichtig, wendeAn } from '../../src/minigames/fotoLogic';
+
+describe('Binärzahlen', () => {
+  it('rechnet hin und zurück', () => {
+    for (const n of [0, 1, 5, 42, 128, 200, 255]) expect(bitsZuZahl(zahlZuBits(n))).toBe(n);
+    expect(binaerText(5)).toBe('00000101');
+    expect(bitsZuZahl(zahlZuBits(42))).toBe(42);
+  });
+  it('Bit-Schlösser sind mit 8 Bit lösbar', () => {
+    for (const s of BITSCHLOESSER) expect(s.ziel).toBeLessThanOrEqual(255);
+  });
+  it('Pixelwand: 8×8 Binärzeilen', () => {
+    expect(PIXELWAND).toHaveLength(8);
+    for (const r of PIXELWAND) expect(r).toMatch(/^[01]{8}$/);
+  });
+  it('Geheimwort passt in 5 Bit je Buchstabe', () => {
+    for (const c of GEHEIMWORT) expect(buchstabeZuZahl(c)).toBeGreaterThanOrEqual(1);
+    for (const c of GEHEIMWORT) expect(buchstabeZuZahl(c)).toBeLessThanOrEqual(31);
+  });
+});
+
+describe('Krümel-Blöcke', () => {
+  for (const [id, level] of Object.entries(KRUEMEL_LEVEL)) {
+    it(`Level ${id}: Musterlösung klappt mit höchstens ${MAX_BLOECKE} Blöcken`, () => {
+      expect(level.loesung.length).toBeLessThanOrEqual(MAX_BLOECKE);
+      expect(fuehreAus(level, level.loesung).geschafft).toBe(true);
+    });
+    it(`Level ${id}: Fehler werden erkannt`, () => {
+      expect(fuehreAus(level, []).geschafft).toBe(false);
+      expect(fuehreAus(level, ['aufnehmen']).schritte[0].fehler).toBeTruthy();
+    });
+  }
+  it('Wand erkennt Krümel', () => {
+    const r = fuehreAus(KRUEMEL_LEVEL.garten, ['links', 'vor']);
+    expect(r.schritte[1].fehler).toMatch(/Wand/);
+  });
+});
+
+describe('Zustandsdiagramm', () => {
+  it('der fehlende Übergang ist nicht schon vorhanden und die falschen Optionen unterscheiden sich', () => {
+    for (const a of Object.values(ZUSTAND_AUFGABEN)) {
+      const key = (u: { von: string; nach: string; ereignis: string }) => `${u.von}>${u.nach}:${u.ereignis}`;
+      expect(a.uebergaenge.map(key)).not.toContain(key(a.fehlt));
+      for (const f of a.falsch) expect(key(f)).not.toBe(key(a.fehlt));
+    }
+  });
+});
+
+describe('Fotolabor', () => {
+  it('Start ist falsch, richtige Einstellung ist Schwarz-Weiß ohne Negativ', () => {
+    expect(fotoRichtig(FOTO_START)).toBe(false);
+    expect(fotoRichtig({ negativ: false, rot: true, gruen: true, blau: true, graustufen: true })).toBe(true);
+    expect(wendeAn([200, 100, 50], { negativ: true, rot: true, gruen: true, blau: true, graustufen: false })).toEqual([55, 155, 205]);
+  });
+});

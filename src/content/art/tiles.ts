@@ -631,6 +631,225 @@ export const TILES: TileDef[] = [
       b.blit(s.outline(PAL.ink));
     },
   },
+  // --- Kapitel 1, M2a: Kabelitz/Dorfplatz ---
+  {
+    id: 'gully',
+    layer: 'ground',
+    draw: (b) => {
+      path(b, 7);
+      b.rect(2, 3, 12, 10, PAL.grau1).frame(2, 3, 12, 10, PAL.ink);
+      for (let x = 4; x < 13; x += 2) b.vline(x, 4, 8, PAL.ink);
+      b.set(9, 9, PAL.gelb);
+    },
+  },
+  {
+    id: 'pflaster',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.grau3);
+      for (let y = 0; y < T; y += 4) {
+        b.hline(0, y + 3, T, PAL.grau2);
+        const off = (y / 4) % 2 ? 0 : 3;
+        for (let x = off; x < T; x += 6) b.vline(x, y, 3, PAL.grau2);
+      }
+      speckle(b, 51, [PAL.grau4], 0.05);
+    },
+  },
+  {
+    id: 'transporter_l',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(1, 3, 15, 10, PAL.weiss).rect(2, 4, 6, 4, PAL.blau4).hline(1, 9, 15, PAL.orange);
+      s.disc(5, 13, 2.5, PAL.ink).disc(5, 13, 1, PAL.grau3);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
+  {
+    id: 'transporter_r',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(0, 1, 14, 12, PAL.weiss).hline(0, 9, 14, PAL.orange);
+      s.rect(3, 3, 8, 3, PAL.blau2);
+      s.disc(10, 13, 2.5, PAL.ink).disc(10, 13, 1, PAL.grau3);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
+  {
+    id: 'sandkasten',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.braun3);
+      b.rect(1, 1, 14, 14, PAL.gelb);
+      speckle(b, 61, [PAL.braun4, PAL.creme], 0.15);
+      b.frame(0, 0, 16, 16, PAL.braun2);
+    },
+  },
+  {
+    id: 'ladestation',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(3, 6, 10, 8, PAL.grau4).frame(3, 6, 10, 8, PAL.ink);
+      b.rect(5, 8, 6, 2, PAL.grau1).set(7, 11, PAL.gruen3).set(8, 11, PAL.gruen3);
+      b.hline(2, 14, 12, PAL.grau2);
+    },
+  },
+  {
+    id: 'kabelschacht',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(2, 4, 12, 10, PAL.grau2).frame(2, 4, 12, 10, PAL.ink);
+      b.rect(4, 6, 8, 6, PAL.ink);
+      b.hline(5, 8, 6, PAL.netzKabel).hline(5, 10, 4, PAL.netzFunk);
+    },
+  },
+  {
+    id: 'laterne',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.vline(7, 5, 11, PAL.grau1).vline(8, 5, 11, PAL.ink);
+      b.rect(5, 1, 6, 5, PAL.gelb).frame(5, 1, 6, 5, PAL.ink);
+      b.rect(5, 15, 6, 1, PAL.ink);
+    },
+  },
+  {
+    id: 'bank',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 5, 14, 3, PAL.braun3).rect(1, 9, 14, 3, PAL.braun3);
+      b.hline(1, 8, 14, PAL.braun1).hline(1, 12, 14, PAL.braun1);
+      b.rect(2, 12, 2, 4, PAL.grau1).rect(12, 12, 2, 4, PAL.grau1);
+    },
+  },
+  {
+    id: 'museumsschild',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(7, 10, 2, 6, PAL.braun1);
+      b.rect(1, 2, 14, 9, PAL.blau1).frame(1, 2, 14, 9, PAL.ink);
+      b.hline(3, 4, 10, PAL.gelb).hline(3, 6, 7, PAL.weiss).hline(3, 8, 9, PAL.weiss);
+    },
+  },
+  // --- Museum ---
+  {
+    id: 'parkett',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.braun2);
+      for (let y = 0; y < T; y += 4) for (let x = (y / 4) % 2 ? 0 : 4; x < T; x += 8) b.rect(x, y, 4, 4, PAL.braun3);
+      b.hline(0, 15, T, PAL.braun1);
+    },
+  },
+  {
+    id: 'museumswand',
+    layer: 'ground',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.lila1);
+      for (let x = 0; x < T; x += 4) b.vline(x, 0, 12, PAL.lila2);
+      b.rect(0, 12, T, 4, PAL.braun1).hline(0, 12, T, PAL.gelb);
+    },
+  },
+  {
+    id: 'bilderrahmen',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(3, 1, 10, 9, PAL.gelb).rect(4, 2, 8, 7, PAL.creme);
+      b.disc(8, 5, 2, PAL.haut2).rect(6, 7, 5, 2, PAL.ink);
+    },
+  },
+  ...(['rechenuhr', 'pascaline', 'leibniz', 'lovelace', 'turing', 'neumann'] as const).map(
+    (motiv): TileDef => ({
+      id: `vitrine_${motiv}`,
+      layer: 'deco',
+      solid: true,
+      draw: (b) => {
+        b.rect(1, 9, 14, 7, PAL.braun1).frame(1, 9, 14, 7, PAL.ink);
+        b.rect(2, 1, 12, 9, PAL.blau4).frame(2, 1, 12, 9, PAL.grau2);
+        b.set(3, 2, PAL.weiss).set(4, 2, PAL.weiss).set(3, 3, PAL.weiss);
+        if (motiv === 'rechenuhr') b.rect(5, 4, 6, 5, PAL.braun3).disc(8, 6, 1.5, PAL.gelb);
+        if (motiv === 'pascaline') b.rect(4, 5, 8, 4, PAL.gelb).disc(6, 7, 1, PAL.ink).disc(10, 7, 1, PAL.ink);
+        if (motiv === 'leibniz') b.rect(5, 3, 6, 6, PAL.creme).hline(6, 4, 1, PAL.ink).hline(8, 4, 2, PAL.ink).hline(6, 6, 2, PAL.ink).hline(9, 6, 1, PAL.ink);
+        if (motiv === 'lovelace') b.rect(5, 4, 6, 5, PAL.rot2).vline(8, 4, 5, PAL.gelb);
+        if (motiv === 'turing') for (let x = 3; x < 13; x += 2) b.rect(x, 6, 1, 2, x % 4 === 1 ? PAL.ink : PAL.weiss).hline(3, 5, 10, PAL.grau2);
+        if (motiv === 'neumann') b.frame(4, 3, 3, 3, PAL.ink).frame(9, 3, 3, 3, PAL.ink).frame(6, 6, 4, 3, PAL.ink);
+        b.rect(5, 11, 6, 2, PAL.gelb);
+      },
+    }),
+  ),
+  {
+    id: 'z3_l',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.grau2).frame(0, 0, 17, 16, PAL.ink);
+      for (let y = 2; y < 14; y += 3) for (let x = 2; x < 15; x += 3) b.rect(x, y, 2, 2, (x + y) % 2 ? PAL.gelb : PAL.grau1);
+    },
+  },
+  {
+    id: 'z3_r',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.grau2).frame(-1, 0, 17, 16, PAL.ink);
+      b.rect(2, 2, 12, 6, PAL.ink);
+      for (let x = 3; x < 13; x += 2) b.set(x, 4, x % 3 ? PAL.rot3 : PAL.gruen3);
+      b.rect(3, 10, 10, 4, PAL.grau4).hline(4, 12, 8, PAL.grau1);
+    },
+  },
+  {
+    id: 'fernschreiber',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 6, 14, 9, PAL.gruen1).frame(1, 6, 14, 9, PAL.ink);
+      b.rect(3, 11, 10, 3, PAL.grau1);
+      for (let x = 4; x < 12; x += 2) b.set(x, 12, PAL.grau4);
+      b.rect(4, 1, 8, 6, PAL.creme).frame(4, 1, 8, 6, PAL.grau2);
+      b.hline(5, 3, 5, PAL.grau2).hline(5, 5, 3, PAL.grau2);
+    },
+  },
+  {
+    id: 'archivtuer',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 0, 14, 16, PAL.braun1).frame(1, 0, 14, 16, PAL.ink);
+      b.rect(2, 2, 12, 4, PAL.ink);
+      for (let i = 0; i < 8; i++) b.set(3 + i + (i > 3 ? 1 : 0), 3, i % 3 === 0 ? PAL.gelb : PAL.grau1).set(3 + i + (i > 3 ? 1 : 0), 4, PAL.grau1);
+      b.rect(6, 9, 4, 4, PAL.grau3).set(8, 11, PAL.ink);
+    },
+  },
+  {
+    id: 'pixelwand',
+    layer: 'ground',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.lila1);
+      b.rect(1, 1, 14, 10, PAL.weiss).frame(1, 1, 14, 10, PAL.ink);
+      for (let y = 2; y < 10; y += 2) for (let x = 2; x < 14; x += 2) if ((x * 3 + y) % 5 < 2) b.rect(x, y, 2, 2, PAL.ink);
+      b.rect(0, 12, T, 4, PAL.braun1).hline(0, 12, T, PAL.gelb);
+    },
+  },
+  {
+    id: 'pult',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(2, 5, 12, 5, PAL.braun3).hline(2, 5, 12, PAL.braun4).frame(2, 5, 12, 5, PAL.ink);
+      b.rect(4, 6, 8, 3, PAL.creme);
+      b.rect(3, 10, 2, 6, PAL.braun1).rect(11, 10, 2, 6, PAL.braun1);
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

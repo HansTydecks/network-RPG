@@ -49,6 +49,8 @@ export async function walk(page: Page, dir: Dir, n = 1) {
 
 /** Dreht sich in eine Richtung, ohne zu laufen (kurzer Tastendruck). */
 export async function face(page: Page, dir: Dir) {
+  // Kurz nach einem Schritt gilt eine neue Richtung als „weiterlaufen" – wie bei echten Spielern erst kurz stehen.
+  await page.waitForTimeout(150);
   await page.keyboard.down(KEY[dir]);
   await page.waitForTimeout(40);
   await page.keyboard.up(KEY[dir]);

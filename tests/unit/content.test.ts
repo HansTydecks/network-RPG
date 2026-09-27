@@ -12,7 +12,7 @@ import { MINIGAME_META as MINIGAMES } from '../../src/minigames/meta';
 import { TILE_INDEX } from '../../src/content/art/tiles';
 
 /** Kapitel je Karte → höchste erlaubte Klassenstufe (Spiralcurriculum). */
-const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7, wohnzimmer: 7, briefzentrum: 7 };
+const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7, wohnzimmer: 7, briefzentrum: 7, dorfplatz: 7, museum: 7 };
 
 function* walk(script: Script): Generator<Command> {
   for (const c of script) {
@@ -93,8 +93,8 @@ describe('Inhalte', () => {
             if (c.op === 'say' && c.who) expect(SPEAKERS[c.who], c.who).toBeDefined();
             if (c.op === 'lexicon') expect(LEXICON[c.id].stufe, `${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
             if (c.op === 'minigame') {
-              expect(MINIGAMES[c.id], `Minispiel ${c.id}`).toBeDefined();
-              expect(MINIGAMES[c.id].stufe, `Minispiel ${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
+              expect(MINIGAMES[c.id.split(':')[0]], `Minispiel ${c.id}`).toBeDefined();
+              expect(MINIGAMES[c.id.split(':')[0]].stufe, `Minispiel ${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
             }
             if (c.op === 'warp') expect(parseMap(MAPS[c.map]).solid[c.y][c.x], `Script-Warp ${c.map}`).toBe(false);
           }

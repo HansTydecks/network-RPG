@@ -35,7 +35,7 @@ export class TitleScene extends Phaser.Scene {
     title.setX(Math.round(160 - (measureText('NETZBLICK') * 3) / 2)).setOrigin(0, 0);
     const sub = 'Alex und die Funkstille';
     this.add.bitmapText(Math.round(160 - measureText(sub) / 2), 62, FONT_KEY, sub).setTint(hexToInt(PAL.gelb));
-    const foot = 'Ein Informatik-Abenteuer · Testversion M1';
+    const foot = 'Ein Informatik-Abenteuer · Testversion M2a';
     this.add.bitmapText(Math.round(160 - measureText(foot) / 2), 168, FONT_KEY, foot).setTint(hexToInt(PAL.grau2));
     this.ping = this.add.sprite(-20, 90, 'ping', 2).play('ping_flap');
     if (isTouchDevice()) addTouchControls(this, this.inp).setDpadVisible(false);
@@ -58,7 +58,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private async enterCode() {
-    const code = await this.modal<string | null>((r) => new CodeInput(this, 'Dein Speichercode:', 32, r, this.inp));
+    const code = await this.modal<string | null>((r) => new CodeInput(this, 'Dein Speichercode:', 64, r, this.inp));
     if (code) {
       const state = decodeSaveCode(code);
       if (state) return this.start(state);

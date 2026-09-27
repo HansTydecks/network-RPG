@@ -9,5 +9,9 @@ export const SPEAKERS: Record<string, string> = {
   krause: 'Frau Krause',
   oezdemir: 'Herr Özdemir',
   morse: 'Morse',
+  kowalski: 'Herr Kowalski',
+  froehlich: 'Frau Fröhlich',
+  emil: 'Emil',
+  kruemel: 'Krümel',
   unbekannt: '???',
 };

@@ -74,6 +74,8 @@ export class WorldScene extends Phaser.Scene {
   private scriptRunning = false;
   private hintLevel = new Map<string, number>();
   private touch?: TouchControls;
+  private turnedAt = -1000;
+  private lastStepEnd = -1000;
 
   constructor() {
     super('World');
@@ -265,7 +267,10 @@ export class WorldScene extends Phaser.Scene {
     if (a.t >= a.dur) {
       a.moving = false;
       this.syncActor(a);
-      if (isPlayer) this.onPlayerArrived();
+      if (isPlayer) {
+        this.lastStepEnd = this.time.now;
+        this.onPlayerArrived();
+      }
       return;
     }
     this.syncActor(a);
@@ -284,10 +289,16 @@ export class WorldScene extends Phaser.Scene {
       if (this.player.sprite.anims.isPlaying) this.face(this.player, this.player.dir);
       return;
     }
-    if (dir !== this.player.dir && inp.heldFor(dir) < TURN_DELAY_MS && !this.player.sprite.anims.isPlaying) {
+    // Aus dem Stand: erst umdrehen, laufen erst, wenn die Taste gehalten wird.
+    // (Bildraten-unabhängig: Zeitpunkt des Umdrehens merken statt Tastendauer zu messen.)
+    const now = this.time.now;
+    const walking = now - this.lastStepEnd < 60;
+    if (dir !== this.player.dir && !walking) {
       this.face(this.player, dir);
+      this.turnedAt = now;
       return;
     }
+    if (!walking && now - this.turnedAt < TURN_DELAY_MS) return;
     const [dx, dy] = VEC[dir];
     if (this.blocked(this.player.x + dx, this.player.y + dy)) {
       this.face(this.player, dir);
@@ -332,7 +343,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Mit aufgesetzter Brille: Objektkarte zeigen
     if (this.net?.on) {
-      const scan: ScanData | undefined = npc?.def.scan ?? (isPing ? PING_SCAN : undefined) ?? ent?.scan;
+      const scan: ScanData | undefined = npc?.def.scan ?? ent?.scan ?? (isPing && !ent ? PING_SCAN : undefined);
       if (scan) return void this.showScan(scan);
     }
     if (npc) {
@@ -340,8 +351,9 @@ export class WorldScene extends Phaser.Scene {
       this.face(npc.actor, opposite[this.player.dir]);
       return void this.run(npc.def.script);
     }
-    if (isPing) return void this.run(this.hintScript());
+    // Gegenstände haben Vorrang vor Ping, falls Ping gerade auf demselben Feld steht
     if (ent) return void this.run(ent.script);
+    if (isPing) return void this.run(this.hintScript());
   }
 
   private async showScan(scan: ScanData) {
@@ -504,7 +516,7 @@ export class WorldScene extends Phaser.Scene {
 
   private async saveDialog() {
     const code = autosave(this.state);
-    await this.host().say(undefined, `Gespeichert! Dein Speichercode lautet:\n${code}`);
+    await this.host().say(undefined, `Gespeichert! Dein Speichercode lautet:\n${code.replace(/-/g, ' ')}`);
     await this.host().say('ping', 'Schreib den Code in deinen Hefter. Damit kannst du auf jedem Computer weiterspielen!');
   }
 

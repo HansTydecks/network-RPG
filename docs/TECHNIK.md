@@ -16,9 +16,19 @@
 - Tageszeit (Tag 1/2, Vormittag/Nachmittag) mit Einfärbung draußen
 - 7 Netzbuch-Einträge, alle Klasse 7
 
-Tests: 57 Unit-Tests (u. a. Minispiel-Logik, Caesar-Zettel, Kartenprüfung, Klassenstufen-Grenzen, Schriftabdeckung aller Texte) und 3 Browser-Tests, darunter ein kompletter Durchlauf von Kapitel 1 mit allen Minispielen.
+Tests (Stand M1): 57 Unit-Tests (u. a. Minispiel-Logik, Caesar-Zettel, Kartenprüfung, Klassenstufen-Grenzen, Schriftabdeckung aller Texte) und 3 Browser-Tests, darunter ein kompletter Durchlauf von Kapitel 1 mit allen Minispielen.
 
-Nächster Schritt: **M2 – Kapitel 1 komplett** (Museum und Binärzahlen, Krümel und Blockprogrammierung, Dorfladen und Einheiten, Dorffest, Reparatur des grauen Kastens).
+**Korrekturen nach dem Test von M1:** Betriebssystem-Minispiel entfernt (Thema vorerst nicht in Kapitel 1), alle Texte brechen um (Tests prüfen das), Drehen im Stand bildratenunabhängig, Gegenstände haben beim Anschauen Vorrang vor Ping, lange Speichercodes werden umbrochen.
+
+**M2a ist fertig:**
+- Herr Kowalski am aufgebrochenen Kasten mit drei Aufträgen (binär beschriftete Anschlüsse, Schlüssel im Gully, Kabelbinder)
+- Neuer Dorfplatz (Museum, Dorfladen, Kabelschacht) und das Dorfmuseum mit Frau Fröhlich
+- 7 Exponate (Schickard, Pascal, Leibniz, Lovelace, Turing, Zuse, von Neumann) mit Fragen; Leibniz gibt die Binär-Karte
+- Minispiele: Bit-Schloss (3 Stufen), Pixelwand, Geheimtext, Fotolabor (optional, Hinweis auf Werner Lösch), Krümel-Blöcke (Emils Garten, Gully), Zustandsdiagramm
+- Emil und Krümel, Block-Fernbedienung; Backtracking-Keime: Kabelschacht (zu lang für 10 Befehle), Fernschreiber im Archiv
+- Minispiele direkt aufrufbar: `?minispiel=bloecke:gully`, `?minispiel=bitschloss:3` usw.
+
+Nächster Schritt: **M2b** – Dorfladen mit Bytes und Einheiten, Pfandautomat, Dorffest (Datei-Chaos, Tabellen), Reparatur mit Kabelsalat, Brief gegen E-Mail, „Was ist schneller?", Samstag mit Lina und Plakat, FUNKSTILLEs Nachricht.
 
 ## Entwickeln
 
