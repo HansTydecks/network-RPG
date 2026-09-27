@@ -1,15 +1,24 @@
 import type { FlagId, ItemId, LexiconId } from './registry';
+import type { Script } from '../engine/script/Script';
 import { LEXICON } from './lexicon';
+import { KAPITEL2_START } from './dialog/kapitel2';
 
 /**
  * Startzustand eines Kapitels. Wer mit dem Kalender-Code direkt in ein Kapitel springt
  * (z. B. eine neue 8. Klasse ohne alten Spielstand), bekommt alles aus den früheren Kapiteln.
  */
 export interface KapitelStart {
+  /** Flag, das anzeigt, dass dieses Kapitel begonnen hat. */
+  startFlag: FlagId;
   items: ItemId[];
+  /** Gegenstände, die am Kapitelanfang nicht mehr im Rucksack sind. */
+  wegnehmen?: ItemId[];
   flags: FlagId[];
   lexicon: LexiconId[];
+  intro: Script;
 }
+
+const lexiconBis = (stufe: number) => (Object.keys(LEXICON) as LexiconId[]).filter((id) => LEXICON[id].stufe <= stufe && id !== 'betriebssystem');
 
 const KAPITEL1_FLAGS: FlagId[] = [
   'intro_gesehen', 'ping_dabei', 'netzblick_erklaert', 'opa_begruesst', 'prolog_gesehen', 'mama_gesprochen', 'idee_brief',
@@ -23,8 +32,17 @@ const KAPITEL1_FLAGS: FlagId[] = [
 
 export const KAPITEL_START: Record<number, KapitelStart> = {
   8: {
+    startFlag: 'k2_start',
     items: ['netzblick_v1', 'binaer_karte', 'block_fernbedienung', 'zettel_funkstille', 'usb_stick'],
     flags: [...KAPITEL1_FLAGS, 'k2_start'],
-    lexicon: (Object.keys(LEXICON) as LexiconId[]).filter((id) => LEXICON[id].stufe === 7 && id !== 'betriebssystem'),
+    lexicon: lexiconBis(7),
+    intro: KAPITEL2_START,
   },
 };
+
+/** Höchste Klassenstufe, deren Kapitel es schon gibt (höchstens die gewünschte). */
+export function verfuegbareStufe(stufe: number): number {
+  let s = stufe;
+  while (s > 8 && !KAPITEL_START[s]) s--;
+  return s;
+}

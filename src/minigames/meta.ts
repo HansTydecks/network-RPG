@@ -1,3 +1,5 @@
+import { SPIEL_DEFS } from '../content/spiele';
+
 /** Beschreibung aller Minispiele ohne Phaser-Abhängigkeit (für Tests und den späteren Trainingsraum). */
 export const MINIGAME_META: Record<string, { titel: string; stufe: number; lehrplan: string }> = {
   brief: { titel: 'Ein Brief an Lina', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Informationen und Daten' },
@@ -18,4 +20,5 @@ export const MINIGAME_META: Record<string, { titel: string; stufe: number; lehrp
   algorithmus: { titel: 'Algorithmus oder nicht?', stufe: 8, lehrplan: 'SN Kl. 8 LB 1 – Begriff und Eigenschaften von Algorithmen, Algorithmen im Alltag' },
   clientserver: { titel: 'Client oder Server?', stufe: 8, lehrplan: 'SN Kl. 8 LB 2 – Vernetzte Systeme (Schulcurriculum: Client-Server)' },
   plakat: { titel: 'Linas Plakat', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Pixel/Vektor, Objekte, Inhalt und Design' },
+  ...Object.fromEntries(Object.entries(SPIEL_DEFS).map(([id, d]) => [id, { titel: d.titel, stufe: d.stufe, lehrplan: d.lehrplan }])),
 };

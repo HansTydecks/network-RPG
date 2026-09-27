@@ -23,6 +23,8 @@ const MAP_STUFE: Record<string, number> = {
   dorfladen: 7,
   knotenburg: 8,
   gymnasium: 8,
+  bibliothek: 8,
+  fernmeldeamt: 8,
 };
 
 /** Durchläuft ein Script und merkt sich, ab welcher Klassenstufe ein Befehl erreichbar ist ({ stufeMin } in Bedingungen). */

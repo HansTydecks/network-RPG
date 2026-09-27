@@ -29,7 +29,7 @@ test('Kapitel 2 (M3a): erster Schultag in Knotenburg', async ({ page }) => {
     });
 
   // Einstieg wie nach dem Kalender-Code (Kapitel 1 übersprungen)
-  await page.evaluate(() => (window as any).__netzblick.scene.testStartKapitel2());
+  await page.evaluate(() => (window as any).__netzblick.scene.testStartKapitel(8));
   await page.waitForTimeout(300);
   await advanceDialogs(page, 60);
   expect((await state()).stufe).toBe(8);
@@ -71,11 +71,11 @@ test('Kapitel 2 (M3a): erster Schultag in Knotenburg', async ({ page }) => {
     await walk(page, 'up', 1);
     await walk(page, 'right', 4);
     await walk(page, 'up', 5);
-    await walk(page, 'right', 5);
+    await walk(page, 'right', 6);
     await talk('up');
   };
   const rausAusDerSchule = async () => {
-    await walk(page, 'left', 5);
+    await walk(page, 'left', 6);
     await walk(page, 'down', 5);
     await walk(page, 'left', 4);
     await walk(page, 'down', 2);
@@ -89,16 +89,12 @@ test('Kapitel 2 (M3a): erster Schultag in Knotenburg', async ({ page }) => {
   expect((await state()).quest).toBe('k2_clientserver');
   await page.screenshot({ path: 'test-results/k2-03-informatikraum.png' });
 
-  // Client und Server am Schul-PC
-  await walk(page, 'down', 2);
-  await walk(page, 'right', 1);
-  await talk('up');
+  // Client und Server am Schul-PC (direkt vor Alex)
+  await talk('down');
   await advanceUntilMinigame(page);
   await playMinigame(page);
   await advanceDialogs(page);
   expect(await flags(page)).toContain('k2_clientserver');
-  await walk(page, 'left', 1);
-  await walk(page, 'up', 2);
   await talk('up');
   await advanceDialogs(page);
   expect((await state()).quest).toBe('k2_kanal');

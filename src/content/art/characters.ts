@@ -372,3 +372,39 @@ export function schluessel7Icon(): PixBuf {
   b.set(9, 11, PAL.ink).set(10, 11, PAL.ink);
   return b;
 }
+
+CHARACTERS.push(
+  { id: 'pino', colors: { s: PAL.haut2, h: PAL.ink, c: PAL.weiss, p: PAL.rot2, f: PAL.ink } },
+  { id: 'lange', colors: { s: PAL.haut1, h: PAL.grau3, c: PAL.creme, p: PAL.grau2, f: PAL.braun1 } },
+  { id: 'schulz', colors: { s: PAL.haut1, h: PAL.braun3, c: PAL.gruen2, p: PAL.grau1, f: PAL.ink } },
+  { id: 'berger', colors: { s: PAL.haut1, h: PAL.weiss, c: PAL.rot3, p: PAL.lila1, f: PAL.braun1 } },
+  { id: 'weber', colors: { s: PAL.haut3, h: PAL.braun1, c: PAL.lila2, p: PAL.blau1, f: PAL.ink }, extra: opaBrille },
+  { id: 'sommer', colors: { s: PAL.haut1, h: PAL.orange, c: PAL.gelb, p: PAL.braun2, f: PAL.ink } },
+);
+
+export function echtheitslupeIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(6, 6, 5, PAL.grau4).disc(6, 6, 4, PAL.blau4).disc(5, 5, 1.5, PAL.weiss);
+  for (let i = 0; i < 5; i++) b.rect(9 + i, 9 + i, 2, 2, PAL.braun2);
+  b.set(5, 8, PAL.gruen3).set(6, 9, PAL.gruen3).set(7, 7, PAL.gruen3).set(8, 6, PAL.gruen3);
+  return b;
+}
+
+export function caesarScheibeIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(7.5, 7.5, 7, PAL.braun3).disc(7.5, 7.5, 5, PAL.creme).disc(7.5, 7.5, 2, PAL.braun2);
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    b.set(Math.round(7.5 + Math.cos(a) * 6), Math.round(7.5 + Math.sin(a) * 6), PAL.ink);
+  }
+  b.vline(7, 1, 3, PAL.rot3);
+  return b;
+}
+
+export function taubenfederIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  for (let i = 0; i < 11; i++) b.set(3 + i, 13 - i, PAL.grau1);
+  for (let i = 1; i < 10; i++) b.hline(3 + i, 12 - i, 3, PAL.grau3).set(2 + i, 13 - i, PAL.grau4);
+  b.rect(3, 12, 3, 2, PAL.gelb);
+  return b;
+}

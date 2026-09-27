@@ -287,4 +287,100 @@ export const QUESTS: Record<QuestId, QuestDef> = {
       'Im Netzbuch (Menü, M) findest du alles, was du heute gelernt hast.',
     ],
   },
+  k2b_schule: {
+    titel: 'Herr Work will den Stick untersuchen. Ab zur Schule!',
+    hinweise: [
+      'Heute wird der fremde USB-Stick untersucht.',
+      'Fahr mit dem Bus nach Knotenburg ins Gymnasium.',
+      'Herr Work wartet im Informatikraum.',
+    ],
+  },
+  k2b_markt: {
+    titel: 'Hilf den Leuten auf dem Markt gegen die Phishing-Mails.',
+    hinweise: [
+      'Auf dem Marktplatz sind Leute, die auf Phishing-Mails hereinzufallen drohen.',
+      'Sprich Frau Berger, den Mann auf dem Markt und Jonas an.',
+      'Achte auf Absender, Link, Zeitdruck. Die Echtheits-Lupe hilft dir!',
+    ],
+  },
+  k2b_rathaus: {
+    titel: 'Das Rathaus wird angegriffen! Sprich mit Frau Schulz.',
+    hinweise: [
+      'FUNKSTILLEs Bot probiert Passwörter des Rathauses aus.',
+      'Frau Schulz steht vor dem Rathaus links oben am Markt.',
+      'Ein sicheres Passwort ist lang und nutzt viele verschiedene Zeichen.',
+    ],
+  },
+  k2b_pino: {
+    titel: 'Pino hat Ärger mit seiner Bestell-App.',
+    hinweise: [
+      'Die Pizzeria „Da Pino" ist rechts oben am Markt.',
+      'Sprich Pino vor seiner Pizzeria an.',
+      'Frag dich: Welche Daten braucht ein Pizzadienst wirklich?',
+    ],
+  },
+  k2b_heim: {
+    titel: 'Fahr nach Hause und schlaf dich aus.',
+    hinweise: [
+      'Was für ein Tag! Morgen geht es weiter.',
+      'Der Bus nach Kabelitz fährt an der Haltestelle ganz links in Knotenburg.',
+      'Zu Hause: Treppe hoch, ins Bett (links im Zimmer).',
+    ],
+  },
+  k2c_bibliothek: {
+    titel: 'Ist das Brand-Foto echt? Frag in der Bibliothek.',
+    hinweise: [
+      'Frau Weber in der Stadtbibliothek kennt sich mit Recherche aus.',
+      'Die Bibliothek ist unten links am Markt in Knotenburg.',
+      'Geh hinein und sprich Frau Weber an.',
+    ],
+  },
+  k2c_lange: {
+    titel: 'Das Foto stammt von „W.L."? Frag Bäcker Lange.',
+    hinweise: [
+      'Die Metadaten verraten die Initialen „W.L.".',
+      'Bäcker Wolfgang Lange hat einen Stand auf dem Markt.',
+      'Sprich Bäcker Lange auf dem Marktplatz an.',
+    ],
+  },
+  k2c_schule: {
+    titel: 'In der Schule ist etwas los. Geh zu Herrn Work.',
+    hinweise: [
+      'Im Klassenchat passiert etwas Schlimmes.',
+      'Geh ins Gymnasium, in den Informatikraum.',
+      'Sprich Herrn Work an.',
+    ],
+  },
+  k2c_zettel: {
+    titel: 'Entschlüssle FUNKSTILLEs Zettel mit der Caesar-Scheibe.',
+    hinweise: [
+      'Den Zettel vom grauen Kasten hast du noch im Rucksack.',
+      'Frau Sommer hat dir die Caesar-Scheibe gegeben. Probier es direkt bei ihr im Flur.',
+      'Sprich Frau Sommer noch einmal an und dreh die Scheibe, bis Wörter entstehen.',
+    ],
+  },
+  k2c_schluessel: {
+    titel: 'Hol den alten Schlüssel aus dem Kabelschacht in Kabelitz.',
+    hinweise: [
+      'Für das Fernmeldeamt brauchst du „Schlüssel 7".',
+      'Der lange Kabelschacht ist auf dem Dorfplatz in Kabelitz.',
+      'Stell dich vor den Kabelschacht und schick Krümel hinein.',
+    ],
+  },
+  k2c_fernmeldeamt: {
+    titel: 'Treffpunkt: altes Fernmeldeamt!',
+    hinweise: [
+      'Das alte Fernmeldeamt steht unten rechts in Knotenburg.',
+      'Öffne die Tür mit Schlüssel 7.',
+      'Im Keller wartet etwas. Untersuche den Laptop.',
+    ],
+  },
+  k2_kapitel_ende: {
+    titel: 'Kapitel 2 geschafft!',
+    hinweise: [
+      'Du hast Kapitel 2 geschafft! Weiter geht es im nächsten Schuljahr.',
+      'Deine Lehrkraft kennt den Code für den Kalender in deinem Zimmer.',
+      'Bis dahin kannst du Knotenburg und Kabelitz weiter erkunden.',
+    ],
+  },
 };

@@ -16,9 +16,21 @@ const mamaScript = [
       ],
       [
         when(
+          { flag: 'k2_mittwoch' },
+          [say('mama', 'Und, war das Foto echt? … Gefälscht? Gut, dass ich es nicht weitergeschickt habe!')],
+          [
+        when(
+          { flag: 'k2b_pino' },
+          [say('mama', 'Pino hatte Ärger mit seiner App? Ich habe die App gleich wieder gelöscht. Die wollte sogar auf meine Fotos zugreifen!')],
+          [
+        when(
           { flag: 'k2_zuhause' },
           [say('mama', 'Mach dir keine Sorgen wegen des Sticks. Herr Work macht das schon.')],
           [say('mama', 'Erster Schultag! Der Bus fährt an der Haltestelle vor Emils Haus. Viel Spaß, Alex!')],
+        ),
+          ],
+        ),
+          ],
         ),
       ],
     ),

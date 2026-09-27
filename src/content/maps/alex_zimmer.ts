@@ -1,4 +1,5 @@
 import type { MapDef } from '../../engine/world/MapDef';
+import { bettKapitel2 } from '../dialog/kapitel2b';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
 
 export const alexZimmer: MapDef = {
@@ -113,8 +114,7 @@ export const alexZimmer: MapDef = {
       script: [narrate('Bücher über Tauben, über den Weltraum – und eins mit dem Titel „Wie funktioniert das Internet?". Noch ungelesen.')],
       scan: { name: 'regal', klasse: 'Regal', attribute: [['anzahlBuecher', '23'], ['material', 'Holz']], methoden: [] },
     },
-    { kind: 'interact', id: 'fenster1', x: 2, y: 0, script: [narrate('Draußen liegt Kabelitz in der Sonne.')] },
-    { kind: 'interact', id: 'fenster2', x: 7, y: 0, script: [narrate('Nebenan sieht man Opa Werners Taubenschlag und seine große Antenne.')] },
+    { kind: 'interact', id: 'fenster1', x: 2, y: 0, script: [narrate('Draußen liegt Kabelitz in der Sonne. Nebenan sieht man Opa Werners Taubenschlag und seine große Antenne.')] },
     {
       kind: 'interact',
       id: 'paket',
@@ -164,6 +164,7 @@ export const alexZimmer: MapDef = {
 
 function bettScript(): Script {
   return [
+    when({ stufeMin: 8 }, bettKapitel2, [
     when(
       { all: [{ flag: 'laden_zu_gesehen' }, { not: { flag: 'tag3' } }] },
       [
@@ -201,6 +202,7 @@ function bettScript(): Script {
         ),
       ],
     ),
+    ]),
   ];
 }
 

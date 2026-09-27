@@ -29,12 +29,20 @@ const ZEIT_NAME: Record<Tageszeit, string> = { vormittag: 'Vormittag', nachmitta
 
 /** Kapitel 2 spielt an Alex' ersten Schultagen in Klasse 8. */
 function kapitel2Zeit(s: GameState): Tageszeit {
+  if (s.flags.has('kapitel2_fertig')) return 'nacht';
+  if (s.flags.has('k2_mittwoch')) return s.flags.has('k2c_caesar') ? 'nachmittag' : 'vormittag';
+  if (s.flags.has('k2_dienstag')) return s.flags.has('k2b_passwort') ? 'nachmittag' : 'vormittag';
   return s.flags.has('k2_stick_abgegeben') ? 'nachmittag' : 'vormittag';
+}
+
+function kapitel2Tag(s: GameState): string {
+  if (s.flags.has('k2_mittwoch')) return 'Mittwoch';
+  return s.flags.has('k2_dienstag') ? 'Dienstag' : 'Montag';
 }
 
 export function zeitLabel(s: GameState): string {
   if (!s.flags.has('prolog_gesehen')) return '';
-  if (s.flags.has('k2_start')) return `Kl. 8 · Montag · ${ZEIT_NAME[kapitel2Zeit(s)]}`;
+  if (s.flags.has('k2_start')) return `Kl. 8 · ${kapitel2Tag(s)} · ${ZEIT_NAME[kapitel2Zeit(s)]}`;
   return `${WOCHENTAGE[tag(s) - 1]} · ${ZEIT_NAME[tageszeit(s)]}`;
 }
 

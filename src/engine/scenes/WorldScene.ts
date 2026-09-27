@@ -8,8 +8,7 @@ import { CALENDAR_CODES } from '../../content/calendarCodes';
 import { NETZBLICK_ERSTMALS } from '../../content/dialog/netzblick';
 import { PING_SCAN, SCAN_ERKLAERUNG } from '../../content/dialog/scan';
 import { tageszeitTint, zeitLabel } from '../../content/zeit';
-import { KAPITEL_START } from '../../content/kapitel';
-import { KAPITEL2_START } from '../../content/dialog/kapitel2';
+import { KAPITEL_START, verfuegbareStufe } from '../../content/kapitel';
 import { formatBytes } from '../../content/bytes';
 import { MINIGAMES } from '../../minigames';
 import type { FlagId, ItemId, LexiconId, MapId, QuestId } from '../../content/registry';
@@ -20,7 +19,7 @@ import { NetVision } from '../netvision/NetVision';
 import { runScript, type ScriptHost } from '../script/ScriptRunner';
 import { evalCond, type Script } from '../script/Script';
 import { checkCalendarCode } from '../state/CalendarCodes';
-import type { Dir, GameState } from '../state/GameState';
+import type { Dir, GameState, Stufe } from '../state/GameState';
 import { autosave } from '../state/storage';
 import { CodeInput } from '../ui/CodeInput';
 import { DialogBox } from '../ui/DialogBox';
@@ -536,29 +535,31 @@ export class WorldScene extends Phaser.Scene {
     if (stufe <= this.state.stufe) return h.say('ping', `${stufeLabel(stufe)} hast du schon erreicht. Das Kalenderblatt ist längst umgeblättert!`);
     this.state.stufe = stufe;
     await h.say(undefined, 'Du blätterst die Seiten um … ein neues Schuljahr beginnt.');
-    if (stufe > 8) await h.say('ping', `Für ${stufeLabel(stufe)} wird gerade noch gebaut. Bis dahin geht es mit Klasse 8 weiter! Gurr!`);
-    if (!this.state.flags.has('k2_start')) await this.startKapitel2();
+    const ziel = verfuegbareStufe(stufe);
+    if (ziel < stufe) await h.say('ping', `Für ${stufeLabel(stufe)} wird gerade noch gebaut. Bis dahin geht es mit ${stufeLabel(ziel)} weiter! Gurr!`);
+    if (!this.state.flags.has(KAPITEL_START[ziel].startFlag)) await this.startKapitel(ziel);
     autosave(this.state);
   }
 
-  /** Für Browser-Tests: Kapitel 2 starten, ohne einen echten Kalender-Code zu kennen. */
-  testStartKapitel2() {
+  /** Für Browser-Tests: ein Kapitel starten, ohne einen echten Kalender-Code zu kennen. */
+  testStartKapitel(stufe = 8) {
     if (this.scriptRunning) return;
     this.scriptRunning = true;
-    void this.startKapitel2().finally(() => {
+    void this.startKapitel(stufe).finally(() => {
       this.scriptRunning = false;
       this.nachScript();
     });
   }
 
-  /** Kapitel 2 beginnt: Startzustand herstellen (falls Kapitel 1 übersprungen wurde) und Einstieg abspielen. */
-  async startKapitel2() {
-    const start = KAPITEL_START[8];
+  /** Ein Kapitel beginnt: Startzustand herstellen (falls frühere Kapitel übersprungen wurden) und Einstieg abspielen. */
+  async startKapitel(stufe: number) {
+    const start = KAPITEL_START[stufe];
     for (const i of start.items) this.state.items.add(i);
+    for (const i of start.wegnehmen ?? []) this.state.items.delete(i);
     for (const f of start.flags) this.state.flags.add(f);
     for (const l of start.lexicon) this.state.lexicon.add(l);
-    if (this.state.stufe < 8) this.state.stufe = 8;
-    await runScript(KAPITEL2_START, this.host());
+    if (this.state.stufe < stufe) this.state.stufe = stufe as Stufe;
+    await runScript(start.intro, this.host());
   }
 
   private async saveDialog() {

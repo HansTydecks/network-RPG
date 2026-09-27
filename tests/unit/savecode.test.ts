@@ -51,3 +51,31 @@ describe('Speichercode', () => {
     expect(decodeSaveCode('ÄÄÄÄ')).toBeNull();
   });
 });
+
+describe('Speichercode Version 2 (Lauflängen)', async () => {
+  const { encodeSaveCodeV1 } = await import('../../src/engine/state/SaveCode');
+  const { FLAG_IDS, ITEM_IDS, LEXICON_IDS } = await import('../../src/content/registry');
+  const voll = () => {
+    const s = newGameState();
+    FLAG_IDS.slice(0, Math.floor(FLAG_IDS.length * 0.8)).forEach((f) => s.flags.add(f));
+    ITEM_IDS.slice(0, 10).forEach((i) => s.items.add(i));
+    LEXICON_IDS.forEach((l, i) => i % 5 !== 1 && s.lexicon.add(l));
+    s.stufe = 9;
+    return s;
+  };
+  it('Roundtrip auch mit vielen Flags', () => {
+    const s = voll();
+    const d = decodeSaveCode(encodeSaveCode(s))!;
+    expect([...d.flags].sort()).toEqual([...s.flags].sort());
+    expect([...d.items].sort()).toEqual([...s.items].sort());
+    expect([...d.lexicon].sort()).toEqual([...s.lexicon].sort());
+  });
+  it('alte Codes (Version 1) werden weiter gelesen', () => {
+    const s = voll();
+    const d = decodeSaveCode(encodeSaveCodeV1(s))!;
+    expect([...d.flags].sort()).toEqual([...s.flags].sort());
+  });
+  it('passt in die Code-Eingabe (höchstens 64 Zeichen)', () => {
+    expect(encodeSaveCode(voll()).replace(/-/g, '').length).toBeLessThanOrEqual(64);
+  });
+});

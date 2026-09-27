@@ -1,7 +1,8 @@
 import type { InteractDef, MapDef } from '../../engine/world/MapDef';
 import { lexicon, minigame, narrate, quest, say, setFlag, take, when, type Script } from '../../engine/script/Script';
+import { miaMittwoch, pcDienstag, sommerScript, workDienstag, workMittwoch } from '../dialog/kapitel2b';
 
-const workScript: Script = [
+const workMontag: Script = [
   when(
     { not: { flag: 'k2_work_gesprochen' } },
     [
@@ -67,7 +68,9 @@ const workScript: Script = [
   ),
 ];
 
-const pcScript: Script = [
+const workScript: Script = [when({ flag: 'k2_mittwoch' }, workMittwoch, [when({ flag: 'k2_dienstag' }, workDienstag, workMontag)])];
+
+const pcMontag: Script = [
   when(
     { all: [{ flag: 'k2_work_gesprochen' }, { not: { flag: 'k2_clientserver' } }] },
     [
@@ -83,6 +86,8 @@ const pcScript: Script = [
     [narrate('Ein Schul-PC. Auf dem Bildschirm: „Anmelden bei KnotenLern". Dein Passwort weißt du noch nicht.')],
   ),
 ];
+
+const pcScript: Script = [when({ flag: 'k2_dienstag' }, pcDienstag, pcMontag)];
 
 export const gymnasium: MapDef = {
   id: 'gymnasium',
@@ -118,7 +123,7 @@ export const gymnasium: MapDef = {
   ],
   entities: [
     { kind: 'warp', x: 2, y: 9, to: { map: 'knotenburg', x: 14, y: 6, dir: 'down' } },
-    { kind: 'npc', id: 'work', sprite: 'work', x: 11, y: 1, dir: 'down', script: workScript },
+    { kind: 'npc', id: 'work', sprite: 'work', x: 12, y: 1, dir: 'down', script: workScript },
     { kind: 'interact', id: 'tafel_l', x: 10, y: 0, script: [narrate('An der Tafel steht: „Algorithmus = eindeutig · ausführbar · endlich"')] },
     { kind: 'interact', id: 'tafel_r', x: 11, y: 0, script: [narrate('Daneben: „Client und Server – wer fragt, wer antwortet?"')] },
     ...[
@@ -169,6 +174,7 @@ export const gymnasium: MapDef = {
       y: 6,
       dir: 'up',
       script: [
+        when({ flag: 'k2_mittwoch' }, miaMittwoch, [
         when(
           { flag: 'k2_algorithmus' },
           [say('mia', 'Mein Schulweg ist ein Algorithmus! Aber „Mach was Schönes" nicht. Muss ich meiner Oma erzählen.')],
@@ -177,6 +183,7 @@ export const gymnasium: MapDef = {
             say('mia', 'Sprich mal mit Herrn Work vorne an der Tafel. Der ist echt nett – auch wenn er schlechte Witze macht.'),
           ],
         ),
+        ]),
       ],
     },
     {
@@ -193,6 +200,7 @@ export const gymnasium: MapDef = {
         say('ping', 'Lieber nicht! Das klingt verdächtig … Gurr.'),
       ],
     },
+    { kind: 'npc', id: 'sommer', sprite: 'sommer', x: 3, y: 4, dir: 'right', visibleIf: { flag: 'k2_mittwoch' }, script: sommerScript },
   ],
   net: {
     devices: [

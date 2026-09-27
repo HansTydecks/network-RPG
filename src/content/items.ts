@@ -72,4 +72,19 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Ein alter Schlüssel mit Anhänger: „Fernmeldeamt Knotenburg – Schlüssel 7". Krümel hat ihn im Kabelschacht am Dorfplatz gefunden.',
     icon: 'icon_schluessel7',
   },
+  echtheitslupe: {
+    name: 'Echtheits-Lupe',
+    beschreibung: 'Von Herrn Work. Zeigt bei E-Mails die echte Absenderadresse und wohin ein Link wirklich führt.',
+    icon: 'icon_lupe',
+  },
+  caesar_scheibe: {
+    name: 'Caesar-Scheibe',
+    beschreibung: 'Zwei Buchstabenringe zum Drehen. Damit verschiebt man jeden Buchstaben um gleich viele Stellen – so hat schon Julius Caesar geheime Botschaften geschrieben.',
+    icon: 'icon_caesar',
+  },
+  taubenfeder: {
+    name: 'Taubenfeder mit Ring',
+    beschreibung: 'Lag neben FUNKSTILLEs Laptop im Fernmeldeamt. Am Kiel steckt ein kleiner Ring: „DV 07734-74-…". Der Rest ist abgerieben.',
+    icon: 'icon_feder',
+  },
 };

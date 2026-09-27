@@ -1009,6 +1009,60 @@ export const TILES: TileDef[] = [
       b.rect(4, 7, 5, 3, PAL.weiss).hline(5, 8, 3, PAL.grau3);
     },
   },
+  {
+    id: 'klappenschrank',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 1, 16, 15, PAL.braun2).frame(0, 1, 16, 15, PAL.braun1);
+      for (let y = 3; y < 10; y += 3) for (let x = 2; x < 15; x += 3) b.rect(x, y, 2, 2, (x + y) % 2 ? PAL.gelb : PAL.ink);
+      b.rect(1, 11, 14, 4, PAL.braun3);
+      b.vline(4, 11, 3, PAL.rot2).vline(9, 11, 3, PAL.ink).vline(12, 11, 2, PAL.rot2);
+    },
+  },
+  {
+    id: 'relais',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 0, 14, 16, PAL.grau2).frame(1, 0, 14, 16, PAL.ink);
+      for (let y = 2; y < 15; y += 3) for (let x = 3; x < 13; x += 3) b.rect(x, y, 2, 2, PAL.grau4).set(x, y, PAL.ink);
+    },
+  },
+  {
+    id: 'buecherregal',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.braun2).frame(0, 0, 16, 16, PAL.braun1);
+      const f = [PAL.rot2, PAL.blau2, PAL.gruen2, PAL.gelb, PAL.lila2, PAL.orange];
+      for (const y of [1, 6, 11]) {
+        for (let x = 1; x < 15; x += 2) b.rect(x, y, 2, 4, f[(x + y) % f.length]);
+        b.hline(1, y + 4, 14, PAL.braun1);
+      }
+    },
+  },
+  {
+    id: 'lesetisch',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 5, 16, 6, PAL.braun3).hline(0, 5, 16, PAL.braun4).frame(0, 5, 16, 6, PAL.braun1);
+      b.rect(2, 11, 2, 5, PAL.braun2).rect(12, 11, 2, 5, PAL.braun2);
+      b.rect(5, 6, 6, 3, PAL.creme).vline(8, 6, 3, PAL.grau3);
+    },
+  },
+  {
+    id: 'backstand',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 4, PAL.braun4);
+      for (let x = 0; x < 16; x += 4) b.rect(x, 0, 2, 4, PAL.braun2);
+      b.rect(1, 8, 14, 8, PAL.braun3).frame(1, 8, 14, 8, PAL.ink);
+      b.disc(4, 7, 2, PAL.braun4).disc(8, 7, 2, PAL.gelb).disc(12, 7, 2, PAL.braun4);
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

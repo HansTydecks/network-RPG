@@ -12,6 +12,8 @@ import { zustandMinigame } from './zustand';
 import { dateienMinigame, einheitenMinigame, kabelsalatMinigame, schnellerMinigame, tabelleMinigame } from './m2b';
 import { plakatMinigame } from './plakat';
 import { algorithmusMinigame, clientServerMinigame } from './k2a';
+import { ausDef } from './generisch';
+import { SPIEL_DEFS } from '../content/spiele';
 
 /** Alle Minispiele. Jedes ist in der Geschichte und später im Trainingsraum nutzbar (Metadaten: meta.ts). */
 export const MINIGAMES: Record<string, Minigame> = {
@@ -33,4 +35,5 @@ export const MINIGAMES: Record<string, Minigame> = {
   plakat: plakatMinigame,
   algorithmus: algorithmusMinigame,
   clientserver: clientServerMinigame,
+  ...Object.fromEntries(Object.entries(SPIEL_DEFS).map(([id, d]) => [id, ausDef(d)])),
 };

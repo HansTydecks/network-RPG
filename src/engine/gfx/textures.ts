@@ -3,7 +3,7 @@ import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
 import { TILES } from '../../content/art/tiles';
 import { EXPONAT_BILDER } from '../../content/art/exponate';
-import { fremderStickIcon, netzblickV2Icon, schluessel7Icon } from '../../content/art/characters';
+import { caesarScheibeIcon, echtheitslupeIcon, fremderStickIcon, netzblickV2Icon, schluessel7Icon, taubenfederIcon } from '../../content/art/characters';
 import { CHARACTERS, kabelbinderIcon, usbIcon, binaerKarteIcon, fernbedienungIcon, fotoIcon, kruemelFrames, schluesselIcon, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
 import { prologBackground, prologHand } from '../../content/art/prolog';
 
@@ -108,6 +108,9 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'icon_netzblick_v2', netzblickV2Icon());
   addImage(scene, 'icon_fremder_stick', fremderStickIcon());
   addImage(scene, 'icon_schluessel7', schluessel7Icon());
+  addImage(scene, 'icon_lupe', echtheitslupeIcon());
+  addImage(scene, 'icon_caesar', caesarScheibeIcon());
+  addImage(scene, 'icon_feder', taubenfederIcon());
   for (const [key, bild] of Object.entries(EXPONAT_BILDER)) addImage(scene, key, bild());
   addSheet(scene, 'kruemel', kruemelFrames());
   addSheet(scene, 'morse', morseFrames());

@@ -3,6 +3,7 @@ import type { InteractDef } from '../../engine/world/MapDef';
 import type { Cond } from '../../engine/script/Script';
 import { earn, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
 import { bytesCheck } from './dorfladen';
+import { nachSchluessel } from '../dialog/kapitel2b';
 
 /** Freitag: Händler und Frau Lehmann sind auf dem Platz. */
 const TAG3: Cond = { all: [{ flag: 'tag3' }, { not: { flag: 'tag4' } }] };
@@ -313,6 +314,7 @@ function schachtKapitel2(): Script {
         narrate('Ganz hinten im Schacht findet Krümel etwas Glänzendes: einen alten Schlüssel mit Anhänger.'),
         give('schluessel7'),
         setFlag('k2_schacht'),
+        nachSchluessel,
         say('ping', '„Fernmeldeamt Knotenburg – Schlüssel 7"? Das alte Fernmeldeamt steht doch in Knotenburg! Wie kommt der Schlüssel denn hierher?'),
       ],
     ),

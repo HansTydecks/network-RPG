@@ -1,5 +1,6 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
+import { bergerScript, bibTuer, fmaTuer, jonasDienstag, langeScript, passantDienstag, pinoScript, schulzScript } from '../dialog/kapitel2b';
 
 /** Mit dem Bus zurück nach Kabelitz. */
 const heimfahrt: Script = [interlude('Mit dem Bus zurück nach Kabelitz …'), warp('kabelitz', 27, 15, 'down')];
@@ -136,17 +137,14 @@ export const knotenburg: MapDef = {
       script: [narrate('Pizzeria „Da Pino". An der Tür: „Neu! Bestellen mit unserer App!" Geöffnet ab 11:30 Uhr.')],
     },
     { kind: 'interact', id: 'pizzaschild', x: 22, y: 6, script: [narrate('„Da Pino – die beste Pizza in Knotenburg. Jetzt auch per App!"')] },
-    { kind: 'interact', id: 'bibliothek', x: 5, y: 15, script: [narrate('Die Stadtbibliothek. „Heute wegen Umbau geschlossen."')] },
+    { kind: 'interact', id: 'bibliothek', x: 5, y: 15, script: bibTuer },
     { kind: 'interact', id: 'bibschild', x: 8, y: 15, script: [narrate('„Stadtbibliothek Knotenburg – Bücher, Zeitungen, Internet-Plätze"')] },
     {
       kind: 'interact',
       id: 'fernmeldeamt',
       x: 23,
       y: 15,
-      script: [
-        narrate('Ein altes, graues Gebäude. Die Tür ist verrammelt, die Fenster sind blind vor Staub.'),
-        when({ item: 'schluessel7' }, [say('ping', 'Das Fernmeldeamt! Und du hast doch diesen alten Schlüssel „Schlüssel 7" … Aber das Schloss ist zugerostet. Später vielleicht!')]),
-      ],
+      script: fmaTuer,
       scan: { name: 'fernmeldeamt', klasse: 'Gebäude', attribute: [['baujahr', '1928'], ['zustand', 'stillgelegt']], methoden: ['oeffnen (verschlossen)'] },
     },
     { kind: 'interact', id: 'fmaschild', x: 27, y: 15, script: [narrate('„Ehemaliges Fernmeldeamt Knotenburg. Betreten verboten!"')] },
@@ -174,8 +172,10 @@ export const knotenburg: MapDef = {
       y: 9,
       dir: 'down',
       script: [
+        when({ flag: 'k2b_phishing' }, passantDienstag, [
         say('passant', 'Hast du das gehört? In Kabelitz war letztes Jahr tagelang das Internet weg. Sabotage, sagen die Leute!'),
         say('passant', 'Hier in Knotenburg passiert so was zum Glück nicht. Hier ist alles vernetzt: Schule, Rathaus, sogar die Pizzeria.'),
+        ]),
       ],
     },
     {
@@ -185,9 +185,18 @@ export const knotenburg: MapDef = {
       x: 17,
       y: 8,
       dir: 'left',
-      visibleIf: { flag: 'k2_stick_abgegeben' },
-      script: [say('jonas', 'Hey Alex! Ich hab heute schon wieder so eine Mail bekommen: „Ihr Konto wird gesperrt!" Voll gruselig. Bis morgen!')],
+      visibleIf: { all: [{ flag: 'k2_stick_abgegeben' }, { not: { flag: 'k2_mittwoch' } }] },
+      script: [
+        when({ flag: 'k2b_phishing' }, jonasDienstag, [
+          say('jonas', 'Hey Alex! Ich hab heute schon wieder so eine Mail bekommen: „Ihr Konto wird gesperrt!" Voll gruselig. Bis morgen!'),
+        ]),
+      ],
     },
+    { kind: 'npc', id: 'berger', sprite: 'berger', x: 9, y: 9, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: bergerScript },
+    { kind: 'npc', id: 'schulz', sprite: 'schulz', x: 3, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: schulzScript },
+    { kind: 'npc', id: 'pino', sprite: 'pino', x: 24, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: pinoScript },
+    { kind: 'npc', id: 'lange', sprite: 'lange', x: 21, y: 9, dir: 'down', visibleIf: { flag: 'k2_mittwoch' }, script: langeScript },
+    { kind: 'interact', id: 'backstand', x: 22, y: 9, tile: 'backstand', visibleIf: { flag: 'k2_mittwoch' }, script: langeScript },
   ],
   onEnter: [
     when({ not: { flag: 'k2_knotenburg' } }, [

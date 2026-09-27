@@ -3,7 +3,7 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt'] as const;
 
 export const ITEM_IDS = [
   'netzblick_v1',
@@ -20,6 +20,9 @@ export const ITEM_IDS = [
   'netzblick_v2',
   'fremder_stick',
   'schluessel7',
+  'echtheitslupe',
+  'caesar_scheibe',
+  'taubenfeder',
 ] as const;
 
 export const FLAG_IDS = [
@@ -107,6 +110,36 @@ export const FLAG_IDS = [
   'k2_stick_abgegeben',
   'k2_zuhause',
   'k2_schacht',
+  // Kapitel 2, M3b
+  'k2_dienstag',
+  'k2b_stick',
+  'k2b_mail',
+  'k2b_adressen',
+  'k2b_ipmac',
+  'k2b_pakete',
+  'k2b_phishing',
+  'k2b_hilfe_berger',
+  'k2b_hilfe_passant',
+  'k2b_hilfe_jonas',
+  'k2b_rathaus',
+  'k2b_passwort',
+  'k2b_pino',
+  'k2b_zuhause',
+  // Kapitel 2, M3c
+  'k2_mittwoch',
+  'k2c_fakefoto',
+  'k2c_suche',
+  'k2c_bild',
+  'k2c_metadaten',
+  'k2c_lange',
+  'k2c_mobbing',
+  'k2c_kollaboration',
+  'k2c_scheibe',
+  'k2c_caesar',
+  'k2c_fma_offen',
+  'k2c_domains',
+  'k2c_filter',
+  'kapitel2_fertig',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -136,6 +169,20 @@ export const LEXICON_IDS = [
   'wiederholung',
   'verzweigung',
   'funk',
+  'email',
+  'adressen',
+  'ip_mac',
+  'datenpakete',
+  'phishing',
+  'passwort',
+  'brute_force',
+  'personenbezogen',
+  'suchmaschinen',
+  'ki_bilder',
+  'metadaten',
+  'kollaboration',
+  'cybermobbing',
+  'verschluesselung',
 ] as const;
 
 export const QUEST_IDS = [
@@ -178,6 +225,18 @@ export const QUEST_IDS = [
   'k2_stick',
   'k2_heim',
   'k2_fortsetzung',
+  'k2b_schule',
+  'k2b_markt',
+  'k2b_rathaus',
+  'k2b_pino',
+  'k2b_heim',
+  'k2c_bibliothek',
+  'k2c_lange',
+  'k2c_schule',
+  'k2c_zettel',
+  'k2c_schluessel',
+  'k2c_fernmeldeamt',
+  'k2_kapitel_ende',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];
