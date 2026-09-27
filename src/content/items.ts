@@ -42,6 +42,16 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: '„Fernmeldeamt Knotenburg, 1974". Ein junger Mann mit Brieftauben vor einem Klappenschrank. Auf der Rückseite: „W. L."',
     icon: 'icon_foto',
   },
+  kabelbinder: {
+    name: 'Kabelbinder',
+    beschreibung: 'Eine Packung Kabelbinder aus dem Dorfladen. Gekauft für 2 KB (2.000 Byte). Herr Kowalski braucht sie für die Reparatur.',
+    icon: 'icon_kabelbinder',
+  },
+  usb_stick: {
+    name: 'USB-Stick (4 GB)',
+    beschreibung: 'Frau Lehmanns USB-Stick mit allem fürs Dorffest. Speicherkapazität: 4 GB, also 4.000 MB.',
+    icon: 'icon_usb',
+  },
   zettel_funkstille: {
     name: 'Seltsamer Zettel',
     beschreibung: 'Lag am grauen Kasten. Darauf eine durchgestrichene Antenne und: „WUHIISXQNW DOWHV IHUQPHOGHDPW". Unlesbar – noch.',

@@ -6,6 +6,7 @@ import { wohnzimmer } from './wohnzimmer';
 import { briefzentrum } from './briefzentrum';
 import { dorfplatz } from './dorfplatz';
 import { museum } from './museum';
+import { dorfladen } from './dorfladen';
 
 export const MAPS: Record<MapId, MapDef> = {
   alex_zimmer: alexZimmer,
@@ -14,4 +15,5 @@ export const MAPS: Record<MapId, MapDef> = {
   briefzentrum,
   dorfplatz,
   museum,
+  dorfladen,
 };

@@ -10,7 +10,7 @@ Alex lebt im sächsischen Dorf Kabelitz und bekommt von Tante Ada eine Brille, d
 
 ## Status
 
-**Testversion M2a:** Kapitel 1 (Klasse 7) ist bis zum Dorfmuseum und zu Krümel spielbar: Brief-Quest, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Blockprogrammierung mit dem Saugroboter. Der Rest von Kapitel 1 folgt mit M2b.
+**Kapitel 1 (Klasse 7) ist komplett spielbar (M2b):** Brief-Quest, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Blockprogrammierung mit dem Saugroboter, Dorfladen mit Bytes und Einheiten, Dorffest (Dateien, Tabellen, Plakat), Reparatur des grauen Kastens, Brief gegen E-Mail und FUNKSTILLEs Drohung. Spielzeit etwa 90 bis 120 Minuten. Als Nächstes folgt Kapitel 2 (Klasse 8).
 
 ## Spielen und entwickeln
 

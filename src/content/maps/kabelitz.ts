@@ -1,5 +1,5 @@
 import type { MapDef } from '../../engine/world/MapDef';
-import { give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, warp, when, type Command } from '../../engine/script/Script';
+import { give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
   id: 'kabelitz',
@@ -159,6 +159,8 @@ export const kabelitz: MapDef = {
       x: 17,
       y: 9,
       dir: 'down',
+      // Am Samstag steht Opa auf dem Dorffest.
+      visibleIf: { not: { all: [{ flag: 'tag4' }, { not: { flag: 'nacht' } }] } },
       script: opaScript(),
     },
     {
@@ -328,6 +330,24 @@ export const kabelitz: MapDef = {
 function opaScript() {
   return [
     when(
+      { flag: 'nacht' },
+      [say('opa', 'Nanu, so spät noch unterwegs? Ab ins Bett mit dir. Ich geh auch gleich schlafen … ganz bestimmt.')],
+      [when({ flag: 'kvz_repariert' }, opaNachReparatur(), opaVorher())],
+    ),
+  ];
+}
+
+function opaNachReparatur(): Command[] {
+  return [
+    say('opa', 'Das Internet ist wieder da? Na, toll. Dann starren alle wieder auf ihre Bildschirme.'),
+    say('opa', 'War schön ruhig die letzten Tage, findest du nicht? Die Leute haben sich wieder unterhalten. Sogar Briefe geschrieben!'),
+    narrate('(Opa Werner klingt fast ein bisschen enttäuscht.)'),
+  ];
+}
+
+function opaVorher(): Command[] {
+  return [
+    when(
       { not: { flag: 'mama_gesprochen' } },
       [
         say('opa', 'Na, Alex! Schon wach? Ping hat mich heute früh schon besucht, die olle Taube.'),
@@ -402,11 +422,25 @@ function opaScript() {
 
 /** Welche Aufgabe für Herrn Kowalski ist als Nächstes dran? */
 function naechsteAufgabe(): Command {
-  return when(
+  return when({ flag: 'kvz_repariert' }, [], [
+    when(
     { not: { flag: 'binaer_gelernt' } },
     [quest('q1_museum')],
-    [when({ not: { flag: 'schluessel_gefunden' } }, [when({ item: 'block_fernbedienung' }, [quest('q1_gully')], [quest('q1_emil')])], [quest('q1_kabelbinder')])],
-  );
+    [
+      when(
+        { not: { flag: 'schluessel_gefunden' } },
+        [when({ item: 'block_fernbedienung' }, [quest('q1_gully')], [quest('q1_emil')])],
+        [
+          when(
+            { flag: 'tag3' },
+            [when({ flag: 'kabelbinder_gekauft' }, [quest('q1_reparatur')], [when({ bytesMin: 2000 }, [quest('q1_kaufen')], [quest('q1_bytes')])])],
+            [when({ flag: 'laden_zu_gesehen' }, [quest('q1_schlafen')], [quest('q1_kabelbinder')])],
+          ),
+        ],
+      ),
+    ],
+    ),
+  ]);
 }
 
 function kowalskiScript() {
@@ -441,9 +475,17 @@ function kowalskiScript() {
                 ),
               ],
               [
-                say('kowalski', 'Mein Schlüssel! Danke dir – und dem kleinen Roboter.'),
-                say('kowalski', 'Jetzt fehlen nur noch Kabelbinder. Gibt\'s hier im Dorf einen Laden?'),
-                say('ping', 'Der Dorfladen am Dorfplatz!'),
+                when({ item: 'kabelbinder' }, reparatur(), [
+                  when(
+                    { flag: 'laden_zu_gesehen' },
+                    [say('kowalski', 'Der Laden hatte zu? So ein Pech. Ich schlafe heute im Gasthof. Morgen früh bin ich wieder hier!')],
+                    [
+                      say('kowalski', 'Mein Schlüssel! Danke dir – und dem kleinen Roboter.'),
+                      say('kowalski', 'Jetzt fehlen nur noch Kabelbinder. Gibt\'s hier im Dorf einen Laden?'),
+                      say('ping', 'Der Dorfladen am Dorfplatz!'),
+                    ],
+                  ),
+                ]),
               ],
             ),
           ],
@@ -451,6 +493,30 @@ function kowalskiScript() {
         naechsteAufgabe(),
       ],
     ),
+  ];
+}
+
+/** Kabelsalat, Reset-Knopf – und Kabelitz ist wieder online. */
+function reparatur(): Command[] {
+  return [
+    say('kowalski', 'Kabelbinder! Klasse, dann kann es losgehen.'),
+    take('kabelbinder'),
+    narrate('Herr Kowalski öffnet das Innenfach. Lose Kabel hängen heraus, jedes mit einer Nummer. An den Anschlüssen kleben die Schilder mit Nullen und Einsen.'),
+    say('kowalski', 'Die Kabel haben normale Nummern, die Anschlüsse aber Binärzahlen. Hilfst du mir? Du hast doch die Binär-Karte!'),
+    minigame('kabelsalat'),
+    setFlag('kabelsalat_fertig'),
+    say('kowalski', 'Alle Kabel stecken und sind festgezurrt. Jetzt muss nur noch jemand den Reset-Knopf drücken.'),
+    say('kowalski', 'Der sitzt ganz hinten im Kasten. Da komme ich mit meinen Wurstfingern nicht hin.'),
+    say('ping', 'Das ist ein Job für Krümel!'),
+    minigame('bloecke:kasten'),
+    narrate('Klick! Im Kasten leuchtet ein Lämpchen nach dem anderen grün auf.'),
+    say('kowalski', 'Wir haben wieder Verbindung! Kabelitz ist online. Danke, Alex – und danke, Krümel!'),
+    setFlag('kvz_repariert'),
+    { op: 'refresh' },
+    toast('Kabelitz ist wieder online!'),
+    say('ping', 'Setz mal die Brille auf! Aus dem Kasten fließen Daten in jedes Haus. Gurr!'),
+    say('ping', 'Und Tante Ada wartet bestimmt auf ein Dankeschön für die Brille. Dein Computer hat jetzt wieder Internet!'),
+    quest('q1_email'),
   ];
 }
 
@@ -487,7 +553,13 @@ function emilScript() {
       [
         when(
           { flag: 'schluessel_gefunden' },
-          [say('emil', 'Krümel hat den Schlüssel gefunden? Er ist der schlaueste Roboter der Welt!')],
+          [
+            when(
+              { flag: 'kvz_repariert' },
+              [say('emil', 'Krümel hat das Internet repariert? Er ist der schlaueste Roboter der Welt! Du darfst ihn behalten, solange du ihn brauchst.')],
+              [say('emil', 'Krümel hat den Schlüssel gefunden? Er ist der schlaueste Roboter der Welt!')],
+            ),
+          ],
           [say('emil', 'Krümel fährt jetzt immer brav zur Ladestation. Danke!'), ausleihen],
         ),
       ],

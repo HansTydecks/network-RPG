@@ -3,7 +3,7 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen'] as const;
 
 export const ITEM_IDS = [
   'netzblick_v1',
@@ -14,6 +14,8 @@ export const ITEM_IDS = [
   'block_fernbedienung',
   'schluessel_kvz',
   'restauriertes_foto',
+  'kabelbinder',
+  'usb_stick',
 ] as const;
 
 export const FLAG_IDS = [
@@ -68,6 +70,26 @@ export const FLAG_IDS = [
   'schacht_gesehen',
   'fernschreiber_gesehen',
   'foto_auftrag',
+  // Kapitel 1, M2b
+  'laden_zu_gesehen',
+  'tag3',
+  'nguyen_gesprochen',
+  'pfand_repariert',
+  'terminal_gesehen',
+  'haendler_gesprochen',
+  'haendler_bonus',
+  'lehmann_gesprochen',
+  'dateien_fertig',
+  'tabelle_fertig',
+  'kabelbinder_gekauft',
+  'kabelsalat_fertig',
+  'email_gesendet',
+  'tag4',
+  'lina_da',
+  'plakat_fertig',
+  'nacht',
+  'kapitel1_fertig',
+  'geburtstag_gefeiert',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -85,6 +107,12 @@ export const LEXICON_IDS = [
   'algorithmus',
   'zustandsdiagramm',
   'farbkanaele',
+  'einheiten',
+  'uebertragungsrate',
+  'dateitypen',
+  'tabellenkalkulation',
+  'pixel_vektor',
+  'inhalt_design',
 ] as const;
 
 export const QUEST_IDS = [
@@ -110,6 +138,14 @@ export const QUEST_IDS = [
   'q1_emil',
   'q1_gully',
   'q1_kabelbinder',
+  'q1_schlafen',
+  'q1_bytes',
+  'q1_kaufen',
+  'q1_reparatur',
+  'q1_email',
+  'q1_samstag',
+  'q1_fest',
+  'q1_kapitel_ende',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];

@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
 import { TILES } from '../../content/art/tiles';
-import { CHARACTERS, binaerKarteIcon, fernbedienungIcon, fotoIcon, kruemelFrames, schluesselIcon, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
+import { CHARACTERS, kabelbinderIcon, usbIcon, binaerKarteIcon, fernbedienungIcon, fotoIcon, kruemelFrames, schluesselIcon, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
 import { prologBackground, prologHand } from '../../content/art/prolog';
 
 export const FONT_KEY = 'kabelitz';
@@ -101,6 +101,8 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'icon_fernbedienung', fernbedienungIcon());
   addImage(scene, 'icon_schluessel', schluesselIcon());
   addImage(scene, 'icon_foto', fotoIcon());
+  addImage(scene, 'icon_kabelbinder', kabelbinderIcon());
+  addImage(scene, 'icon_usb', usbIcon());
   addSheet(scene, 'kruemel', kruemelFrames());
   addSheet(scene, 'morse', morseFrames());
   addImage(scene, 'prolog_bg', prologBackground());

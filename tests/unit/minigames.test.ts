@@ -117,3 +117,43 @@ describe('Fotolabor', () => {
     expect(wendeAn([200, 100, 50], { negativ: true, rot: true, gruen: true, blau: true, graustufen: false })).toEqual([55, 155, 205]);
   });
 });
+
+describe('Minispiele M2b (Laden, Dorffest, Reparatur)', async () => {
+  const m = await import('../../src/minigames/m2bLogic');
+  const { PLAKAT_FRAGEN } = await import('../../src/minigames/plakatLogic');
+  const alle = { einheiten: m.EINHEITEN_FRAGEN, dateien: m.DATEI_FRAGEN, schneller: m.SCHNELLER_FRAGEN, plakat: PLAKAT_FRAGEN };
+
+  for (const [id, fragen] of Object.entries(alle)) {
+    it(`${id}: jede Frage hat genau eine richtige Antwort, jede Antwort eine Erklärung`, () => {
+      for (const f of fragen) {
+        expect(f.optionen.filter((o) => o.ok).length, f.frage).toBe(1);
+        for (const o of f.optionen) expect(o.erklaerung.length).toBeGreaterThan(10);
+      }
+    });
+  }
+
+  it('USB-Stick: alles zusammen passt nicht, Wichtiges plus Video oder Fotos schon', () => {
+    const alles = m.STICK_DATEIEN.map(() => true);
+    expect(m.stickPasst(alles).ok).toBe(false);
+    const mitVideo = m.STICK_DATEIEN.map((d) => d.pflicht || d.name.startsWith('festvideo'));
+    expect(m.stickPasst(mitVideo).ok).toBe(true);
+    const mitFotos = m.STICK_DATEIEN.map((d) => d.pflicht || d.name.startsWith('800'));
+    expect(m.stickPasst(mitFotos).ok).toBe(true);
+    expect(m.stickPasst(m.STICK_DATEIEN.map((d) => d.pflicht)).ok).toBe(false);
+  });
+
+  it('Tabelle: Summe stimmt, Formeln haben genau eine richtige Option', () => {
+    expect(m.kuchenSumme()).toBe(2 * 12 + 1.5 * 20 + 1.5 * 16 + 1 * 30);
+    for (const f of m.TABELLE_FRAGEN_TEXT) expect(f.optionen[f.richtig]).toMatch(/^=/);
+  });
+
+  it('Was ist schneller: Internet gewinnt bei kleinen, Ping bei riesigen Datenmengen', () => {
+    expect(m.internetSekunden(800)).toBeLessThan(m.PING_MINUTEN * 60);
+    expect(m.internetSekunden(2_000_000)).toBeGreaterThan(m.PING_MINUTEN * 60);
+  });
+
+  it('Kabelsalat: fünf verschiedene Anschlüsse, alle mit 8 Bit darstellbar', () => {
+    expect(new Set(m.KABELSALAT_ANSCHLUESSE).size).toBe(5);
+    for (const n of m.KABELSALAT_ANSCHLUESSE) expect(n).toBeLessThan(256);
+  });
+});

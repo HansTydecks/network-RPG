@@ -72,7 +72,8 @@ class ZustandModal extends MinigameModal {
       for (let i = 0; i < n; i += 2) g.lineBetween(sx + ((ex - sx) * i) / n, sy + ((ey - sy) * i) / n, sx + ((ex - sx) * (i + 1)) / n, sy + ((ey - sy) * (i + 1)) / n);
     } else g.lineBetween(sx, sy, ex, ey);
     g.fillStyle(hexToInt(color), 1).fillTriangle(ex, ey, ex - ux * 6 - uy * 3, ey - uy * 6 + ux * 3, ex - ux * 6 + uy * 3, ey - uy * 6 - ux * 3);
-    lt.setText(label).setPosition(Math.round((sx + ex) / 2 - measureText(label) / 2 + uy * 10), Math.round((sy + ey) / 2 - 10 - ux * 4));
+    if (u.label) lt.setText(label).setPosition(u.label[0], u.label[1]);
+    else lt.setText(label).setPosition(Math.round((sx + ex) / 2 - measureText(label) / 2 + uy * 10), Math.round((sy + ey) / 2 - 10 - ux * 4));
   }
 
   private render() {

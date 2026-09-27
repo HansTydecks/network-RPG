@@ -146,8 +146,72 @@ export const QUESTS: Record<QuestId, QuestDef> = {
     titel: 'Kauf Kabelbinder im Dorfladen.',
     hinweise: [
       'Der Dorfladen ist am Dorfplatz, rechts.',
-      'Der Laden hat gerade geschlossen. In der nächsten Version geht es hier weiter!',
-      'Bis dahin: Hast du im Museum schon alle Exponate angeschaut?',
+      'Heute ist der Laden zu. Morgen ist er wieder offen.',
+      'Geh nach Hause und leg dich schlafen. Morgen früh geht es weiter.',
+    ],
+  },
+  q1_schlafen: {
+    titel: 'Geh schlafen. Morgen hat der Laden wieder offen.',
+    hinweise: [
+      'Es war ein langer Tag! Dein Bett steht in deinem Zimmer.',
+      'Geh nach Hause, die Treppe hoch in dein Zimmer.',
+      'Stell dich vor dein Bett (links im Zimmer) und drück Leertaste.',
+    ],
+  },
+  q1_bytes: {
+    titel: 'Verdiene 2 KB für die Kabelbinder.',
+    hinweise: [
+      'Kabelbinder kosten 2 KB = 2.000 Byte. Im Dorf gibt es Leute, die Hilfe brauchen – und dafür zahlen.',
+      'Herr Nguyen im Laden hat einen kaputten Pfandautomaten. Frau Lehmann auf dem Dorfplatz bereitet das Dorffest vor.',
+      'Wie viele Bytes du hast, steht im Rucksack (Menü, M). Hilf Herrn Nguyen und Frau Lehmann bei beiden Aufgaben.',
+    ],
+  },
+  q1_kaufen: {
+    titel: 'Kauf die Kabelbinder im Dorfladen.',
+    hinweise: [
+      'Du hast genug Bytes! Ab in den Dorfladen.',
+      'Der Dorfladen ist rechts am Dorfplatz.',
+      'Sprich Herrn Nguyen an der Kasse an.',
+    ],
+  },
+  q1_reparatur: {
+    titel: 'Bring Herrn Kowalski die Kabelbinder.',
+    hinweise: [
+      'Herr Kowalski wartet am grauen Kasten in Kabelitz.',
+      'Geh vom Dorfplatz nach Norden zurück nach Kabelitz.',
+      'Sprich Herrn Kowalski an. Die Binär-Karte hilft dir beim Kabelsalat.',
+    ],
+  },
+  q1_email: {
+    titel: 'Schreib Tante Ada eine E-Mail.',
+    hinweise: [
+      'Das Internet ist wieder da! Tante Ada freut sich bestimmt über eine Nachricht.',
+      'Dein Computer steht in deinem Zimmer.',
+      'Stell dich vor den Computer (rechts neben dem Schreibtisch) und drück Leertaste.',
+    ],
+  },
+  q1_samstag: {
+    titel: 'Geh schlafen. Morgen ist dein Geburtstag!',
+    hinweise: [
+      'Morgen ist Samstag: dein Geburtstag und das Dorffest!',
+      'Dein Bett steht in deinem Zimmer.',
+      'Stell dich vor dein Bett und drück Leertaste.',
+    ],
+  },
+  q1_fest: {
+    titel: 'Feier mit Lina auf dem Dorffest.',
+    hinweise: [
+      'Lina ist mit dem Bus gekommen und wartet auf dem Dorfplatz.',
+      'Geh nach Süden zum Dorfplatz. Lina steht vor der Bühne.',
+      'Sprich Lina an – sie hat eine Idee für ein Plakat.',
+    ],
+  },
+  q1_kapitel_ende: {
+    titel: 'Kapitel 1 geschafft!',
+    hinweise: [
+      'Du hast Kapitel 1 geschafft! Wie es weitergeht, erfährst du im nächsten Schuljahr.',
+      'Deine Lehrkraft kennt den Code für den Kalender in deinem Zimmer.',
+      'Bis dahin kannst du im Dorf alles erkunden, was du noch nicht gesehen hast – zum Beispiel alle Museums-Exponate.',
     ],
   },
   q1_fortsetzung: {

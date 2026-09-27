@@ -8,6 +8,7 @@ import { CALENDAR_CODES } from '../../content/calendarCodes';
 import { NETZBLICK_ERSTMALS } from '../../content/dialog/netzblick';
 import { PING_SCAN, SCAN_ERKLAERUNG } from '../../content/dialog/scan';
 import { tageszeitTint, zeitLabel } from '../../content/zeit';
+import { formatBytes } from '../../content/bytes';
 import { MINIGAMES } from '../../minigames';
 import type { FlagId, ItemId, LexiconId, MapId, QuestId } from '../../content/registry';
 import { TILESET_KEY } from '../gfx/textures';
@@ -190,7 +191,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   private applyTint() {
-    const t = this.def.outdoor ? tageszeitTint(this.state) : null;
+    const t = tageszeitTint(this.state, !!this.def.outdoor);
     if (!this.tintRect) return;
     if (t) this.tintRect.setFillStyle(t[0], t[1]).setVisible(true);
     else this.tintRect.setVisible(false);
@@ -472,6 +473,7 @@ export class WorldScene extends Phaser.Scene {
         if (n) this.face(n.actor, dir);
       },
       refresh: () => this.refreshAfterScript(),
+      bytesChanged: (d) => this.modal<void>((r) => new Toast(this, `${d > 0 ? '+' : '–'}${formatBytes(Math.abs(d))} · Jetzt: ${formatBytes(this.state.bytes)}`, r)),
     };
   }
 
@@ -525,7 +527,7 @@ export class WorldScene extends Phaser.Scene {
     const i = await this.modal<number>((r) => new ListMenu(this, labels, r, { anchor: 'right-top', cancellable: true, title: 'Menü' }));
     if (i === 1) {
       const entries = [...this.state.items].map((id) => ({ titel: ITEMS[id].name, text: ITEMS[id].beschreibung, icon: ITEMS[id].icon }));
-      await this.modal<void>((r) => new InfoPanel(this, 'Rucksack', entries, 'Dein Rucksack ist noch leer.', r));
+      await this.modal<void>((r) => new InfoPanel(this, `Rucksack · ${formatBytes(this.state.bytes)}`, entries, 'Dein Rucksack ist noch leer.', r));
     } else if (i === 2) {
       const entries = [...this.state.lexicon].map((id) => ({ titel: LEXICON[id].titel, text: LEXICON[id].text }));
       await this.modal<void>((r) => new InfoPanel(this, 'Netzbuch', entries, 'Noch keine Einträge. Entdecke die Welt!', r));

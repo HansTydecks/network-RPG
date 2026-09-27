@@ -88,3 +88,13 @@ export async function advanceUntilMinigame(page: Page, max = 60) {
 export async function flags(page: Page): Promise<string[]> {
   return page.evaluate(() => [...(window as any).__netzblick.state.flags]);
 }
+
+/** Spielt Minispiele, bis keins mehr direkt nachfolgt (z. B. Quiz und danach USB-Stick). */
+export async function playMinigames(page: Page) {
+  await playMinigame(page);
+  for (;;) {
+    await page.waitForTimeout(400);
+    if (!(await page.evaluate(() => !!(window as any).__minigame))) return;
+    await playMinigame(page);
+  }
+}

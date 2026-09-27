@@ -22,6 +22,7 @@ function mockHost(choices: number[] = []) {
     minigame: async (id) => void log.push(`minispiel ${id}`),
     faceNpc: () => {},
     refresh: () => {},
+    bytesChanged: async (d) => void log.push(`bytes ${d}`),
   };
   return { host, log };
 }

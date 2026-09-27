@@ -12,6 +12,8 @@ export interface Uebergang {
   von: string;
   nach: string;
   ereignis: string;
+  /** Feste Position der Beschriftung, falls sie sonst mit anderem überlappt. */
+  label?: [number, number];
 }
 
 export interface ZustandAufgabe {
@@ -43,6 +45,27 @@ export const ZUSTAND_AUFGABEN: Record<string, ZustandAufgabe> = {
       { von: 'laden', nach: 'zurueck', ereignis: 'Akku voll' },
     ],
     erklaerung: 'Genau! Wird der Akku beim Saugen knapp, fährt Krümel zur Station zurück und lädt.',
+  },
+  pfand: {
+    titel: 'Das Zustandsdiagramm des Pfandautomaten',
+    einleitung: 'Der Automat nimmt jede Flasche an – auch die ohne Pfand. Welcher Übergang fehlt?',
+    zustaende: [
+      { id: 'bereit', name: 'Bereit', x: 44, y: 98 },
+      { id: 'pruefen', name: 'Flasche prüfen', x: 150, y: 72 },
+      { id: 'angenommen', name: 'Angenommen', x: 266, y: 98 },
+      { id: 'abgelehnt', name: 'Abgelehnt', x: 150, y: 116 },
+    ],
+    uebergaenge: [
+      { von: 'bereit', nach: 'pruefen', ereignis: 'Flasche eingelegt', label: [14, 61] },
+      { von: 'pruefen', nach: 'angenommen', ereignis: 'Pfandlogo erkannt', label: [204, 64] },
+      { von: 'abgelehnt', nach: 'bereit', ereignis: 'Flasche zurück', label: [12, 114] },
+    ],
+    fehlt: { von: 'pruefen', nach: 'abgelehnt', ereignis: 'kein Pfandlogo', label: [156, 97] },
+    falsch: [
+      { von: 'pruefen', nach: 'angenommen', ereignis: 'kein Pfandlogo' },
+      { von: 'bereit', nach: 'abgelehnt', ereignis: 'Flasche eingelegt' },
+    ],
+    erklaerung: 'Genau! Ohne Pfandlogo wird die Flasche abgelehnt und kommt zurück.',
   },
 };
 

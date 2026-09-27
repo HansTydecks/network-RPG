@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { advanceDialogs, advanceUntilMinigame, face, flags, playMinigame, player, walk } from './helpers';
+import { advanceDialogs, advanceUntilMinigame, face, flags, playMinigame, playMinigames, player, walk } from './helpers';
 
-test.setTimeout(420_000);
+test.setTimeout(900_000);
 
-test('Kapitel 1: vom Prolog bis zum geschlossenen Dorfladen (M1 + M2a)', async ({ page }) => {
+test('Kapitel 1: vom Prolog bis zum Kapitelende', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
@@ -269,5 +269,172 @@ test('Kapitel 1: vom Prolog bis zum geschlossenen Dorfladen (M1 + M2a)', async (
   await page.screenshot({ path: 'test-results/m2-05-laden.png' });
   const lex2 = await page.evaluate(() => [...(window as any).__netzblick.state.lexicon]);
   expect(lex2).toEqual(expect.arrayContaining(['binaerzahlen', 'bilder_als_zahlen', 'text_als_zahlen', 'algorithmus', 'zustandsdiagramm']));
+  expect(await flags(page)).toContain('laden_zu_gesehen');
+
+  // ---------- M2b ----------
+  const state = () => page.evaluate(() => {
+    const s = (window as any).__netzblick.state;
+    return { bytes: s.bytes as number, quest: s.questId as string, items: [...s.items] as string[] };
+  });
+  // Nach Hause ins Bett (Kowalski steht in Reihe 14, darum über Reihe 15)
+  const dorfplatzNachHause = async () => {
+    await walk(page, 'left', 7);
+    await walk(page, 'up', 7);
+    expect((await player(page)).map).toBe('kabelitz');
+    await walk(page, 'up', 3);
+    await walk(page, 'left', 9);
+    await walk(page, 'up', 8);
+    expect((await player(page)).map).toBe('wohnzimmer');
+  };
+  const wohnzimmerHoch = async () => {
+    await walk(page, 'up', 5);
+    await walk(page, 'left', 5);
+    await walk(page, 'up', 1);
+    expect((await player(page)).map).toBe('alex_zimmer');
+  };
+  const zimmerZumDorfplatz = async () => {
+    // von (1,2) im Zimmer
+    await walk(page, 'right', 3);
+    await walk(page, 'down', 5);
+    await walk(page, 'down', 5);
+    await walk(page, 'right', 4);
+    await walk(page, 'down', 2);
+    expect((await player(page)).map).toBe('kabelitz');
+    await walk(page, 'down', 7);
+    await walk(page, 'right', 9);
+    await walk(page, 'down', 4);
+    expect((await player(page)).map).toBe('dorfplatz');
+  };
+  const inDenLaden = async () => {
+    await face(page, 'up');
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(800);
+    expect((await player(page)).map).toBe('dorfladen');
+    await walk(page, 'right', 2);
+    await walk(page, 'up', 1);
+  };
+
+  await dorfplatzNachHause();
+  await wohnzimmerHoch();
+  await walk(page, 'up', 4);
+  await walk(page, 'left', 3);
+  await talk('left');
+  await advanceDialogs(page, 80);
+  expect(await flags(page)).toContain('tag3');
+  expect((await state()).quest).toBe('q1_bytes');
+
+  // Freitag: Dorfladen, Pfandautomat
+  await zimmerZumDorfplatz();
+  await walk(page, 'down', 6);
+  await walk(page, 'right', 7);
+  await inDenLaden();
+  await talk('up');
+  await advanceDialogs(page);
+  expect(await flags(page)).toContain('nguyen_gesprochen');
+  await page.screenshot({ path: 'test-results/m3-01-dorfladen.png' });
+  await walk(page, 'right', 3);
+  await walk(page, 'up', 3);
+  await talk('up');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m3-02-pfand.png' });
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect((await state()).bytes).toBe(500);
+
+  // Händler Hubert und Frau Lehmann
+  await walk(page, 'down', 3);
+  await walk(page, 'left', 5);
+  await walk(page, 'down', 2);
+  expect((await player(page)).map).toBe('dorfplatz');
+  await walk(page, 'down', 4);
+  await walk(page, 'right', 2);
+  await talk('right');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m3-03-haendler.png' });
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect((await state()).bytes).toBe(750);
+  await walk(page, 'left', 9);
+  await talk('left');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m3-04-dateien.png' });
+  await playMinigames(page);
+  await advanceDialogs(page);
+  await talk('left');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m3-05-tabelle.png' });
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect((await state()).bytes).toBe(2250);
+  expect((await state()).quest).toBe('q1_kaufen');
+
+  // Kabelbinder kaufen
+  await walk(page, 'up', 4);
+  await walk(page, 'right', 7);
+  await inDenLaden();
+  await talk('up');
+  await advanceDialogs(page);
+  expect((await state()).items).toContain('kabelbinder');
+  expect((await state()).bytes).toBe(250);
+
+  // Reparatur mit Herrn Kowalski
+  await walk(page, 'down', 1);
+  await walk(page, 'left', 2);
+  await walk(page, 'down', 1);
+  expect((await player(page)).map).toBe('dorfplatz');
+  await walk(page, 'left', 7);
+  await walk(page, 'up', 7);
+  expect((await player(page)).map).toBe('kabelitz');
+  await walk(page, 'up', 4);
+  await walk(page, 'left', 4);
+  await talk('left');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m3-06-kabelsalat.png' });
+  await playMinigame(page);
+  await advanceUntilMinigame(page);
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect(await flags(page)).toContain('kvz_repariert');
+  await page.keyboard.press('KeyN');
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: 'test-results/m3-07-online.png' });
+  await page.keyboard.press('KeyN');
+  await page.waitForTimeout(200);
+
+  // E-Mail an Tante Ada
+  await walk(page, 'left', 5);
+  await walk(page, 'up', 7);
+  await wohnzimmerHoch();
+  await walk(page, 'up', 4);
+  await walk(page, 'right', 3);
+  await talk('up');
+  await advanceUntilMinigame(page);
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: 'test-results/m3-08-email.png' });
+  await playMinigame(page);
+  await advanceUntilMinigame(page);
+  await playMinigame(page);
+  await advanceDialogs(page);
+  expect(await flags(page)).toContain('email_gesendet');
+
+  // Samstag: Dorffest mit Lina
+  await walk(page, 'left', 6);
+  await talk('left');
+  await advanceDialogs(page, 80);
+  expect(await flags(page)).toContain('tag4');
+  await zimmerZumDorfplatz();
+  await walk(page, 'down', 10);
+  await page.screenshot({ path: 'test-results/m3-09-dorffest.png' });
+  await talk('right');
+  await advanceUntilMinigame(page);
+  await page.screenshot({ path: 'test-results/m3-10-plakat.png' });
+  await playMinigame(page);
+  await advanceDialogs(page, 150);
+  expect(await flags(page)).toContain('kapitel1_fertig');
+  expect((await player(page)).map).toBe('alex_zimmer');
+  expect((await state()).quest).toBe('q1_kapitel_ende');
+  const lex3 = await page.evaluate(() => [...(window as any).__netzblick.state.lexicon]);
+  expect(lex3).toEqual(expect.arrayContaining(['einheiten', 'dateitypen', 'tabellenkalkulation', 'uebertragungsrate', 'pixel_vektor', 'inhalt_design']));
+  await page.screenshot({ path: 'test-results/m3-11-ende.png' });
   expect(errors).toEqual([]);
 });

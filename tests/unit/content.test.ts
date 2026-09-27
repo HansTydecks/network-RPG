@@ -12,7 +12,7 @@ import { MINIGAME_META as MINIGAMES } from '../../src/minigames/meta';
 import { TILE_INDEX } from '../../src/content/art/tiles';
 
 /** Kapitel je Karte → höchste erlaubte Klassenstufe (Spiralcurriculum). */
-const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7, wohnzimmer: 7, briefzentrum: 7, dorfplatz: 7, museum: 7 };
+const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7, wohnzimmer: 7, briefzentrum: 7, dorfplatz: 7, museum: 7, dorfladen: 7 };
 
 function* walk(script: Script): Generator<Command> {
   for (const c of script) {

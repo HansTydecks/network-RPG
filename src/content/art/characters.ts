@@ -316,3 +316,23 @@ export function fotoIcon(): PixBuf {
   b.disc(6, 8, 2, PAL.grau4).rect(9, 7, 3, 4, PAL.grau3);
   return b.outline(PAL.ink);
 }
+
+CHARACTERS.push(
+  { id: 'nguyen', colors: { s: PAL.haut2, h: PAL.ink, c: PAL.gruen2, p: PAL.grau1, f: PAL.braun1 } },
+  { id: 'haendler', colors: { s: PAL.haut1, h: PAL.orange, c: PAL.lila2, p: PAL.braun2, f: PAL.ink } },
+  { id: 'lehmann', colors: { s: PAL.haut1, h: PAL.braun2, c: PAL.blau2, p: PAL.grau1, f: PAL.ink } },
+  { id: 'lina', colors: { s: PAL.haut3, h: PAL.ink, c: PAL.gelb, p: PAL.lila1, f: PAL.rot2 } },
+);
+
+export function kabelbinderIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  for (let i = 0; i < 3; i++) b.hline(2, 4 + i * 4, 12, [PAL.ink, PAL.weiss, PAL.ink][i]).set(13, 3 + i * 4, PAL.grau2);
+  return b.outline(PAL.grau1);
+}
+
+export function usbIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(4, 3, 8, 10, PAL.blau2).rect(6, 0, 4, 3, PAL.grau4).set(7, 1, PAL.ink).set(8, 1, PAL.ink);
+  b.rect(6, 7, 4, 2, PAL.weiss);
+  return b.outline(PAL.ink);
+}

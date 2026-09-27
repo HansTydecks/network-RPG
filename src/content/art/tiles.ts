@@ -850,6 +850,99 @@ export const TILES: TileDef[] = [
       b.rect(3, 10, 2, 6, PAL.braun1).rect(11, 10, 2, 6, PAL.braun1);
     },
   },
+  // --- Kapitel 1, M2b: Dorfladen und Dorffest ---
+  {
+    id: 'ladenregal',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 1, 16, 15, PAL.braun2).frame(0, 1, 16, 15, PAL.ink);
+      for (const y of [5, 10]) b.hline(1, y, 14, PAL.braun1);
+      const farben = [PAL.rot3, PAL.gelb, PAL.blau3, PAL.gruen3, PAL.orange, PAL.weiss];
+      for (let i = 0; i < 6; i++) {
+        b.rect(2 + i * 2, 2, 2, 3, farben[i]);
+        b.rect(2 + i * 2, 7, 2, 3, farben[(i + 3) % 6]);
+        b.rect(2 + i * 2, 11, 2, 4, farben[(i + 1) % 6]);
+      }
+    },
+  },
+  {
+    id: 'kasse',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 7, 16, 9, PAL.braun3).hline(0, 7, 16, PAL.braun4).frame(0, 7, 16, 9, PAL.ink);
+      b.rect(3, 1, 9, 6, PAL.grau1).rect(4, 2, 7, 3, PAL.gruen4);
+      b.rect(12, 4, 3, 3, PAL.grau2).rect(12, 3, 3, 1, PAL.blau4);
+    },
+  },
+  {
+    id: 'pfandautomat',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(2, 0, 12, 16, PAL.gruen2).frame(2, 0, 12, 16, PAL.ink);
+      b.rect(4, 2, 8, 4, PAL.ink).disc(8, 4, 1.5, PAL.grau3);
+      b.rect(4, 8, 8, 2, PAL.grau4).rect(5, 12, 6, 2, PAL.weiss);
+      b.set(11, 9, PAL.rot3);
+    },
+  },
+  {
+    id: 'karren_l',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(1, 3, 15, 8, PAL.braun3).hline(1, 3, 15, PAL.braun4);
+      for (let x = 2; x < 16; x += 4) s.rect(x, 1, 3, 2, [PAL.rot3, PAL.gelb, PAL.blau3, PAL.gruen3][x % 4]);
+      s.disc(5, 12, 3, PAL.braun1).disc(5, 12, 1, PAL.gelb);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
+  {
+    id: 'karren_r',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(0, 3, 12, 8, PAL.braun3).hline(0, 3, 12, PAL.braun4);
+      s.rect(2, 0, 6, 3, PAL.lila2);
+      s.disc(9, 12, 3, PAL.braun1).disc(9, 12, 1, PAL.gelb);
+      s.hline(12, 6, 4, PAL.braun1);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
+  {
+    id: 'buehne',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 5, 16, 11, PAL.braun2).hline(0, 5, 16, PAL.braun4);
+      for (let x = 0; x < 16; x += 4) b.vline(x, 6, 10, PAL.braun1);
+      b.rect(0, 0, 16, 5, PAL.rot2);
+      for (let x = 1; x < 16; x += 3) b.vline(x, 0, 5, PAL.rot1);
+    },
+  },
+  {
+    id: 'kuchenstand',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 4, PAL.weiss);
+      for (let x = 0; x < 16; x += 4) b.rect(x, 0, 2, 4, PAL.rot3);
+      b.rect(1, 8, 14, 8, PAL.braun3).frame(1, 8, 14, 8, PAL.ink);
+      b.disc(5, 7, 2.5, PAL.braun4).rect(3, 6, 5, 1, PAL.rot3).disc(11, 7, 2.5, PAL.creme);
+    },
+  },
+  {
+    id: 'wimpel',
+    layer: 'deco',
+    draw: (b) => {
+      b.hline(0, 2, 16, PAL.grau1);
+      const f = [PAL.rot3, PAL.gelb, PAL.blau3, PAL.gruen3];
+      for (let i = 0; i < 4; i++) for (let y = 0; y < 4; y++) b.hline(i * 4 + y / 2, 3 + y, 4 - y, f[i]);
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

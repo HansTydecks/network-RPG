@@ -1,5 +1,5 @@
 import type { MapDef } from '../../engine/world/MapDef';
-import { choice, give, lexicon, minigame, narrate, quest, say, setFlag, when } from '../../engine/script/Script';
+import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
 
 export const alexZimmer: MapDef = {
   id: 'alex_zimmer',
@@ -74,7 +74,17 @@ export const alexZimmer: MapDef = {
       x: 7,
       y: 1,
       script: [
-        narrate('Dein Computer. „Keine Internetverbindung" steht in der Ecke. Speichern geht aber trotzdem.'),
+        when(
+          { all: [{ flag: 'kvz_repariert' }, { not: { flag: 'email_gesendet' } }] },
+          emailSchreiben(),
+          [
+            when(
+              { flag: 'kvz_repariert' },
+              [narrate('Dein Computer. In der Ecke steht „Verbunden". Das Internet ist wieder da!')],
+              [narrate('Dein Computer. „Keine Internetverbindung" steht in der Ecke. Speichern geht aber trotzdem.')],
+            ),
+          ],
+        ),
         { op: 'save' },
       ],
       scan: {
@@ -89,10 +99,10 @@ export const alexZimmer: MapDef = {
       id: 'bett',
       x: 0,
       y: 1,
-      script: [narrate('Dein Bett. Noch fünf Minuten …? Nein – es gibt zu tun!')],
+      script: bettScript(),
       scan: { name: 'bett', klasse: 'Bett', attribute: [['farbe', 'blau'], ['laenge', '2 m']], methoden: [] },
     },
-    { kind: 'interact', id: 'bett2', x: 0, y: 2, script: [narrate('Dein Bett. Noch fünf Minuten …? Nein – es gibt zu tun!')] },
+    { kind: 'interact', id: 'bett2', x: 0, y: 2, script: bettScript() },
     {
       kind: 'interact',
       id: 'regal',
@@ -149,3 +159,63 @@ export const alexZimmer: MapDef = {
     ]),
   ],
 };
+
+function bettScript(): Script {
+  return [
+    when(
+      { all: [{ flag: 'laden_zu_gesehen' }, { not: { flag: 'tag3' } }] },
+      [
+        narrate('Was für ein Tag! Du kuschelst dich ins Bett. Ping macht es sich auf dem Regal gemütlich.'),
+        interlude('Am nächsten Morgen'),
+        setFlag('tag3'),
+        warp('alex_zimmer', 1, 2, 'down'),
+        say('ping', 'Ping! Guten Morgen! Heute hat der Dorfladen wieder offen.'),
+        say('ping', 'Aber Kabelbinder gibt es nicht umsonst. Im Laden bezahlt man mit Bytes – und dein Rucksack ist ziemlich leer.'),
+        say('ping', 'Vielleicht kann jemand im Dorf Hilfe gebrauchen? Frag doch mal Herrn Nguyen im Laden.'),
+        quest('q1_bytes'),
+      ],
+      [
+        when(
+          { all: [{ flag: 'email_gesendet' }, { not: { flag: 'tag4' } }] },
+          [
+            narrate('Morgen ist dein Geburtstag! Vor Aufregung kannst du kaum einschlafen … aber irgendwann doch.'),
+            interlude('Samstag – dein Geburtstag!'),
+            setFlag('tag4'),
+            warp('alex_zimmer', 1, 2, 'down'),
+            say('ping', 'Ping, ping, ping! Alles Gute zum Geburtstag, Alex!'),
+            say('mama', 'Alles Gute, Geburtstagskind! Komm runter, es gibt Frühstück!'),
+            interlude('Am Nachmittag'),
+            setFlag('lina_da'),
+            say('ping', 'Gleich beginnt das Dorffest! Und Lina ist mit dem Bus gekommen – sie wartet auf dem Dorfplatz.'),
+            quest('q1_fest'),
+          ],
+          [
+            when(
+              { flag: 'nacht' },
+              [narrate('Dein Bett. Nach so einem Tag schläfst du bestimmt sofort ein … wenn da nicht diese Nachricht wäre.')],
+              [narrate('Dein Bett. Noch fünf Minuten …? Nein – es gibt zu tun!')],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ];
+}
+
+function emailSchreiben(): Script {
+  return [
+    narrate('Dein Computer. In der Ecke steht: „Verbunden". Das Internet ist zurück!'),
+    narrate('Du schreibst Tante Ada eine E-Mail: „Danke für die Brille! Stell dir vor, ich habe geholfen, das Internet in Kabelitz zu reparieren!"'),
+    narrate('Du klickst auf „Senden".'),
+    minigame('briefreise:email'),
+    say('ping', '0,8 Sekunden! Dein Brief an Lina war über zwei Tage unterwegs.'),
+    narrate('Pling! Eine Antwort von Tante Ada.'),
+    say('ada', 'Hallo Alex! Was für tolle Neuigkeiten! Ich bin so stolz auf dich. Pass gut auf die Brille auf – und auf dich!'),
+    say('ping', 'Ist das Internet eigentlich immer schneller als ein Brief? Oder als eine Brieftaube? Gurr …'),
+    minigame('schneller'),
+    lexicon('uebertragungsrate'),
+    setFlag('email_gesendet'),
+    say('ping', 'Morgen ist Samstag: dein Geburtstag und das Dorffest! Zeit fürs Bett.'),
+    quest('q1_samstag'),
+  ];
+}

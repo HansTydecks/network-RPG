@@ -2,6 +2,11 @@ import type { MapDef } from '../../engine/world/MapDef';
 import { choice, interlude, narrate, quest, say, setFlag, warp, when } from '../../engine/script/Script';
 
 const mamaScript = [
+  when({ flag: 'tag4' }, [say('mama', 'Alles Gute zum Geburtstag, Alex! Lina wartet bestimmt schon auf dem Dorfplatz.')], [
+  when({ flag: 'kvz_repariert' }, [
+    say('mama', 'Das Internet ist wieder da! Meine Datei ist endlich bei der Firma. Und das hast du repariert? Unglaublich!'),
+    say('mama', 'Schreib Tante Ada doch eine E-Mail. Sie freut sich bestimmt!'),
+  ], [
   when(
     { not: { flag: 'mama_gesprochen' } },
     [
@@ -44,6 +49,8 @@ const mamaScript = [
       ),
     ],
   ),
+  ]),
+  ]),
 ];
 
 export const wohnzimmer: MapDef = {
@@ -88,6 +95,8 @@ export const wohnzimmer: MapDef = {
       y: 3,
       dir: 'left',
       script: [
+        when({ flag: 'tag4' }, [say('papa', 'Alles Gute, Alex! Heute Abend habe ich zum Glück keine Nachtschicht. Wir sehen uns auf dem Fest!')], [
+        when({ flag: 'tag3' }, [say('papa', 'Ich muss gleich zur Spätschicht ins Krankenhaus. Viel Glück mit den Kabelbindern!')], [
         when(
           { flag: 'tag2' },
           [say('papa', 'Guten Morgen! Heute hab ich endlich frei. Ohne Internet … dann lese ich eben mal wieder die Zeitung. Die ist aus Papier!')],
@@ -103,6 +112,8 @@ export const wohnzimmer: MapDef = {
             ),
           ],
         ),
+        ]),
+        ]),
       ],
     },
     {

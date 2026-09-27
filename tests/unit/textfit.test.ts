@@ -8,6 +8,7 @@ import { PING_SCAN } from '../../src/content/dialog/scan';
 import { ADRESS_HINWEIS, BRIEF_SLOTS } from '../../src/minigames/briefLogic';
 import { SORT_RUNDEN, sortHinweis } from '../../src/minigames/sortierenLogic';
 import { BAUTEILE } from '../../src/minigames/evaLogic';
+import { DATEI_FRAGEN, EINHEITEN_FRAGEN, SCHNELLER_FRAGEN } from '../../src/minigames/m2bLogic';
 
 /** Diese Werte spiegeln die Layouts in Hud.ts, minigames/base.ts, ObjectCard.ts und InfoPanel.ts. */
 const QUEST_W = 290 - 12; // abzüglich „▸ "
@@ -28,6 +29,7 @@ describe('Texte passen in ihre Kästen (kein Überlauf)', () => {
       ...SORT_RUNDEN.map((r) => r.ansage),
       ...SORT_RUNDEN.flatMap((r, i) => r.briefe.map((b) => `Hmm, das passt nicht. ${sortHinweis(i, b)}`)),
       ...BAUTEILE.map((b) => `Richtig! ${b.hinweis}`),
+      ...[...EINHEITEN_FRAGEN, ...DATEI_FRAGEN, ...SCHNELLER_FRAGEN].flatMap((f) => f.optionen.map((o) => `Richtig! ${o.erklaerung} (Leertaste)`)),
     ];
     for (const t of texte) expect(fits(t, FEEDBACK_W, FEEDBACK_LINES), t).toBe(true);
   });

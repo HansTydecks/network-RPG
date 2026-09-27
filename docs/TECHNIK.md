@@ -28,7 +28,19 @@ Tests (Stand M1): 57 Unit-Tests (u. a. Minispiel-Logik, Caesar-Zettel, Kartenpr�
 - Emil und Krümel, Block-Fernbedienung; Backtracking-Keime: Kabelschacht (zu lang für 10 Befehle), Fernschreiber im Archiv
 - Minispiele direkt aufrufbar: `?minispiel=bloecke:gully`, `?minispiel=bitschloss:3` usw.
 
-Nächster Schritt: **M2b** – Dorfladen mit Bytes und Einheiten, Pfandautomat, Dorffest (Datei-Chaos, Tabellen), Reparatur mit Kabelsalat, Brief gegen E-Mail, „Was ist schneller?", Samstag mit Lina und Plakat, FUNKSTILLEs Nachricht.
+**M2b ist fertig – Kapitel 1 komplett:**
+- Tagesablauf Mittwoch bis Samstag (Wochentag und Tageszeit oben links, abends/nachts dunkler), Schlafen im Bett bringt die Geschichte weiter
+- Dorfladen mit Herrn Nguyen: Bytes als Währung (Anzeige im Rucksack), Pfandautomat (EVA-Frage + Zustandsdiagramm), Kartenterminal mit Touchscreen-Frage, Kabelbinder für 2 KB
+- Dorfplatz: Händler Hubert (KB/MB/GB gegen KiB/MiB/GiB), Frau Lehmann (Datei-Chaos mit 4-GB-Stick, Tabellen-Zauber mit `=B2*C2` und `=SUMME(D2:D5)`)
+- Reparatur mit Herrn Kowalski: Kabelsalat (binär beschriftete Anschlüsse), Krümel drückt den Reset-Knopf; danach fließen im Netzblick wieder Daten
+- E-Mail an Tante Ada (Zeitleiste: 0,8 s gegen 2 Tage 3 Stunden) und „Was ist schneller?" (Internet oder Ping mit Speicherkarte)
+- Samstag: Dorffest mit Bühne und Kuchenstand, Lina bringt den Brief mit, Minispiel „Linas Plakat" (Pixel/Vektor, Objekt.Attribut = Wert, Inhalt und Design)
+- Nachts: FUNKSTILLEs Nachricht, „Ende von Kapitel 1", Verweis auf den Kalender
+- Neue Minispiele direkt aufrufbar: `?minispiel=einheiten`, `dateien`, `tabelle`, `schneller`, `kabelsalat`, `plakat`, `briefreise:email`, `zustand:pfand`, `bloecke:kasten`
+
+Tests (Stand M2b): 102 Unit-Tests und 3 Browser-Tests; der Durchlauf spielt Kapitel 1 vom Prolog bis zum Abspann mit allen Minispielen per Tastatur (ca. 5 Minuten).
+
+Nächster Schritt: **M3 – Kapitel 2 (Klasse 8)**.
 
 ## Entwickeln
 

@@ -9,6 +9,7 @@ export type Cond =
   | { flag: FlagId }
   | { item: ItemId }
   | { stufeMin: number }
+  | { bytesMin: number }
   | { not: Cond }
   | { all: Cond[] };
 
@@ -30,7 +31,9 @@ export type Command =
   | { op: 'interlude'; text: string }
   | { op: 'minigame'; id: string }
   | { op: 'face'; npc: string; dir: Dir }
-  | { op: 'refresh' };
+  | { op: 'refresh' }
+  | { op: 'earn'; amount: number }
+  | { op: 'pay'; amount: number };
 
 export type Script = Command[];
 
@@ -54,12 +57,15 @@ export const toast = (text: string): Command => ({ op: 'toast', text });
 export const take = (item: ItemId): Command => ({ op: 'take', item });
 export const interlude = (text: string): Command => ({ op: 'interlude', text });
 export const minigame = (id: string): Command => ({ op: 'minigame', id });
+export const earn = (amount: number): Command => ({ op: 'earn', amount });
+export const pay = (amount: number): Command => ({ op: 'pay', amount });
 export const faceNpc = (npc: string, dir: Dir): Command => ({ op: 'face', npc, dir });
 
 export function evalCond(c: Cond, s: GameState): boolean {
   if ('flag' in c) return s.flags.has(c.flag);
   if ('item' in c) return s.items.has(c.item);
   if ('stufeMin' in c) return s.stufe >= c.stufeMin;
+  if ('bytesMin' in c) return s.bytes >= c.bytesMin;
   if ('not' in c) return !evalCond(c.not, s);
   return c.all.every((x) => evalCond(x, s));
 }

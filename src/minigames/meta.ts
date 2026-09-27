@@ -10,4 +10,10 @@ export const MINIGAME_META: Record<string, { titel: string; stufe: number; lehrp
   fotolabor: { titel: 'Das Fotolabor', stufe: 7, lehrplan: 'SN Kl. 7 WB 2 – Farbkanäle, Graustufen, Negativ' },
   bloecke: { titel: 'Krümel programmieren', stufe: 7, lehrplan: 'SN Kl. 7 LB 3 – Algorithmen in Blöcken (Sequenz)' },
   zustand: { titel: 'Zustandsdiagramm', stufe: 7, lehrplan: 'SN Kl. 7 LB 2 – Zustandsdiagramm, Übergangsgraph' },
+  einheiten: { titel: 'Händler Hubert', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Präfixe, SI- und Binärpräfixe' },
+  dateien: { titel: 'Datei-Chaos', stufe: 7, lehrplan: 'SN Kl. 7 LB 2 – Dateityp und Applikation; LB 1 Speicherkapazität' },
+  tabelle: { titel: 'Tabellen-Zauber', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Tabellenkalkulation' },
+  schneller: { titel: 'Was ist schneller?', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Übertragungsrate' },
+  kabelsalat: { titel: 'Kabelsalat', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Binärzahlen' },
+  plakat: { titel: 'Linas Plakat', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Pixel/Vektor, Objekte, Inhalt und Design' },
 };

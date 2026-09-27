@@ -11,11 +11,15 @@ export class PixBuf {
   }
 
   get(x: number, y: number): Color {
+    x = Math.floor(x);
+    y = Math.floor(y);
     if (x < 0 || y < 0 || x >= this.w || y >= this.h) return null;
     return this.data[y * this.w + x];
   }
 
   set(x: number, y: number, c: Color): this {
+    x = Math.floor(x);
+    y = Math.floor(y);
     if (x < 0 || y < 0 || x >= this.w || y >= this.h) return this;
     this.data[y * this.w + x] = c;
     return this;

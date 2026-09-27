@@ -20,6 +20,7 @@ export interface ScriptHost {
   minigame(id: string): Promise<void>;
   faceNpc(npc: string, dir: Dir): void;
   refresh(): void;
+  bytesChanged(delta: number): Promise<void>;
 }
 
 export async function runScript(script: Script, host: ScriptHost): Promise<void> {
@@ -88,6 +89,14 @@ export async function runScript(script: Script, host: ScriptHost): Promise<void>
         break;
       case 'refresh':
         host.refresh();
+        break;
+      case 'earn':
+        host.state.bytes = Math.min(65535, host.state.bytes + cmd.amount);
+        await host.bytesChanged(cmd.amount);
+        break;
+      case 'pay':
+        host.state.bytes = Math.max(0, host.state.bytes - cmd.amount);
+        await host.bytesChanged(-cmd.amount);
         break;
     }
   }

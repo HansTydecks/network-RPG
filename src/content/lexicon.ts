@@ -91,6 +91,42 @@ export const LEXICON: Record<LexiconId, LexiconEntry> = {
     stufe: 7,
     lehrplan: 'SN Kl. 7 WB 2 – Computergrafik (Farbkanäle, Graustufen, Negativ)',
   },
+  einheiten: {
+    titel: 'Einheiten: Kilo, Mega, Giga, Tera',
+    text: '1 KB = 1.000 Byte, 1 MB = 1.000 KB, 1 GB = 1.000 MB, 1 TB = 1.000 GB. Computer rechnen oft mit Zweierpotenzen: 1 KiB = 1.024 Byte, 1 MiB = 1.024 KiB. Deshalb zeigt ein 64-GB-Stick nur etwa 59,6 GiB an.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Präfixe, SI- und Binärpräfixe, Speicherkapazität',
+  },
+  uebertragungsrate: {
+    titel: 'Übertragungsrate',
+    text: 'Übertragungsrate = Datenmenge ÷ Zeit. Die E-Mail an Tante Ada brauchte 0,8 Sekunden, dein Brief 2 Tage und 3 Stunden. Bei riesigen Datenmengen kann aber sogar eine Taube mit Speicherkarte schneller sein als das Internet!',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Übertragungsrate',
+  },
+  dateitypen: {
+    titel: 'Dateitypen und Dateinamen',
+    text: 'Die Endung zeigt den Dateityp und damit das passende Programm: .docx Textverarbeitung, .xlsx Tabellenkalkulation, .png Bild, .mp3 Musik, .mp4 Video. Gute Dateinamen sagen, was drin ist – „Dorffest_Ablauf.docx" statt „Neues Dokument (7)".',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 2 – Dateityp und Applikation, problemadäquate Dateinamen',
+  },
+  tabellenkalkulation: {
+    titel: 'Tabellenkalkulation',
+    text: 'In einer Tabellenkalkulation rechnen Formeln automatisch: =B2*C2 multipliziert zwei Zellen, =SUMME(D2:D5) addiert einen Bereich. Ändert sich ein Wert, rechnet die Tabelle alles neu.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Automatisierung mit Tabellenkalkulation',
+  },
+  pixel_vektor: {
+    titel: 'Pixel- und Vektorgrafik',
+    text: 'Eine Pixelgrafik besteht aus vielen Punkten – vergrößert man sie, sieht man Treppchen. Eine Vektorgrafik speichert Formen (Kreis, Linie, Text) mit ihren Eigenschaften und bleibt in jeder Größe scharf.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Pixelgrafik, Vektorgrafik, Objektorientierung',
+  },
+  inhalt_design: {
+    titel: 'Inhalt und Design',
+    text: 'Auf Linas Plakat blieben Text und Bilder gleich, nur das Aussehen wechselte. Inhalt (was drauf steht) und Design (wie es aussieht) werden getrennt – so kann man das Design ändern, ohne den Inhalt neu zu schreiben.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Trennung von Inhalt und Design',
+  },
   objekt: {
     titel: 'Objekt und Klasse',
     text: 'Morse ist ein Objekt der Klasse „Katze". Eine Klasse ist der Bauplan, ein Objekt ein konkretes Ding. Objekte haben Attribute mit Werten (Farbe = grau) und Methoden, also Dinge, die sie tun können (miauen()).',

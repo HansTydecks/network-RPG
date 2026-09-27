@@ -30,6 +30,13 @@ export const KRUEMEL_LEVEL: Record<string, KruemelLevel> = {
     startRichtung: 2,
     loesung: ['vor', 'vor', 'links', 'vor', 'vor', 'vor', 'links', 'vor', 'vor', 'aufnehmen'],
   },
+  kasten: {
+    titel: 'Im grauen Kasten',
+    auftrag: 'Herr Kowalski: „Der Reset-Knopf ist ganz hinten, zwischen den Kabeln. Krümel muss ihn drücken (aufnehmen)."',
+    raster: ['#######', '#S..#.#', '##.##.#', '#...Z.#', '#######'],
+    startRichtung: 1,
+    loesung: ['vor', 'rechts', 'vor', 'vor', 'links', 'vor', 'vor', 'aufnehmen'],
+  },
 };
 
 const DX = [0, 1, 0, -1];
