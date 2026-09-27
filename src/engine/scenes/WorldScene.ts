@@ -8,6 +8,8 @@ import { CALENDAR_CODES } from '../../content/calendarCodes';
 import { NETZBLICK_ERSTMALS } from '../../content/dialog/netzblick';
 import { PING_SCAN, SCAN_ERKLAERUNG } from '../../content/dialog/scan';
 import { tageszeitTint, zeitLabel } from '../../content/zeit';
+import { KAPITEL_START } from '../../content/kapitel';
+import { KAPITEL2_START } from '../../content/dialog/kapitel2';
 import { formatBytes } from '../../content/bytes';
 import { MINIGAMES } from '../../minigames';
 import type { FlagId, ItemId, LexiconId, MapId, QuestId } from '../../content/registry';
@@ -127,7 +129,7 @@ export class WorldScene extends Phaser.Scene {
     this.mapObjects.push(this.tintRect);
     this.applyTint();
 
-    this.net = new NetVision(this, this.def.net, this.parsed.width, this.parsed.height, (f) => this.state.flags.has(f as FlagId));
+    this.net = new NetVision(this, this.def.net, this.parsed.width, this.parsed.height, (f) => this.state.flags.has(f as FlagId), () => (this.state.items.has('netzblick_v2') ? 2 : 1));
     this.hud.setNet(false);
     this.hud.setTime(zeitLabel(this.state));
     this.updateCamera();
@@ -393,6 +395,15 @@ export class WorldScene extends Phaser.Scene {
   // ---------- Scripts ----------
 
   private bildImage?: Phaser.GameObjects.Image;
+  private enterNachScript = false;
+
+  private nachScript() {
+    this.refreshAfterScript();
+    if (this.enterNachScript) {
+      this.enterNachScript = false;
+      this.runEnterScript();
+    }
+  }
 
   /** Bild neben dem Dialog, z. B. zu einem Museumsexponat. */
   private showBild(key: string | null) {
@@ -411,7 +422,7 @@ export class WorldScene extends Phaser.Scene {
     } finally {
       this.scriptRunning = false;
       this.showBild(null);
-      this.refreshAfterScript();
+      this.nachScript();
     }
   }
 
@@ -427,6 +438,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   private async doWarp(map: MapId, x: number, y: number, dir: Dir, fromStep: boolean) {
+    const imScript = this.scriptRunning;
     this.scriptRunning = true;
     await new Promise<void>((r) => {
       this.cameras.main.fadeOut(180);
@@ -440,8 +452,10 @@ export class WorldScene extends Phaser.Scene {
     }
     autosave(this.state);
     this.cameras.main.fadeIn(180);
-    this.scriptRunning = false;
+    this.scriptRunning = imScript;
     if (fromStep) this.runEnterScript();
+    // Warp mitten in einem Script: Begrüßung der neuen Karte läuft, wenn das Script fertig ist.
+    else this.enterNachScript = true;
   }
 
   private modal<T>(make: (resolve: (v: T) => void) => import('../ui/widgets').Modal): Promise<T> {
@@ -521,10 +535,30 @@ export class WorldScene extends Phaser.Scene {
     if (stufe === null) return h.say('ping', 'Hmm, der Code stimmt nicht. Frag deine Lehrkraft nach dem richtigen Code. Gurr!');
     if (stufe <= this.state.stufe) return h.say('ping', `${stufeLabel(stufe)} hast du schon erreicht. Das Kalenderblatt ist längst umgeblättert!`);
     this.state.stufe = stufe;
+    await h.say(undefined, 'Du blätterst die Seiten um … ein neues Schuljahr beginnt.');
+    if (stufe > 8) await h.say('ping', `Für ${stufeLabel(stufe)} wird gerade noch gebaut. Bis dahin geht es mit Klasse 8 weiter! Gurr!`);
+    if (!this.state.flags.has('k2_start')) await this.startKapitel2();
     autosave(this.state);
-    await h.say(undefined, 'Du blätterst die Seiten um … Sommerferien … ein neues Schuljahr beginnt.');
-    await h.say(undefined, `Ein Jahr später: Alex ist jetzt in ${stufeLabel(stufe)}!`);
-    await h.say('ping', 'Die Abenteuer für dieses Schuljahr werden gerade noch gebaut. Bald geht es weiter! Gurr!');
+  }
+
+  /** Für Browser-Tests: Kapitel 2 starten, ohne einen echten Kalender-Code zu kennen. */
+  testStartKapitel2() {
+    if (this.scriptRunning) return;
+    this.scriptRunning = true;
+    void this.startKapitel2().finally(() => {
+      this.scriptRunning = false;
+      this.nachScript();
+    });
+  }
+
+  /** Kapitel 2 beginnt: Startzustand herstellen (falls Kapitel 1 übersprungen wurde) und Einstieg abspielen. */
+  async startKapitel2() {
+    const start = KAPITEL_START[8];
+    for (const i of start.items) this.state.items.add(i);
+    for (const f of start.flags) this.state.flags.add(f);
+    for (const l of start.lexicon) this.state.lexicon.add(l);
+    if (this.state.stufe < 8) this.state.stufe = 8;
+    await runScript(KAPITEL2_START, this.host());
   }
 
   private async saveDialog() {

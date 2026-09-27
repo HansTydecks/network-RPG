@@ -6,13 +6,42 @@ import { ITEMS } from '../../src/content/items';
 import { LEXICON } from '../../src/content/lexicon';
 import { QUESTS } from '../../src/content/quests';
 import { SPEAKERS } from '../../src/content/speakers';
-import type { Command, Script } from '../../src/engine/script/Script';
+import type { Command, Cond, Script } from '../../src/engine/script/Script';
+import { KRUEMEL_LEVEL } from '../../src/minigames/kruemelLogic';
 import { NETZBLICK_ERSTMALS } from '../../src/content/dialog/netzblick';
 import { MINIGAME_META as MINIGAMES } from '../../src/minigames/meta';
 import { TILE_INDEX } from '../../src/content/art/tiles';
 
 /** Kapitel je Karte → höchste erlaubte Klassenstufe (Spiralcurriculum). */
-const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7, wohnzimmer: 7, briefzentrum: 7, dorfplatz: 7, museum: 7, dorfladen: 7 };
+const MAP_STUFE: Record<string, number> = {
+  alex_zimmer: 7,
+  kabelitz: 7,
+  wohnzimmer: 7,
+  briefzentrum: 7,
+  dorfplatz: 7,
+  museum: 7,
+  dorfladen: 7,
+  knotenburg: 8,
+  gymnasium: 8,
+};
+
+/** Durchläuft ein Script und merkt sich, ab welcher Klassenstufe ein Befehl erreichbar ist ({ stufeMin } in Bedingungen). */
+function* walkStufe(script: Script, stufe: number): Generator<[Command, number]> {
+  for (const c of script) {
+    yield [c, stufe];
+    if (c.op === 'if') {
+      yield* walkStufe(c.then, Math.max(stufe, stufeAus(c.cond)));
+      yield* walkStufe(c.else ?? [], stufe);
+    }
+    if (c.op === 'choice') for (const o of c.options) yield* walkStufe(o.then, stufe);
+  }
+}
+
+function stufeAus(c: Cond): number {
+  if ('stufeMin' in c) return c.stufeMin;
+  if ('all' in c) return Math.max(0, ...c.all.map(stufeAus));
+  return 0;
+}
 
 function* walk(script: Script): Generator<Command> {
   for (const c of script) {
@@ -89,12 +118,14 @@ describe('Inhalte', () => {
 
       it('Sprecher sind bekannt und Netzbuch-Einträge passen zur Klassenstufe', () => {
         for (const s of scriptsOf(id))
-          for (const c of walk(s)) {
+          for (const [c, bedingt] of walkStufe(s, MAP_STUFE[id])) {
             if (c.op === 'say' && c.who) expect(SPEAKERS[c.who], c.who).toBeDefined();
-            if (c.op === 'lexicon') expect(LEXICON[c.id].stufe, `${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
+            if (c.op === 'lexicon') expect(LEXICON[c.id].stufe, `${c.id} zu früh`).toBeLessThanOrEqual(bedingt);
             if (c.op === 'minigame') {
-              expect(MINIGAMES[c.id.split(':')[0]], `Minispiel ${c.id}`).toBeDefined();
-              expect(MINIGAMES[c.id.split(':')[0]].stufe, `Minispiel ${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
+              const [mg, param] = c.id.split(':');
+              expect(MINIGAMES[mg], `Minispiel ${c.id}`).toBeDefined();
+              expect(MINIGAMES[mg].stufe, `Minispiel ${c.id} zu früh`).toBeLessThanOrEqual(bedingt);
+              if (mg === 'bloecke') expect(KRUEMEL_LEVEL[param]?.stufe ?? 7, `Level ${param} zu früh`).toBeLessThanOrEqual(bedingt);
             }
             if (c.op === 'warp') expect(parseMap(MAPS[c.map]).solid[c.y][c.x], `Script-Warp ${c.map}`).toBe(false);
           }

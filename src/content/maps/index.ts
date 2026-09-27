@@ -7,6 +7,8 @@ import { briefzentrum } from './briefzentrum';
 import { dorfplatz } from './dorfplatz';
 import { museum } from './museum';
 import { dorfladen } from './dorfladen';
+import { knotenburg } from './knotenburg';
+import { gymnasium } from './gymnasium';
 
 export const MAPS: Record<MapId, MapDef> = {
   alex_zimmer: alexZimmer,
@@ -16,4 +18,6 @@ export const MAPS: Record<MapId, MapDef> = {
   dorfplatz,
   museum,
   dorfladen,
+  knotenburg,
+  gymnasium,
 };

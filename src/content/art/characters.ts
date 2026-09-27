@@ -336,3 +336,39 @@ export function usbIcon(): PixBuf {
   b.rect(6, 7, 4, 2, PAL.weiss);
   return b.outline(PAL.ink);
 }
+
+// Kapitel 2: Knotenburg
+CHARACTERS.push(
+  { id: 'work', colors: { s: PAL.haut2, h: PAL.braun1, c: PAL.blau4, p: PAL.grau1, f: PAL.ink }, extra: opaBrille },
+  { id: 'mia', colors: { s: PAL.haut1, h: PAL.rot2, c: PAL.gruen3, p: PAL.blau1, f: PAL.weiss } },
+  { id: 'jonas', colors: { s: PAL.haut3, h: PAL.ink, c: PAL.orange, p: PAL.grau2, f: PAL.ink } },
+  { id: 'fahrer', colors: { s: PAL.haut1, h: PAL.gelb, c: PAL.blau2, p: PAL.blau1, f: PAL.ink } },
+  { id: 'passant', colors: { s: PAL.haut2, h: PAL.grau3, c: PAL.braun2, p: PAL.grau1, f: PAL.braun1 } },
+);
+
+/** Brille v2: wie v1, mit Antennen-Symbol für Funk und Pakete. */
+export function netzblickV2Icon(): PixBuf {
+  const b = netzblickIcon();
+  b.vline(13, 1, 4, PAL.netzFunk).set(12, 1, PAL.netzFunk).set(14, 1, PAL.netzFunk);
+  b.rect(1, 1, 4, 3, PAL.netzPaket).frame(1, 1, 4, 3, PAL.ink);
+  return b;
+}
+
+/** Fremder USB-Stick mit FUNKSTILLEs Zeichen. */
+export function fremderStickIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(4, 3, 8, 10, PAL.ink).rect(6, 13, 4, 2, PAL.grau4);
+  b.vline(8, 5, 6, PAL.grau4).hline(6, 6, 5, PAL.grau4);
+  for (let i = 0; i < 6; i++) b.set(5 + i, 4 + i, PAL.rot3);
+  return b;
+}
+
+/** Alter Schlüsselanhänger „Schlüssel 7". */
+export function schluessel7Icon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(5, 5, 3, PAL.gelb).disc(5, 5, 1, PAL.ink);
+  b.hline(8, 5, 6, PAL.gelb).vline(12, 6, 2, PAL.gelb).vline(10, 6, 2, PAL.gelb);
+  b.rect(6, 9, 7, 5, PAL.braun3).frame(6, 9, 7, 5, PAL.braun1);
+  b.set(9, 11, PAL.ink).set(10, 11, PAL.ink);
+  return b;
+}

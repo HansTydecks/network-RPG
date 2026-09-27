@@ -2,6 +2,27 @@ import type { MapDef } from '../../engine/world/MapDef';
 import { choice, interlude, narrate, quest, say, setFlag, warp, when } from '../../engine/script/Script';
 
 const mamaScript = [
+  when({ stufeMin: 8 }, [
+    when(
+      { all: [{ flag: 'k2_stick_abgegeben' }, { not: { flag: 'k2_zuhause' } }] },
+      [
+        say('mama', 'Da bist du ja! Und? Wie war der erste Tag am Gymnasium?'),
+        narrate('Du erzählst von Herrn Work, von Algorithmen, von Client und Server – und von Krümel im Kabelkanal.'),
+        say('mama', 'Ein USB-Stick mit einer durchgestrichenen Antenne? So wie auf dem Zettel am grauen Kasten damals? Da läuft es mir kalt den Rücken runter.'),
+        say('mama', 'Gut, dass dein Lehrer sich darum kümmert. Und du steckst so was nie selbst irgendwo ein, versprochen?'),
+        setFlag('k2_zuhause'),
+        say('ping', 'Morgen schauen wir uns den Stick mit Herrn Work an. Gurr!'),
+        quest('k2_fortsetzung'),
+      ],
+      [
+        when(
+          { flag: 'k2_zuhause' },
+          [say('mama', 'Mach dir keine Sorgen wegen des Sticks. Herr Work macht das schon.')],
+          [say('mama', 'Erster Schultag! Der Bus fährt an der Haltestelle vor Emils Haus. Viel Spaß, Alex!')],
+        ),
+      ],
+    ),
+  ], [
   when({ flag: 'tag4' }, [say('mama', 'Alles Gute zum Geburtstag, Alex! Lina wartet bestimmt schon auf dem Dorfplatz.')], [
   when({ flag: 'kvz_repariert' }, [
     say('mama', 'Das Internet ist wieder da! Meine Datei ist endlich bei der Firma. Und das hast du repariert? Unglaublich!'),
@@ -51,6 +72,7 @@ const mamaScript = [
   ),
   ]),
   ]),
+  ]),
 ];
 
 export const wohnzimmer: MapDef = {
@@ -95,6 +117,7 @@ export const wohnzimmer: MapDef = {
       y: 3,
       dir: 'left',
       script: [
+        when({ stufeMin: 8 }, [say('papa', 'Na, Gymnasium! Mach\'s gut heute. Ich hab Frühschicht gehabt und bin hundemüde … Zzz.')], [
         when({ flag: 'tag4' }, [say('papa', 'Alles Gute, Alex! Heute Abend habe ich zum Glück keine Nachtschicht. Wir sehen uns auf dem Fest!')], [
         when({ flag: 'tag3' }, [say('papa', 'Ich muss gleich zur Spätschicht ins Krankenhaus. Viel Glück mit den Kabelbindern!')], [
         when(
@@ -112,6 +135,7 @@ export const wohnzimmer: MapDef = {
             ),
           ],
         ),
+        ]),
         ]),
         ]),
       ],

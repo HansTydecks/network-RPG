@@ -10,7 +10,9 @@ Alex lebt im sächsischen Dorf Kabelitz und bekommt von Tante Ada eine Brille, d
 
 ## Status
 
-**Kapitel 1 (Klasse 7) ist komplett spielbar (M2b):** Brief-Quest, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Blockprogrammierung mit dem Saugroboter, Dorfladen mit Bytes und Einheiten, Dorffest (Dateien, Tabellen, Plakat), Reparatur des grauen Kastens, Brief gegen E-Mail und FUNKSTILLEs Drohung. Spielzeit etwa 90 bis 120 Minuten. Als Nächstes folgt Kapitel 2 (Klasse 8).
+**Kapitel 1 (Klasse 7) ist komplett spielbar (M2b):** Brief-Quest, Briefzentrum, Netzblick-Brille, Binärzahlen im Museum, Blockprogrammierung mit dem Saugroboter, Dorfladen mit Bytes und Einheiten, Dorffest (Dateien, Tabellen, Plakat), Reparatur des grauen Kastens, Brief gegen E-Mail und FUNKSTILLEs Drohung. Spielzeit etwa 90 bis 120 Minuten.
+
+**Kapitel 2 (Klasse 8), Teil 1 (M3a):** Über den Schulkalender (Code der Lehrkraft) geht es ins nächste Schuljahr: Brille v2 mit Funkwellen, Busfahrt nach Knotenburg, Gymnasium mit Herrn Work, „Algorithmus oder nicht?", Client und Server, Krümel mit Wiederholung, Verzweigung und „solange"-Schleife. Wer ohne Spielstand mit dem Code einsteigt, bekommt automatisch alles aus Kapitel 1.
 
 ## Spielen und entwickeln
 

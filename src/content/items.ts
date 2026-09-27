@@ -57,4 +57,19 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Lag am grauen Kasten. Darauf eine durchgestrichene Antenne und: „WUHIISXQNW DOWHV IHUQPHOGHDPW". Unlesbar – noch.',
     icon: 'icon_zettel',
   },
+  netzblick_v2: {
+    name: 'NetzBlick v2',
+    beschreibung: 'Tante Adas Update für die Brille: Jetzt siehst du auch Funkwellen (z. B. WLAN) und Datenpakete. Taste N.',
+    icon: 'icon_netzblick_v2',
+  },
+  fremder_stick: {
+    name: 'Fremder USB-Stick',
+    beschreibung: 'Lag im Kabelkanal der Schule. Darauf klebt eine durchgestrichene Antenne. Niemals einfach in einen Computer stecken!',
+    icon: 'icon_fremder_stick',
+  },
+  schluessel7: {
+    name: 'Schlüssel 7',
+    beschreibung: 'Ein alter Schlüssel mit Anhänger: „Fernmeldeamt Knotenburg – Schlüssel 7". Krümel hat ihn im Kabelschacht am Dorfplatz gefunden.',
+    icon: 'icon_schluessel7',
+  },
 };

@@ -24,6 +24,7 @@ export class NetVision {
   private overlay: Phaser.GameObjects.Rectangle;
   private gfx: Phaser.GameObjects.Graphics;
   private labels: Phaser.GameObjects.BitmapText[] = [];
+  private funkLabels: Phaser.GameObjects.BitmapText[] = [];
   private packets: Packet[] = [];
   private spawnTimers: number[];
   private time = 0;
@@ -34,10 +35,17 @@ export class NetVision {
     mapW: number,
     mapH: number,
     private isBroken: (flag: string) => boolean,
+    /** Ausbaustufe der Brille: ab 2 sind Funkwellen sichtbar. */
+    private version: () => number = () => 1,
   ) {
     this.overlay = scene.add.rectangle(-200, -200, mapW * TILE + 400, mapH * TILE + 400, hexToInt(PAL.nacht), 0.8).setOrigin(0).setDepth(DEPTH).setVisible(false);
     this.gfx = scene.add.graphics().setDepth(DEPTH + 1).setVisible(false);
     this.spawnTimers = (net?.cables ?? []).map(() => Math.random() * 800);
+    for (const f of net?.funk ?? []) {
+      const t = scene.add.bitmapText(f.x * TILE + 8, f.y * TILE - 6, FONT_KEY, f.label).setOrigin(0.5, 1).setTint(hexToInt(PAL.netzFunk));
+      t.setDepth(DEPTH + 3).setVisible(false);
+      this.funkLabels.push(t);
+    }
     for (const d of net?.devices ?? []) {
       const t = scene.add.bitmapText(d.x * TILE + 8, d.y * TILE - 6, FONT_KEY, d.label).setOrigin(0.5, 1).setTint(hexToInt(PAL.netzKabel));
       t.setDepth(DEPTH + 3).setVisible(false);
@@ -46,7 +54,7 @@ export class NetVision {
   }
 
   get hasNetwork(): boolean {
-    return (this.net?.cables.length ?? 0) > 0;
+    return (this.net?.cables.length ?? 0) > 0 || (this.version() >= 2 && (this.net?.funk?.length ?? 0) > 0);
   }
 
   setOn(on: boolean) {
@@ -56,7 +64,7 @@ export class NetVision {
     if (!on) {
       for (const p of this.packets) p.sprite.destroy();
       this.packets = [];
-      for (const l of this.labels) l.setVisible(false);
+      for (const l of [...this.labels, ...this.funkLabels]) l.setVisible(false);
     }
   }
 
@@ -113,6 +121,22 @@ export class NetVision {
       }
     });
 
+    // Funkwellen (ab v2): Ringe, die sich ausbreiten und dabei schwächer werden – Form statt nur Farbe.
+    const v2 = this.version() >= 2;
+    (this.net.funk ?? []).forEach((f, i) => {
+      this.funkLabels[i].setVisible(v2 && Math.abs(f.x - playerX) <= 3 && Math.abs(f.y - playerY) <= 3);
+      if (!v2) return;
+      const cx = f.x * TILE + 8;
+      const cy = f.y * TILE + 8;
+      const max = f.reichweite * TILE;
+      for (let k = 0; k < 3; k++) {
+        const r = ((this.time / 1400 + k / 3) % 1) * max;
+        g.lineStyle(2, hexToInt(PAL.netzFunk), Math.min(1, 1.3 * (1 - r / max)));
+        for (let a = 0; a < 24; a += 2) g.beginPath().arc(cx, cy, r, (a / 24) * Math.PI * 2, ((a + 1) / 24) * Math.PI * 2).strokePath();
+      }
+      g.fillStyle(hexToInt(PAL.netzFunk), 1).fillRect(cx - 1, cy - 1, 3, 3);
+    });
+
     for (const d of this.net.devices) {
       const cx = d.x * TILE + 8;
       const cy = d.y * TILE + 8;
@@ -154,6 +178,6 @@ export class NetVision {
     for (const p of this.packets) p.sprite.destroy();
     this.overlay.destroy();
     this.gfx.destroy();
-    for (const l of this.labels) l.destroy();
+    for (const l of [...this.labels, ...this.funkLabels]) l.destroy();
   }
 }

@@ -40,7 +40,20 @@ Tests (Stand M1): 57 Unit-Tests (u. a. Minispiel-Logik, Caesar-Zettel, Kartenpr�
 
 Tests (Stand M2b): 102 Unit-Tests und 3 Browser-Tests; der Durchlauf spielt Kapitel 1 vom Prolog bis zum Abspann mit allen Minispielen per Tastatur (ca. 5 Minuten).
 
-Nächster Schritt: **M3 – Kapitel 2 (Klasse 8)**.
+**Nach M2b:** Museumsexponate zeigen ein Bild (Script-Befehl `bild`), richtige Antworten stehen nicht mehr immer oben (Museum, Laden, alle Quiz-Minispiele).
+
+**M3a ist fertig – Kapitel 2, Teil 1 („Erster Schultag"):**
+- Kalender-Code Klasse 8 startet Kapitel 2 (`startKapitel2` in `WorldScene`, Startzustand in `src/content/kapitel.ts`); Einstieg in `src/content/dialog/kapitel2.ts`
+- Tante Ada spielt per Videoanruf das Update auf Brille v2 auf: Funkquellen (`net.funk`) erscheinen als sich ausbreitende Ringe
+- Neue Karten `knotenburg` (Markt, Rathaus, Pizzeria, Bibliothek, Fernmeldeamt, Bushaltestelle) und `gymnasium` (Flur, Informatikraum, Serverraum-Tür)
+- Neue Figuren: Herr Work, Mia, Jonas, Passant; Bushaltestelle in Kabelitz
+- Minispiele `algorithmus` (eindeutig, ausführbar, endlich) und `clientserver`
+- Krümel-Blöcke mit Kontrollstrukturen: Zählschleife (⟳ n× … ⟲ Ende, auch verschachtelt), Verzweigung („wenn Wand: rechts"), kopfgesteuerte Schleife („solange frei: vor"); Level `kanal1`, `kanal2` und `schacht` (Backtracking am Dorfplatz → Schlüssel 7)
+- Bedingung `{ stufeMin: 8 }` schaltet Kapitel-2-Inhalte in alten Karten frei; der Inhaltstest prüft Klassenstufen jetzt auch hinter solchen Bedingungen
+- Scripts, die die Karte wechseln, lösen danach das `onEnter` der neuen Karte aus
+- Browser-Test `kapitel2.spec.ts` spielt M3a komplett durch (Einstieg ohne Code über `testStartKapitel2()`)
+
+Nächste Schritte: **M3b** – der fremde USB-Stick, Mail-Werkstatt (AN/CC/BCC, Betreff, Adressen, IP- und MAC-Adresse, Pakete als Einblick), Phishing-Welle (Phishing-Detektiv, Passwort-Schmiede, Brute Force), Pizza Pino (personenbezogene Daten). **M3c** – Bibliothek (Suchmaschinen, SEO, KI-Bilder, Metadaten), Kollaboration und Netiquette, Caesar-Scheibe (Zettel aus Kapitel 1), Fernmeldeamt als Kapitelfinale.
 
 ## Entwickeln
 

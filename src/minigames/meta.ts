@@ -15,5 +15,7 @@ export const MINIGAME_META: Record<string, { titel: string; stufe: number; lehrp
   tabelle: { titel: 'Tabellen-Zauber', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Tabellenkalkulation' },
   schneller: { titel: 'Was ist schneller?', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Übertragungsrate' },
   kabelsalat: { titel: 'Kabelsalat', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Binärzahlen' },
+  algorithmus: { titel: 'Algorithmus oder nicht?', stufe: 8, lehrplan: 'SN Kl. 8 LB 1 – Begriff und Eigenschaften von Algorithmen, Algorithmen im Alltag' },
+  clientserver: { titel: 'Client oder Server?', stufe: 8, lehrplan: 'SN Kl. 8 LB 2 – Vernetzte Systeme (Schulcurriculum: Client-Server)' },
   plakat: { titel: 'Linas Plakat', stufe: 7, lehrplan: 'SN Kl. 7 LB 1 – Pixel/Vektor, Objekte, Inhalt und Design' },
 };

@@ -101,7 +101,16 @@ export interface NetCable {
   brokenUnless?: string;
 }
 
+/** Funkquelle (z. B. WLAN), sichtbar ab Brille v2. Reichweite in Kacheln. */
+export interface NetFunk {
+  x: number;
+  y: number;
+  reichweite: number;
+  label: string;
+}
+
 export interface NetDef {
   devices: NetDevice[];
   cables: NetCable[];
+  funk?: NetFunk[];
 }

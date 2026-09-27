@@ -7,3 +7,5 @@ playwright-report/
 mg.tmp.mjs
 shot.tmp.mjs
 shot2.tmp.mjs
+shot3.tmp.mjs
+*.tmp.mjs

@@ -74,6 +74,7 @@ export const alexZimmer: MapDef = {
       x: 7,
       y: 1,
       script: [
+        when({ all: [{ stufeMin: 8 }, { not: { flag: 'k2_ada_update' } }] }, adaUpdate(), [
         when(
           { all: [{ flag: 'kvz_repariert' }, { not: { flag: 'email_gesendet' } }] },
           emailSchreiben(),
@@ -85,6 +86,7 @@ export const alexZimmer: MapDef = {
             ),
           ],
         ),
+        ]),
         { op: 'save' },
       ],
       scan: {
@@ -191,7 +193,7 @@ function bettScript(): Script {
           ],
           [
             when(
-              { flag: 'nacht' },
+              { all: [{ flag: 'nacht' }, { not: { stufeMin: 8 } }] },
               [narrate('Dein Bett. Nach so einem Tag schläfst du bestimmt sofort ein … wenn da nicht diese Nachricht wäre.')],
               [narrate('Dein Bett. Noch fünf Minuten …? Nein – es gibt zu tun!')],
             ),
@@ -217,5 +219,20 @@ function emailSchreiben(): Script {
     setFlag('email_gesendet'),
     say('ping', 'Morgen ist Samstag: dein Geburtstag und das Dorffest! Zeit fürs Bett.'),
     quest('q1_samstag'),
+  ];
+}
+
+/** Kapitel 2: Videoanruf von Tante Ada, Update auf Brille v2. */
+function adaUpdate(): Script {
+  return [
+    narrate('Auf dem Bildschirm blinkt: „Videoanruf von Tante Ada".'),
+    say('ada', 'Hallo Alex! Erster Tag am Gymnasium – aufgeregt? Ich hab ein Geschenk für dich: ein Update für deine Brille!'),
+    say('ada', 'Leg sie mal neben den Computer … So, das Update läuft über das Internet zu dir. Fertig!'),
+    give('netzblick_v2'),
+    say('ada', 'Ab jetzt siehst du nicht nur Kabel, sondern auch Funkwellen – zum Beispiel vom WLAN. In der Stadt wirst du staunen!'),
+    say('ada', 'Und Alex: Wenn dir in Knotenburg etwas Seltsames auffällt, melde dich. Viel Spaß in der neuen Schule!'),
+    setFlag('k2_ada_update'),
+    say('ping', 'Los geht\'s! Der Bus nach Knotenburg hält an der Haltestelle rechts im Dorf, vor Emils Haus.'),
+    quest('k2_bus'),
   ];
 }

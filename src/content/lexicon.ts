@@ -133,4 +133,35 @@ export const LEXICON: Record<LexiconId, LexiconEntry> = {
     stufe: 7,
     lehrplan: 'SN Kl. 7 LB 1 – Objektorientierung: Klasse, Objekt, Attribut, Methode',
   },
+  // ---------- Kapitel 2 (Klasse 8) ----------
+  algorithmus_eigenschaften: {
+    titel: 'Was ist ein Algorithmus?',
+    text: 'Ein Algorithmus ist eine Anleitung, die ein Problem Schritt für Schritt löst. Sie muss eindeutig sein (jeder Schritt klar), ausführbar (jeder Schritt machbar) und endlich (sie hört irgendwann auf). „Mach was Schönes" ist deshalb kein Algorithmus.',
+    stufe: 8,
+    lehrplan: 'SN Kl. 8 LB 1 – Begriff und Eigenschaften von Algorithmen',
+  },
+  client_server: {
+    titel: 'Client und Server',
+    text: 'Ein Client stellt Anfragen („Zeig mir den Stundenplan!"), ein Server beantwortet sie und stellt Daten bereit. Ein Server muss kein riesiges Gerät sein: Oft ist er einfach ein Programm, das auf einem Rechner läuft.',
+    stufe: 8,
+    lehrplan: 'SN Kl. 8 LB 2 – Vernetzte Systeme (Schulcurriculum: Client-Server)',
+  },
+  wiederholung: {
+    titel: 'Wiederholung (Schleife)',
+    text: 'Statt dieselben Befehle immer wieder hinzuschreiben, sagt man: „Wiederhole 4-mal …" (Zählschleife). Eine Schleife mit Bedingung prüft vorher, ob sie weitermachen soll: „Solange vorne frei ist: fahre vor" (kopfgesteuerte Schleife).',
+    stufe: 8,
+    lehrplan: 'SN Kl. 8 LB 1 – Zählschleife, kopfgesteuerte Schleife',
+  },
+  verzweigung: {
+    titel: 'Verzweigung',
+    text: 'Eine Verzweigung prüft eine Bedingung und entscheidet dann: „Wenn vorne eine Wand ist, dann drehe rechts." So kann ein Programm auf seine Umgebung reagieren, ohne dass man jeden Schritt vorher kennt.',
+    stufe: 8,
+    lehrplan: 'SN Kl. 8 LB 1 – Verzweigung',
+  },
+  funk: {
+    titel: 'Kabel oder Funk',
+    text: 'Geräte tauschen Datenpakete über Kabel oder über Funk aus. Das WLAN in der Schule sendet Funkwellen in alle Richtungen – je weiter weg, desto schwächer. Handys und Laptops empfangen sie ohne Kabel.',
+    stufe: 8,
+    lehrplan: 'SN Kl. 8 LB 2 – Vernetzte Systeme (Schulcurriculum: Kabel und Funk als Einblick)',
+  },
 };

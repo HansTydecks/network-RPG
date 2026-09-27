@@ -9,6 +9,8 @@ import { ADRESS_HINWEIS, BRIEF_SLOTS } from '../../src/minigames/briefLogic';
 import { SORT_RUNDEN, sortHinweis } from '../../src/minigames/sortierenLogic';
 import { BAUTEILE } from '../../src/minigames/evaLogic';
 import { DATEI_FRAGEN, EINHEITEN_FRAGEN, SCHNELLER_FRAGEN } from '../../src/minigames/m2bLogic';
+import { KRUEMEL_LEVEL } from '../../src/minigames/kruemelLogic';
+import { ALGORITHMUS_FRAGEN, CLIENT_SERVER_FRAGEN } from '../../src/minigames/k2aLogic';
 
 /** Diese Werte spiegeln die Layouts in Hud.ts, minigames/base.ts, ObjectCard.ts und InfoPanel.ts. */
 const QUEST_W = 290 - 12; // abzüglich „▸ "
@@ -29,7 +31,7 @@ describe('Texte passen in ihre Kästen (kein Überlauf)', () => {
       ...SORT_RUNDEN.map((r) => r.ansage),
       ...SORT_RUNDEN.flatMap((r, i) => r.briefe.map((b) => `Hmm, das passt nicht. ${sortHinweis(i, b)}`)),
       ...BAUTEILE.map((b) => `Richtig! ${b.hinweis}`),
-      ...[...EINHEITEN_FRAGEN, ...DATEI_FRAGEN, ...SCHNELLER_FRAGEN].flatMap((f) => f.optionen.map((o) => `Richtig! ${o.erklaerung} (Leertaste)`)),
+      ...[...EINHEITEN_FRAGEN, ...DATEI_FRAGEN, ...SCHNELLER_FRAGEN, ...ALGORITHMUS_FRAGEN, ...CLIENT_SERVER_FRAGEN].flatMap((f) => f.optionen.map((o) => `Richtig! ${o.erklaerung} (Leertaste)`)),
     ];
     for (const t of texte) expect(fits(t, FEEDBACK_W, FEEDBACK_LINES), t).toBe(true);
   });
@@ -64,5 +66,8 @@ import { ABSENDER } from '../../src/minigames/briefLogic';
 describe('Umschlag', () => {
   it('Absender endet vor dem Briefmarkenfeld (x = 136, Text beginnt bei x = 16)', () => {
     for (const l of ABSENDER) expect(measureText(l), l).toBeLessThanOrEqual(116);
+  });
+  it('Krümel-Aufträge: höchstens 2 Zeilen über dem Raster', () => {
+    for (const [id, l] of Object.entries(KRUEMEL_LEVEL)) expect(fits(l.auftrag, 300, 2), id).toBe(true);
   });
 });

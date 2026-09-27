@@ -222,4 +222,69 @@ export const QUESTS: Record<QuestId, QuestDef> = {
       'Probier auch das Netzbuch im Menü (M) aus.',
     ],
   },
+  // ---------- Kapitel 2 (Klasse 8) ----------
+  k2_ada: {
+    titel: 'Tante Ada ruft an! Geh an deinen Computer.',
+    hinweise: [
+      'Dein Computer piept. Das ist bestimmt Tante Ada!',
+      'Der Computer steht in deinem Zimmer rechts neben dem Schreibtisch.',
+      'Stell dich vor den Computer und drück Leertaste.',
+    ],
+  },
+  k2_bus: {
+    titel: 'Fahr mit dem Bus zum Gymnasium nach Knotenburg.',
+    hinweise: [
+      'Der Bus nach Knotenburg hält in Kabelitz an der Straße.',
+      'Die Bushaltestelle steht rechts in Kabelitz, am Weg vor Emils Haus.',
+      'Geh raus, dann nach rechts zur Haltestelle (Schild mit „H") und drück dort Leertaste.',
+    ],
+  },
+  k2_schule: {
+    titel: 'Finde den Informatikraum im Gymnasium.',
+    hinweise: [
+      'Das Gymnasium ist das große Gebäude im Norden von Knotenburg.',
+      'Geh durch die Schultür. Der Informatikraum ist im Schulgebäude.',
+      'Im Informatikraum steht Herr Work vorn an der Tafel. Sprich ihn an.',
+    ],
+  },
+  k2_clientserver: {
+    titel: 'Wie kommt der Stundenplan auf den Bildschirm?',
+    hinweise: [
+      'Herr Work möchte wissen, woher ein Schul-PC den Stundenplan bekommt.',
+      'Schau dir einen der Computer im Informatikraum genauer an.',
+      'Stell dich vor einen Schul-PC und drück Leertaste.',
+    ],
+  },
+  k2_kanal: {
+    titel: 'Schick Krümel in den Kabelkanal im Schulhof.',
+    hinweise: [
+      'Im Kabelkanal hat jemand etwas versteckt. Krümel passt hinein!',
+      'Die Klappe zum Kabelkanal ist draußen an der Schulmauer, rechts neben dem Eingang.',
+      'Die Fernbedienung hat neue Blöcke: ⟳ wiederholt Befehle, ⟲ beendet die Wiederholung. So brauchst du viel weniger Blöcke.',
+    ],
+  },
+  k2_stick: {
+    titel: 'Bring den fremden USB-Stick zu Herrn Work.',
+    hinweise: [
+      'Krümel hat einen fremden USB-Stick gefunden. Den sollte sich Herr Work ansehen.',
+      'Herr Work ist im Informatikraum.',
+      'Sprich Herrn Work an. Den Stick selbst einzustecken, wäre gefährlich!',
+    ],
+  },
+  k2_heim: {
+    titel: 'Fahr mit dem Bus nach Hause.',
+    hinweise: [
+      'Die Schule ist aus! Der Bus zurück nach Kabelitz fährt an der Haltestelle links in Knotenburg.',
+      'Die Bushaltestelle ist ganz links in Knotenburg.',
+      'Zu Hause wartet Mama im Wohnzimmer.',
+    ],
+  },
+  k2_fortsetzung: {
+    titel: 'Fortsetzung folgt …',
+    hinweise: [
+      'Hier endet die Testversion M3a von Kapitel 2. Bald geht es mit dem fremden USB-Stick weiter!',
+      'Mit Wiederholungen schafft Krümel jetzt auch den langen Kabelschacht am Dorfplatz in Kabelitz.',
+      'Im Netzbuch (Menü, M) findest du alles, was du heute gelernt hast.',
+    ],
+  },
 };

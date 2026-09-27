@@ -172,6 +172,7 @@ export const dorfplatz: MapDef = {
       x: 10,
       y: 5,
       script: [
+        when({ all: [{ stufeMin: 8 }, { item: 'block_fernbedienung' }] }, schachtKapitel2(), [
         when(
           { flag: 'kruemel_repariert' },
           [
@@ -181,6 +182,7 @@ export const dorfplatz: MapDef = {
           ],
           [narrate('Ein Kabelschacht mit Deckel. Innen ist es eng und dunkel.')],
         ),
+        ]),
       ],
       scan: { name: 'kabelschacht', klasse: 'Schacht', attribute: [['laenge', 'ca. 40 m'], ['inhalt', 'Kabel']], methoden: ['oeffnen'] },
     },
@@ -196,7 +198,7 @@ export const dorfplatz: MapDef = {
 
 /** Bühne, Wimpel und Kuchenstand stehen ab Samstag. */
 function festDeko(): InteractDef[] {
-  const fest: Cond = { flag: 'tag4' };
+  const fest: Cond = { all: [{ flag: 'tag4' }, { not: { stufeMin: 8 } }] };
   const buehne: Script = [narrate('Die Bühne fürs Dorffest. Hier hält Frau Lehmann ihre Rede.')];
   const deko: InteractDef[] = [12, 13, 14, 15, 16, 17].map((x) => ({
     kind: 'interact',
@@ -292,6 +294,26 @@ function linaScript(): Script {
         interlude('Ende von Kapitel 1'),
         say('ping', 'Das Schuljahr ist bald vorbei. Wenn es weitergeht, weiß deine Lehrkraft, wie du den Kalender umblätterst.'),
         say('ping', 'Bis dahin kannst du in Kabelitz alles erkunden, was du noch nicht gesehen hast. Gurr!'),
+      ],
+    ),
+  ];
+}
+
+/** Backtracking aus Kapitel 1: Mit Schleifen schafft Krümel jetzt den langen Schacht. */
+function schachtKapitel2(): Script {
+  return [
+    when(
+      { flag: 'k2_schacht' },
+      [narrate('Der lange Kabelschacht. Hier hat Krümel den alten Schlüssel gefunden.')],
+      [
+        narrate('Der lange, verwinkelte Kabelschacht. Letztes Jahr war er für Krümel zu lang.'),
+        say('ping', 'Jetzt kennt Krümel Wiederholungen! Und es gibt noch einen Block: „▲▲ solange frei: vor". Krümel fährt dann so lange geradeaus, bis vorne eine Wand ist.'),
+        minigame('bloecke:schacht'),
+        lexicon('wiederholung'),
+        narrate('Ganz hinten im Schacht findet Krümel etwas Glänzendes: einen alten Schlüssel mit Anhänger.'),
+        give('schluessel7'),
+        setFlag('k2_schacht'),
+        say('ping', '„Fernmeldeamt Knotenburg – Schlüssel 7"? Das alte Fernmeldeamt steht doch in Knotenburg! Wie kommt der Schlüssel denn hierher?'),
       ],
     ),
   ];

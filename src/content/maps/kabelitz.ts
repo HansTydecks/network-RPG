@@ -1,5 +1,5 @@
 import type { MapDef } from '../../engine/world/MapDef';
-import { give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
+import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
   id: 'kabelitz',
@@ -303,10 +303,37 @@ export const kabelitz: MapDef = {
       ],
     },
     {
+      kind: 'interact',
+      id: 'bushalt',
+      x: 27,
+      y: 14,
+      tile: 'bushalt',
+      script: [
+        when(
+          { stufeMin: 8 },
+          [
+            when(
+              { flag: 'k2_ada_update' },
+              [
+                choice('Mit dem Bus nach Knotenburg fahren?', [
+                  ['Ja, los!', [interlude('Mit dem Bus nach Knotenburg …'), warp('knotenburg', 3, 16, 'right')]],
+                  ['Nein, noch nicht', []],
+                ]),
+              ],
+              [say('ping', 'Warte! Erst geht es an deinen Computer – Tante Ada ruft an!')],
+            ),
+          ],
+          [narrate('Bushaltestelle „Kabelitz Dorfstraße". Hier fährt der Bus nach Knotenburg ab. Heute brauchst du ihn nicht.')],
+        ),
+      ],
+      scan: { name: 'bushaltestelle', klasse: 'Haltestelle', attribute: [['linie', '42 nach Knotenburg'], ['takt', 'jede Stunde']], methoden: ['warten'] },
+    },
+    {
       kind: 'trigger',
       id: 'ortsausgang',
       x: 29,
       y: 15,
+      activeIf: { not: { stufeMin: 8 } },
       script: [say('ping', 'Da geht es nach Knotenburg. Aber heute bleiben wir in Kabelitz. Gurr!'), { op: 'turn', dir: 'left' }],
     },
   ],
@@ -329,10 +356,30 @@ export const kabelitz: MapDef = {
 
 function opaScript() {
   return [
+    when({ stufeMin: 8 }, opaKapitel2(), [
     when(
       { flag: 'nacht' },
       [say('opa', 'Nanu, so spät noch unterwegs? Ab ins Bett mit dir. Ich geh auch gleich schlafen … ganz bestimmt.')],
       [when({ flag: 'kvz_repariert' }, opaNachReparatur(), opaVorher())],
+    ),
+    ]),
+  ];
+}
+
+function opaKapitel2(): Command[] {
+  return [
+    when(
+      { flag: 'k2_stick_abgegeben' },
+      [
+        say('opa', 'Na, wie war\'s in der großen Stadt? Viel gelernt?'),
+        narrate('Du erzählst von Herrn Work – und vom USB-Stick mit der durchgestrichenen Antenne.'),
+        say('opa', 'So, so. Eine Antenne mit Strich … Na, das wird wohl ein Dummejungenstreich gewesen sein. Nu mach dir mal keinen Kopf.'),
+        narrate('(Opa Werner schaut schnell zu seinem Taubenschlag.)'),
+      ],
+      [
+        say('opa', 'Na, Alex! Heute geht\'s aufs Gymnasium in die Stadt, was? Mensch, wie die Zeit vergeht.'),
+        say('opa', 'In Knotenburg haben sie ja an jeder Ecke Computer. Pass mir bloß auf dich auf!'),
+      ],
     ),
   ];
 }

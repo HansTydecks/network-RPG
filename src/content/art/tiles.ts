@@ -943,6 +943,72 @@ export const TILES: TileDef[] = [
       for (let i = 0; i < 4; i++) for (let y = 0; y < 4; y++) b.hline(i * 4 + y / 2, 3 + y, 4 - y, f[i]);
     },
   },
+  // --- Kapitel 2: Knotenburg und Gymnasium ---
+  {
+    id: 'bushalt',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.vline(7, 6, 10, PAL.grau1).vline(8, 6, 10, PAL.grau2);
+      b.disc(7.5, 4.5, 4.5, PAL.gelb).disc(7.5, 4.5, 3.5, PAL.gruen2);
+      b.vline(6, 2, 5, PAL.gelb).vline(9, 2, 5, PAL.gelb).hline(6, 4, 4, PAL.gelb);
+      b.rect(5, 15, 6, 1, PAL.ink);
+    },
+  },
+  {
+    id: 'spind',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 0, 14, 16, PAL.blau2).frame(1, 0, 14, 16, PAL.ink);
+      b.vline(8, 1, 14, PAL.blau1);
+      for (const x of [3, 10]) b.hline(x, 3, 3, PAL.blau1).hline(x, 5, 3, PAL.blau1);
+      b.set(6, 9, PAL.grau4).set(10, 9, PAL.grau4);
+    },
+  },
+  {
+    id: 'tafel',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 2, 16, 11, PAL.gruen1).frame(0, 2, 16, 11, PAL.braun2);
+      b.hline(2, 5, 7, PAL.grau4).hline(2, 8, 10, PAL.grau4).set(12, 5, PAL.grau4);
+      b.hline(1, 13, 14, PAL.braun3);
+    },
+  },
+  {
+    id: 'serverschrank',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(2, 0, 12, 16, PAL.grau1).frame(2, 0, 12, 16, PAL.ink);
+      for (let y = 2; y < 15; y += 3) {
+        b.hline(4, y, 8, PAL.grau2);
+        b.set(11, y, y % 2 ? PAL.gruen4 : PAL.netzKabel);
+      }
+    },
+  },
+  {
+    id: 'schulschild',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.vline(3, 9, 7, PAL.braun1).vline(12, 9, 7, PAL.braun1);
+      b.rect(1, 2, 14, 8, PAL.blau2).frame(1, 2, 14, 8, PAL.ink);
+      b.hline(3, 4, 10, PAL.weiss).hline(3, 6, 7, PAL.weiss);
+      b.set(12, 6, PAL.gelb);
+    },
+  },
+  {
+    id: 'schulbank',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 6, 16, 5, PAL.braun3).hline(0, 6, 16, PAL.braun4).frame(0, 6, 16, 5, PAL.braun1);
+      b.vline(1, 11, 5, PAL.grau1).vline(14, 11, 5, PAL.grau1);
+      b.rect(4, 7, 5, 3, PAL.weiss).hline(5, 8, 3, PAL.grau3);
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

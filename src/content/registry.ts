@@ -3,7 +3,7 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium'] as const;
 
 export const ITEM_IDS = [
   'netzblick_v1',
@@ -16,6 +16,10 @@ export const ITEM_IDS = [
   'restauriertes_foto',
   'kabelbinder',
   'usb_stick',
+  // Kapitel 2
+  'netzblick_v2',
+  'fremder_stick',
+  'schluessel7',
 ] as const;
 
 export const FLAG_IDS = [
@@ -90,6 +94,19 @@ export const FLAG_IDS = [
   'nacht',
   'kapitel1_fertig',
   'geburtstag_gefeiert',
+  // Kapitel 2, M3a
+  'k2_start',
+  'k2_ada_update',
+  'k2_knotenburg',
+  'k2_work_gesprochen',
+  'k2_algorithmus',
+  'k2_clientserver',
+  'k2_kanal_auftrag',
+  'k2_kanal1',
+  'k2_kanal2',
+  'k2_stick_abgegeben',
+  'k2_zuhause',
+  'k2_schacht',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -113,6 +130,12 @@ export const LEXICON_IDS = [
   'tabellenkalkulation',
   'pixel_vektor',
   'inhalt_design',
+  // Kapitel 2 (Klasse 8)
+  'algorithmus_eigenschaften',
+  'client_server',
+  'wiederholung',
+  'verzweigung',
+  'funk',
 ] as const;
 
 export const QUEST_IDS = [
@@ -146,6 +169,15 @@ export const QUEST_IDS = [
   'q1_samstag',
   'q1_fest',
   'q1_kapitel_ende',
+  // Kapitel 2
+  'k2_ada',
+  'k2_bus',
+  'k2_schule',
+  'k2_clientserver',
+  'k2_kanal',
+  'k2_stick',
+  'k2_heim',
+  'k2_fortsetzung',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];

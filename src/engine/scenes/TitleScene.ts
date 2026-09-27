@@ -35,7 +35,7 @@ export class TitleScene extends Phaser.Scene {
     title.setX(Math.round(160 - (measureText('NETZBLICK') * 3) / 2)).setOrigin(0, 0);
     const sub = 'Alex und die Funkstille';
     this.add.bitmapText(Math.round(160 - measureText(sub) / 2), 62, FONT_KEY, sub).setTint(hexToInt(PAL.gelb));
-    const foot = 'Ein Informatik-Abenteuer · Kapitel 1 (Klasse 7)';
+    const foot = 'Ein Informatik-Abenteuer · Kapitel 1 + Kapitel 2 (Teil 1)';
     this.add.bitmapText(Math.round(160 - measureText(foot) / 2), 168, FONT_KEY, foot).setTint(hexToInt(PAL.grau2));
     this.ping = this.add.sprite(-20, 90, 'ping', 2).play('ping_flap');
     if (isTouchDevice()) addTouchControls(this, this.inp).setDpadVisible(false);

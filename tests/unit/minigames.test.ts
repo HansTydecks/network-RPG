@@ -157,3 +157,40 @@ describe('Minispiele M2b (Laden, Dorffest, Reparatur)', async () => {
     for (const n of m.KABELSALAT_ANSCHLUESSE) expect(n).toBeLessThan(256);
   });
 });
+
+describe('Krümel-Blöcke mit Kontrollstrukturen (Klasse 8)', () => {
+  it('Wiederholung ohne ⟲ Ende und ⟲ Ende ohne Wiederholung werden erklärt', () => {
+    expect(fuehreAus(KRUEMEL_LEVEL.kanal1, ['wdh4', 'vor']).schritte[0].fehler).toMatch(/fehlt das ⟲ Ende/);
+    expect(fuehreAus(KRUEMEL_LEVEL.kanal1, ['ende']).schritte[0].fehler).toMatch(/keiner Wiederholung/);
+  });
+  it('die Treppe im Kabelkanal braucht eine Wiederholung: als reine Sequenz wären es mehr als 10 Blöcke', () => {
+    const sequenz = ['vor', 'rechts', 'vor', 'links', 'vor', 'rechts', 'vor', 'links', 'vor', 'rechts', 'vor', 'links', 'vor', 'rechts', 'vor', 'links', 'aufnehmen'] as const;
+    expect(fuehreAus(KRUEMEL_LEVEL.kanal1, [...sequenz]).geschafft).toBe(true);
+    expect(sequenz.length).toBeGreaterThan(MAX_BLOECKE);
+  });
+  it('„wenn Wand: rechts" dreht nur vor einer Wand', () => {
+    const r = fuehreAus(KRUEMEL_LEVEL.kanal2, ['wenn']);
+    expect(r.schritte[0].r).toBe(KRUEMEL_LEVEL.kanal2.startRichtung);
+  });
+  it('„solange frei: vor" fährt bis zur Wand und stößt nie an', () => {
+    const r = fuehreAus(KRUEMEL_LEVEL.schacht, ['solange']);
+    expect(r.schritte.every((s) => !s.fehler)).toBe(true);
+    expect(r.schritte[r.schritte.length - 1].x).toBe(7);
+  });
+  it('verschachtelte Wiederholungen laufen richtig oft', () => {
+    const r = fuehreAus(KRUEMEL_LEVEL.schacht, ['wdh2', 'wdh3', 'links', 'ende', 'ende']);
+    expect(r.schritte.length).toBe(6);
+  });
+});
+
+describe('Quizze Kapitel 2', async () => {
+  const k = await import('../../src/minigames/k2aLogic');
+  for (const [id, fragen] of Object.entries({ algorithmus: k.ALGORITHMUS_FRAGEN, clientserver: k.CLIENT_SERVER_FRAGEN })) {
+    it(`${id}: genau eine richtige Antwort, alle mit Erklärung`, () => {
+      for (const f of fragen) {
+        expect(f.optionen.filter((o) => o.ok).length, f.frage).toBe(1);
+        for (const o of f.optionen) expect(o.erklaerung.length).toBeGreaterThan(10);
+      }
+    });
+  }
+});

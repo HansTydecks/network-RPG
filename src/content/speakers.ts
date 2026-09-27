@@ -18,5 +18,10 @@ export const SPEAKERS: Record<string, string> = {
   lehmann: 'Frau Lehmann',
   lina: 'Lina',
   funkstille: 'FUNKSTILLE',
+  work: 'Herr Work',
+  mia: 'Mia',
+  jonas: 'Jonas',
+  fahrer: 'Busfahrerin',
+  passant: 'Passant',
   unbekannt: '???',
 };

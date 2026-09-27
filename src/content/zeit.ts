@@ -27,14 +27,20 @@ export function tageszeit(s: GameState): Tageszeit {
 
 const ZEIT_NAME: Record<Tageszeit, string> = { vormittag: 'Vormittag', nachmittag: 'Nachmittag', nacht: 'Nacht' };
 
+/** Kapitel 2 spielt an Alex' ersten Schultagen in Klasse 8. */
+function kapitel2Zeit(s: GameState): Tageszeit {
+  return s.flags.has('k2_stick_abgegeben') ? 'nachmittag' : 'vormittag';
+}
+
 export function zeitLabel(s: GameState): string {
   if (!s.flags.has('prolog_gesehen')) return '';
+  if (s.flags.has('k2_start')) return `Kl. 8 · Montag · ${ZEIT_NAME[kapitel2Zeit(s)]}`;
   return `${WOCHENTAGE[tag(s) - 1]} · ${ZEIT_NAME[tageszeit(s)]}`;
 }
 
 /** Farbton über der Karte (Farbe, Deckkraft). Nachts ist es auch drinnen dunkler. */
 export function tageszeitTint(s: GameState, draussen: boolean): [number, number] | null {
-  const z = tageszeit(s);
+  const z = s.flags.has('k2_start') ? kapitel2Zeit(s) : tageszeit(s);
   if (z === 'nacht') return [0x10144a, draussen ? 0.5 : 0.3];
   return z === 'nachmittag' && draussen ? [0xff8a30, 0.2] : null;
 }
