@@ -436,3 +436,33 @@ export function grubenlampeIcon(): PixBuf {
   b.hline(6, 3, 4, PAL.grau1).vline(5, 3, 2, PAL.grau1).vline(10, 3, 2, PAL.grau1);
   return b;
 }
+
+// Kapitel 4
+CHARACTERS.push(
+  { id: 'kevin', colors: { s: PAL.haut1, h: PAL.lila2, c: PAL.ink, p: PAL.grau1, f: PAL.rot2 } },
+  { id: 'schubert', colors: { s: PAL.haut1, h: PAL.grau4, c: PAL.braun2, p: PAL.grau2, f: PAL.ink }, extra: opaBrille },
+);
+
+export function postkarteIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(1, 3, 14, 10, PAL.creme).frame(1, 3, 14, 10, PAL.braun2);
+  b.rect(10, 4, 4, 4, PAL.blau3).disc(9, 6, 2, PAL.grau3);
+  b.hline(3, 9, 6, PAL.grau2).hline(3, 11, 5, PAL.grau2);
+  return b;
+}
+
+export function quelltextIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.disc(7, 7, 6, PAL.grau4).disc(7, 7, 5, PAL.nacht);
+  b.set(5, 6, PAL.netzKabel).set(4, 7, PAL.netzKabel).set(5, 8, PAL.netzKabel);
+  b.set(9, 6, PAL.netzKabel).set(10, 7, PAL.netzKabel).set(9, 8, PAL.netzKabel).set(7, 5, PAL.gelb).set(7, 9, PAL.gelb);
+  for (let i = 0; i < 4; i++) b.rect(11 + i, 11 + i, 2, 2, PAL.braun2);
+  return b;
+}
+
+export function reisepassIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(3, 1, 10, 14, PAL.rot1).frame(3, 1, 10, 14, PAL.ink);
+  b.disc(8, 7, 2.5, PAL.gelb).hline(5, 11, 6, PAL.gelb);
+  return b;
+}

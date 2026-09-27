@@ -28,6 +28,7 @@ const MAP_STUFE: Record<string, number> = {
   netzleitstelle: 9,
   silberbach: 9,
   silberstollen: 9,
+  werkstatt: 10,
 };
 
 /** Durchläuft ein Script und merkt sich, ab welcher Klassenstufe ein Befehl erreichbar ist ({ stufeMin } in Bedingungen). */

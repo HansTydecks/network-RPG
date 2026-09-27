@@ -463,4 +463,52 @@ export const QUESTS: Record<QuestId, QuestDef> = {
       'Bis dahin kannst du alle Orte weiter erkunden.',
     ],
   },
+  k4_werkstatt: {
+    titel: 'Die Stadtseiten sind verschandelt! Ab in die Werkstatt.',
+    hinweise: [
+      'Herr Work schreibt: Treffpunkt in der Werkstatt, dem Maker-Space in der alten Fabrik.',
+      'Die alte Fabrik liegt rechts hinter Knotenburg. Folge dem Gehweg nach rechts.',
+      'Geh in Knotenburg ganz nach rechts, am Fernmeldeamt vorbei. Drinnen wartet Kevin.',
+    ],
+  },
+  k4_html: {
+    titel: 'Repariere die Rathaus-Webseite für Herrn Schubert.',
+    hinweise: [
+      'Herr Schubert findet mit seinem Screenreader nichts mehr auf der Rathaus-Seite.',
+      'Er sitzt in der Werkstatt am Computer.',
+      'Sprich Herrn Schubert an. Die Quelltext-Linse zeigt dir den HTML-Code.',
+    ],
+  },
+  k4_regex: {
+    titel: 'Fang die Spam-Adressen mit regulären Ausdrücken.',
+    hinweise: [
+      'Das Stadtforum wird mit Spam geflutet.',
+      'Lina sitzt in der Werkstatt am Forum-Rechner.',
+      'Sprich Lina an. Ein Suchmuster fängt viele Adressen auf einmal.',
+    ],
+  },
+  k4_chat: {
+    titel: 'Baut einen Notfall-Chat für Knotenburg.',
+    hinweise: [
+      'Kevin hat einen kleinen Rechner, „die Himbeere".',
+      'Kevin ist in der Werkstatt.',
+      'Sprich Kevin an.',
+    ],
+  },
+  k4_stimme: {
+    titel: 'Wessen Stimme ist das? Analysiere die Sprachnachricht.',
+    hinweise: [
+      'FUNKSTILLE hat eine verzerrte Sprachnachricht geschickt.',
+      'Kevin hat sie auf dem Audio-Rechner in der Werkstatt.',
+      'Sprich Kevin noch einmal an.',
+    ],
+  },
+  k4_kapitel_ende: {
+    titel: 'Kapitel 4 geschafft!',
+    hinweise: [
+      'Du hast Kapitel 4 geschafft! Weiter geht es im nächsten Schuljahr.',
+      'Deine Lehrkraft kennt den Code für den Kalender.',
+      'Pack schon mal den Koffer – es geht um die Welt.',
+    ],
+  },
 };

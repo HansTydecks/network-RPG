@@ -1,5 +1,6 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { opaK3 } from '../dialog/kapitel3';
+import { emilK4 } from '../dialog/kapitel4';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
@@ -133,7 +134,7 @@ export const kabelitz: MapDef = {
       x: 23,
       y: 13,
       dir: 'down',
-      script: emilScript(),
+      script: [when({ stufeMin: 10 }, emilK4, emilScript())],
     },
     {
       kind: 'npc',
@@ -161,7 +162,8 @@ export const kabelitz: MapDef = {
       y: 9,
       dir: 'down',
       // Am Samstag steht Opa auf dem Dorffest.
-      visibleIf: { not: { all: [{ flag: 'tag4' }, { not: { flag: 'nacht' } }] } },
+      // Am Samstag in Kapitel 1 steht Opa auf dem Dorffest, ab Klasse 10 ist er „zur Kur".
+      visibleIf: { all: [{ not: { all: [{ flag: 'tag4' }, { not: { flag: 'nacht' } }] } }, { not: { stufeMin: 10 } }] },
       script: opaScript(),
     },
     {

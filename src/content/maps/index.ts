@@ -14,6 +14,7 @@ import { fernmeldeamt } from './fernmeldeamt';
 import { netzleitstelle } from './netzleitstelle';
 import { silberbach } from './silberbach';
 import { silberstollen } from './silberstollen';
+import { werkstatt } from './werkstatt';
 
 export const MAPS: Record<MapId, MapDef> = {
   alex_zimmer: alexZimmer,
@@ -30,4 +31,5 @@ export const MAPS: Record<MapId, MapDef> = {
   netzleitstelle,
   silberbach,
   silberstollen,
+  werkstatt,
 };

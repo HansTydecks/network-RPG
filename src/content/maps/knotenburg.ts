@@ -1,5 +1,6 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, warp, when, type Script } from '../../engine/script/Script';
+import { fabrikWeg } from '../dialog/kapitel4';
 import { busKnotenburgK3, fmaTuerK3, pinoK3 } from '../dialog/kapitel3';
 import { bergerScript, bibTuer, fmaTuer, jonasDienstag, langeScript, passantDienstag, pinoScript, schulzScript } from '../dialog/kapitel2b';
 
@@ -195,6 +196,7 @@ export const knotenburg: MapDef = {
         ]),
       ],
     },
+    { kind: 'trigger', id: 'fabrikweg', x: 29, y: 16, script: fabrikWeg },
     { kind: 'npc', id: 'berger', sprite: 'berger', x: 9, y: 9, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: bergerScript },
     { kind: 'npc', id: 'schulz', sprite: 'schulz', x: 3, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: schulzScript },
     { kind: 'npc', id: 'pino', sprite: 'pino', x: 24, y: 6, dir: 'down', visibleIf: { flag: 'k2_dienstag' }, script: [when({ stufeMin: 9 }, pinoK3, pinoScript)] },
@@ -202,7 +204,7 @@ export const knotenburg: MapDef = {
     { kind: 'interact', id: 'backstand', x: 22, y: 9, tile: 'backstand', visibleIf: { flag: 'k2_mittwoch' }, script: langeScript },
   ],
   onEnter: [
-    when({ not: { flag: 'k2_knotenburg' } }, [
+    when({ all: [{ not: { flag: 'k2_knotenburg' } }, { not: { stufeMin: 9 } }] }, [
       setFlag('k2_knotenburg'),
       say('ping', 'Knotenburg! So viele Häuser, so viele Leute. Und so viele Kabel unter dem Pflaster!'),
       say('ping', 'Setz mal deine Brille auf (N)! Siehst du die rosa Ringe um die Schule? Das sind Funkwellen vom WLAN.'),

@@ -3,7 +3,7 @@
  * WICHTIG: Nur hinten anfügen, nie umsortieren oder löschen – sonst werden alte
  * Speichercodes aus den Heftern ungültig. Nicht mehr genutzte Einträge bleiben stehen.
  */
-export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt', 'netzleitstelle', 'silberbach', 'silberstollen'] as const;
+export const MAP_IDS = ['alex_zimmer', 'kabelitz', 'wohnzimmer', 'briefzentrum', 'dorfplatz', 'museum', 'dorfladen', 'knotenburg', 'gymnasium', 'bibliothek', 'fernmeldeamt', 'netzleitstelle', 'silberbach', 'silberstollen', 'werkstatt'] as const;
 
 export const ITEM_IDS = [
   'netzblick_v1',
@@ -27,6 +27,10 @@ export const ITEM_IDS = [
   'netzblick_v3',
   'schluesselpaar',
   'grubenlampe',
+  // Kapitel 4
+  'postkarte',
+  'quelltext_linse',
+  'reisepass',
 ] as const;
 
 export const FLAG_IDS = [
@@ -164,6 +168,19 @@ export const FLAG_IDS = [
   'k3_raum5',
   'k3_boss',
   'kapitel3_fertig',
+  // Kapitel 4
+  'k4_start',
+  'k4_postkarte',
+  'k4_kevin',
+  'k4_kruemel',
+  'k4_robotik',
+  'k4_html',
+  'k4_regex',
+  'k4_chat',
+  'k4_bus',
+  'k4_stimme',
+  'k4_emil',
+  'kapitel4_fertig',
 ] as const;
 
 export const LEXICON_IDS = [
@@ -224,6 +241,21 @@ export const LEXICON_IDS = [
   'switch_router',
   'dns',
   'nachhaltigkeit',
+  // Kapitel 4 (Klasse 10)
+  'datentypen',
+  'bedingungen',
+  'unterprogramme',
+  'fehlermeldungen',
+  'robotik',
+  'html',
+  'barrierefreiheit',
+  'css',
+  'regex',
+  'syntax_semantik',
+  'client_server_dienst',
+  'suchen_sortieren',
+  'maschinen_entscheiden',
+  'zeitabhaengige_medien',
 ] as const;
 
 export const QUEST_IDS = [
@@ -288,6 +320,12 @@ export const QUEST_IDS = [
   'k3_stollen',
   'k3_tiefer',
   'k3_kapitel_ende',
+  'k4_werkstatt',
+  'k4_html',
+  'k4_regex',
+  'k4_chat',
+  'k4_stimme',
+  'k4_kapitel_ende',
 ] as const;
 
 export type MapId = (typeof MAP_IDS)[number];

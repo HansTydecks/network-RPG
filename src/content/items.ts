@@ -102,4 +102,19 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Von Kalle. Im Silberstollen ist es stockdunkel – ohne Lampe geht es nicht weiter.',
     icon: 'icon_grubenlampe',
   },
+  postkarte: {
+    name: 'Postkarte von Opa',
+    beschreibung: '„Grüße aus Bad Elster! Die Kur tut gut. Euer Werner." Vorne ein Bild vom Kurpark. Der Poststempel ist verwischt.',
+    icon: 'icon_postkarte',
+  },
+  quelltext_linse: {
+    name: 'Quelltext-Linse',
+    beschreibung: 'Von Kevin für die Brille. Zeigt hinter Bildschirmen und Plakaten den HTML-Quelltext.',
+    icon: 'icon_quelltext',
+  },
+  reisepass: {
+    name: 'Reisepass',
+    beschreibung: 'Alex\' Reisepass. Tante Ada sagt: „Pack deinen Koffer."',
+    icon: 'icon_reisepass',
+  },
 };

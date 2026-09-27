@@ -3,6 +3,7 @@ import type { Script } from '../engine/script/Script';
 import { LEXICON } from './lexicon';
 import { KAPITEL2_START } from './dialog/kapitel2';
 import { KAPITEL3_START } from './dialog/kapitel3';
+import { KAPITEL4_START } from './dialog/kapitel4';
 import { FLAG_IDS } from './registry';
 
 /**
@@ -47,6 +48,14 @@ export const KAPITEL_START: Record<number, KapitelStart> = {
     flags: [...KAPITEL1_FLAGS, ...flagsVon('k2'), 'kapitel2_fertig', 'k3_start'],
     lexicon: lexiconBis(8),
     intro: KAPITEL3_START,
+  },
+  10: {
+    startFlag: 'k4_start',
+    items: ['netzblick_v1', 'netzblick_v2', 'netzblick_v3', 'binaer_karte', 'block_fernbedienung', 'zettel_funkstille', 'usb_stick', 'echtheitslupe', 'caesar_scheibe', 'taubenfeder', 'schluessel7', 'schluesselpaar', 'grubenlampe'],
+    wegnehmen: ['fremder_stick'],
+    flags: [...KAPITEL1_FLAGS, ...flagsVon('k2'), 'kapitel2_fertig', ...flagsVon('k3'), 'kapitel3_fertig', 'k4_start'],
+    lexicon: lexiconBis(9),
+    intro: KAPITEL4_START,
   },
 };
 

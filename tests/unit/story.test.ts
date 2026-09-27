@@ -125,3 +125,36 @@ describe('Story-Simulation Kapitel 3', () => {
       expect(s.log.minispiele, id).toContain(id);
   });
 });
+
+describe('Story-Simulation Kapitel 4', () => {
+  it('vom Kalender Klasse 10 bis zum Reisepass', async () => {
+    const s = new Story();
+    await s.kapitel(10);
+    expect(s.state.questId).toBe('k4_werkstatt');
+    expect(s.state.items.has('postkarte')).toBe(true);
+    await s.an('kabelitz', 'bushalt');
+    expect(s.state.mapId).toBe('knotenburg');
+    await s.an('knotenburg', 'fabrikweg');
+    expect(s.state.mapId).toBe('werkstatt');
+    await s.an('werkstatt', 'kevin');
+    expect(s.state.questId).toBe('k4_html');
+    await s.an('werkstatt', 'schubert');
+    expect(s.state.questId).toBe('k4_regex');
+    await s.an('werkstatt', 'lina_k4');
+    expect(s.state.questId).toBe('k4_chat');
+    await s.an('werkstatt', 'kevin');
+    expect(s.state.questId).toBe('k4_stimme');
+    await s.an('werkstatt', 'kevin');
+    expect(s.hat('kapitel4_fertig')).toBe(true);
+    expect(s.state.items.has('reisepass')).toBe(true);
+    await s.an('kabelitz', 'emil');
+    expect(s.hat('k4_emil')).toBe(true);
+    for (const id of ['datentypen', 'fehlermeldung', 'unterprogramm', 'robotik', 'html_struktur', 'html_barriere', 'css', 'regex_finden', 'regex_validieren', 'chatserver', 'chatbot', 'binaersuche', 'bedingungen', 'stadtbus', 'stimme'])
+      expect(s.log.minispiele, id).toContain(id);
+  });
+  it('Opa ist ab Klasse 10 „zur Kur" und nicht in Kabelitz', async () => {
+    const s = new Story();
+    await s.kapitel(10);
+    await expect(s.an('kabelitz', 'opa')).rejects.toThrow(/nicht sichtbar/);
+  });
+});

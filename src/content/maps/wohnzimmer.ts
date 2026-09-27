@@ -1,8 +1,10 @@
 import type { MapDef } from '../../engine/world/MapDef';
 import { mamaK3, routerK3 } from '../dialog/kapitel3';
+import { mamaK4 } from '../dialog/kapitel4';
 import { choice, interlude, narrate, quest, say, setFlag, warp, when } from '../../engine/script/Script';
 
 const mamaScript = [
+  when({ stufeMin: 10 }, mamaK4, [
   when({ stufeMin: 9 }, mamaK3, [
   when({ stufeMin: 8 }, [
     when(
@@ -84,6 +86,7 @@ const mamaScript = [
       ),
     ],
   ),
+  ]),
   ]),
   ]),
   ]),

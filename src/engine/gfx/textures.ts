@@ -3,6 +3,7 @@ import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
 import { TILES } from '../../content/art/tiles';
 import { EXPONAT_BILDER } from '../../content/art/exponate';
+import { postkarteIcon, quelltextIcon, reisepassIcon } from '../../content/art/characters';
 import { grubenlampeIcon, netzblickV3Icon, schluesselpaarIcon } from '../../content/art/characters';
 import { caesarScheibeIcon, echtheitslupeIcon, fremderStickIcon, netzblickV2Icon, schluessel7Icon, taubenfederIcon } from '../../content/art/characters';
 import { CHARACTERS, kabelbinderIcon, usbIcon, binaerKarteIcon, fernbedienungIcon, fotoIcon, kruemelFrames, schluesselIcon, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
@@ -115,6 +116,9 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'icon_netzblick_v3', netzblickV3Icon());
   addImage(scene, 'icon_schluesselpaar', schluesselpaarIcon());
   addImage(scene, 'icon_grubenlampe', grubenlampeIcon());
+  addImage(scene, 'icon_postkarte', postkarteIcon());
+  addImage(scene, 'icon_quelltext', quelltextIcon());
+  addImage(scene, 'icon_reisepass', reisepassIcon());
   for (const [key, bild] of Object.entries(EXPONAT_BILDER)) addImage(scene, key, bild());
   addSheet(scene, 'kruemel', kruemelFrames());
   addSheet(scene, 'morse', morseFrames());
