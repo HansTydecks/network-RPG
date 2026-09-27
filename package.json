@@ -1,0 +1,26 @@
+{
+  "name": "netzblick",
+  "private": true,
+  "version": "0.1.0",
+  "description": "NETZBLICK – Alex und die Funkstille: ein edukatives Netzwerk-RPG für den Informatikunterricht",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "e2e:full": "npm run build && playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  },
+  "dependencies": {
+    "phaser": "^4.2.1"
+  }
+}

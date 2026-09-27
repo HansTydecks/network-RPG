@@ -10,7 +10,18 @@ Alex lebt im sächsischen Dorf Kabelitz und bekommt von Tante Ada eine Brille, d
 
 ## Status
 
-Planungsphase. Es gibt noch keinen Spielcode.
+**Testversion M0:** Das technische Fundament steht und ist spielbar (Alex' Zimmer und ein Stück Kabelitz). Die echten Kapitel folgen ab M1.
+
+## Spielen und entwickeln
+
+```bash
+npm install
+npm run dev      # dann http://localhost:5173 öffnen
+```
+
+Steuerung: Pfeiltasten/WASD laufen · Leertaste/Enter sprechen/untersuchen · Esc/Shift zurück (halten = rennen) · H Hilfe von Ping · N Netzblick-Brille · M Menü. Auf Tablets erscheinen Bildschirm-Knöpfe.
+
+Mehr in [`docs/TECHNIK.md`](docs/TECHNIK.md#entwickeln).
 
 ## Dokumente
 

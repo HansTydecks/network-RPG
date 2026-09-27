@@ -1,5 +1,38 @@
 # NETZBLICK – Alex und die Funkstille
-## Technischer Plan
+
+## Stand der Umsetzung
+
+**M0 „Fundament" ist fertig** (Testversion, noch ohne echte Kapitelinhalte):
+
+- Phaser 4 + TypeScript + Vite, alle Grafiken und die Schrift werden beim Start aus Code erzeugt (`src/content/art`, `src/engine/gfx`)
+- Kachelbewegung wie bei Pokémon (kurz tippen = drehen, halten = laufen, B halten = rennen), Kamera, Türen/Warps
+- Dialogfenster mit Schreibmaschinen-Effekt, Auswahlmenüs, Menü (Rucksack, Netzbuch, Speichern)
+- Script-System für Story-Ereignisse (`src/engine/script`), Aufgabenzeile, Hilfe von Ping mit drei Hinweisstufen (Taste H)
+- Netzblick-Brille v1 (Taste N): Kabel, Glasfaser, Geräte, wandernde Datenpakete
+- Speichercode (Hefter-tauglich, mit Prüfsumme) + Autosave, Schulkalender mit Lehrkraft-Codes (nur Hashes im Code)
+- Touch-Steuerung für Tablets
+- Testkarten: Alex' Zimmer und ein Stück Kabelitz mit Opa Werner, grauem Kasten, Briefkasten, Taubenschlag
+- Tests: 35 Unit-Tests (u. a. Speichercode, Kalender-Codes, Script-Runner, Kartenprüfung, Schriftabdeckung), 3 Browser-Tests (komplettes Durchspielen, Speichercode, Kalender)
+
+Nächster Schritt: **M1 Vertical Slice** (Prolog + Kapitel 1 bis zur Brille).
+
+## Entwickeln
+
+```bash
+npm install
+npm run dev          # Entwicklungsserver, http://localhost:5173
+npm test             # Unit-Tests
+npm run e2e:full     # Build + Browser-Tests (Playwright)
+npm run build        # statischer Build nach dist/
+```
+
+Hilfreiche URL-Parameter: `?kontaktbogen` zeigt alle Grafiken auf einer Seite.
+
+**Veröffentlichen:** Bei jedem Push auf `main` baut `.github/workflows/deploy.yml` das Spiel und stellt es auf GitHub Pages. Einmalig nötig: Repository → Settings → Pages → Source: „GitHub Actions".
+
+**Kalender-Codes ändern:** `node tools/kalender-code.mjs` schlägt einen neuen Code vor und gibt den Hash aus; `node tools/kalender-code.mjs ABCD-1234` hasht einen eigenen Code. Den Hash in `src/content/calendarCodes.ts` eintragen. Klartext-Codes nie committen.
+
+**Register nur erweitern:** In `src/content/registry.ts` (Karten, Items, Flags, Netzbuch, Aufgaben) nur hinten anfügen, nie umsortieren – sonst werden Speichercodes in den Heftern ungültig.
 
 ## 2. Technischer Plan
 
@@ -24,7 +57,7 @@
   ```
   Beim Start werden daraus Phaser-Texturen erzeugt. Vorteile: 100 % eigene Grafik, versionierbar (Git-Diffs), von dir editierbar, keine externen Assets.
 - `tools/render-sprites.ts` exportiert alle Grafiken zusätzlich als PNG-Kontaktbogen (Vorschau/Dokumentation).
-- **Auflösung**: intern 320×180 (16:9), ganzzahlig skaliert (1280×720, 1920×1080 pixelgenau). Kacheln 16×16, Figuren 16×24, 4 Richtungen × 3 Laufbilder.
+- **Auflösung**: intern 320×180 (16:9), ganzzahlig skaliert (1280×720, 1920×1080 pixelgenau). Kacheln 16×16, Figuren 16×16 im Chibi-Stil (wie Pokémon auf dem Game Boy), 3 Richtungen × 3 Laufbilder (rechts = gespiegelt links).
 - **Eigene Palette** (~32 Farben), **eigene Bitmap-Schrift** mit Umlauten/ß.
 - **Netzblick-Overlay farbenblind-sicher**: Nicht nur Farbe, sondern Form: Kabel = Linien (gestrichelt/durchgezogen je Medium), Funk = Ringwellen, Pakete = Briefumschlag-Symbole, verschlüsselt = Schloss-Symbol.
 - **Audio selbst erzeugt**: kleiner WebAudio-Chiptune-Synth (Rechteck/Dreieck/Rauschen), Songs als Notenfolgen im Code, prozedurale Soundeffekte.
