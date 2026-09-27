@@ -6,13 +6,16 @@ import { QUESTS } from '../../content/quests';
 import { SPEAKERS } from '../../content/speakers';
 import { CALENDAR_CODES } from '../../content/calendarCodes';
 import { NETZBLICK_ERSTMALS } from '../../content/dialog/netzblick';
+import { PING_SCAN, SCAN_ERKLAERUNG } from '../../content/dialog/scan';
+import { tageszeitTint, zeitLabel } from '../../content/zeit';
+import { MINIGAMES } from '../../minigames';
 import type { FlagId, ItemId, LexiconId, MapId, QuestId } from '../../content/registry';
 import { TILESET_KEY } from '../gfx/textures';
 import { PAL } from '../gfx/palette';
 import type { Input } from '../input/Input';
 import { NetVision } from '../netvision/NetVision';
 import { runScript, type ScriptHost } from '../script/ScriptRunner';
-import type { Script } from '../script/Script';
+import { evalCond, type Script } from '../script/Script';
 import { checkCalendarCode } from '../state/CalendarCodes';
 import type { Dir, GameState } from '../state/GameState';
 import { autosave } from '../state/storage';
@@ -20,10 +23,12 @@ import { CodeInput } from '../ui/CodeInput';
 import { DialogBox } from '../ui/DialogBox';
 import { Hud, Toast } from '../ui/Hud';
 import { InfoPanel } from '../ui/InfoPanel';
+import { Interlude } from '../ui/Interlude';
+import { ObjectCard } from '../ui/ObjectCard';
 import { ListMenu } from '../ui/ListMenu';
 import { UiStack } from '../ui/widgets';
 import { addTouchControls, isTouchDevice, type TouchControls } from '../ui/TouchControls';
-import type { MapDef, NpcDef } from '../world/MapDef';
+import type { InteractDef, MapDef, NpcDef, ScanData } from '../world/MapDef';
 import { parseMap, type ParsedMap } from '../world/mapUtil';
 
 const TILE = 16;
@@ -62,6 +67,9 @@ export class WorldScene extends Phaser.Scene {
   private player!: Actor;
   private ping?: Actor;
   private npcs: { def: NpcDef; actor: Actor }[] = [];
+  private props: { def: InteractDef; sprite: Phaser.GameObjects.Image }[] = [];
+  private entityObjects: Phaser.GameObjects.GameObject[] = [];
+  private tintRect?: Phaser.GameObjects.Rectangle;
   private net?: NetVision;
   private scriptRunning = false;
   private hintLevel = new Map<string, number>();
@@ -88,7 +96,10 @@ export class WorldScene extends Phaser.Scene {
 
   private loadMap(id: MapId, x: number, y: number, dir: Dir) {
     for (const o of this.mapObjects) o.destroy();
+    for (const o of this.entityObjects) o.destroy();
     this.mapObjects = [];
+    this.entityObjects = [];
+    this.props = [];
     this.tilemap?.destroy();
     this.net?.destroy();
     this.npcs = [];
@@ -107,22 +118,24 @@ export class WorldScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(this.def.outside ?? PAL.gruen1);
 
     this.player = this.makeActor('char_alex', x, y, dir);
-    for (const e of this.def.entities) {
-      if (e.kind !== 'npc') continue;
-      if (e.visibleIf && !e.visibleIf(this.state.flags)) continue;
-      this.npcs.push({ def: e, actor: this.makeActor(`char_${e.sprite}`, e.x, e.y, e.dir) });
-    }
+    this.refreshEntities();
     this.placePing();
+    this.tintRect = this.add.rectangle(-200, -200, this.parsed.width * TILE + 400, this.parsed.height * TILE + 400, 0, 0).setOrigin(0).setDepth(55);
+    this.mapObjects.push(this.tintRect);
+    this.applyTint();
 
     this.net = new NetVision(this, this.def.net, this.parsed.width, this.parsed.height, (f) => this.state.flags.has(f as FlagId));
     this.hud.setNet(false);
+    this.hud.setTime(zeitLabel(this.state));
     this.updateCamera();
   }
 
-  private makeActor(key: string, x: number, y: number, dir: Dir): Actor {
-    const sprite = this.add.sprite(x * TILE, y * TILE, key, FRAME_BASE[dir]).setOrigin(0, 0);
-    sprite.setFlipX(dir === 'right');
-    this.mapObjects.push(sprite);
+  private makeActor(key: string, x: number, y: number, dir: Dir, anim?: string, list = this.mapObjects): Actor {
+    const isChar = key.startsWith('char_');
+    const sprite = this.add.sprite(x * TILE, y * TILE, key, isChar ? FRAME_BASE[dir] : 0).setOrigin(0, 0);
+    if (isChar) sprite.setFlipX(dir === 'right');
+    if (anim) sprite.play(anim);
+    list.push(sprite);
     const a: Actor = { sprite, key, x, y, dir, moving: false, fromX: x, fromY: y, t: 0, dur: WALK_MS };
     this.syncActor(a);
     return a;
@@ -150,10 +163,42 @@ export class WorldScene extends Phaser.Scene {
     this.syncActor(this.ping);
   }
 
+  /** Figuren und Gegenstände nach aktuellem Spielstand (neu) aufbauen. */
+  private refreshEntities() {
+    for (const o of this.entityObjects) o.destroy();
+    this.entityObjects = [];
+    this.npcs = [];
+    this.props = [];
+    for (const e of this.def.entities) {
+      if (e.kind === 'npc') {
+        if (e.visibleIf && !evalCond(e.visibleIf, this.state)) continue;
+        const key = e.anim ? e.sprite : `char_${e.sprite}`;
+        this.npcs.push({ def: e, actor: this.makeActor(key, e.x, e.y, e.dir, e.anim, this.entityObjects) });
+      } else if (e.kind === 'interact' && e.tile) {
+        if (e.visibleIf && !evalCond(e.visibleIf, this.state)) continue;
+        const sprite = this.add.image(e.x * TILE, e.y * TILE, `tile_${e.tile}`).setOrigin(0).setDepth(100 + e.y - 0.5);
+        this.entityObjects.push(sprite);
+        this.props.push({ def: e, sprite });
+      }
+    }
+  }
+
+  private visible(e: { visibleIf?: import('../script/Script').Cond }) {
+    return !e.visibleIf || evalCond(e.visibleIf, this.state);
+  }
+
+  private applyTint() {
+    const t = this.def.outdoor ? tageszeitTint(this.state) : null;
+    if (!this.tintRect) return;
+    if (t) this.tintRect.setFillStyle(t[0], t[1]).setVisible(true);
+    else this.tintRect.setVisible(false);
+  }
+
   private blocked(x: number, y: number, ignoreNpcs = false): boolean {
     if (x < 0 || y < 0 || x >= this.parsed.width || y >= this.parsed.height) return true;
     if (this.parsed.solid[y][x]) return true;
     if (!ignoreNpcs && this.npcs.some((n) => n.actor.x === x && n.actor.y === y)) return true;
+    if (this.props.some((p) => p.def.x === x && p.def.y === y)) return true;
     return false;
   }
 
@@ -170,7 +215,7 @@ export class WorldScene extends Phaser.Scene {
 
   private face(a: Actor, dir: Dir) {
     a.dir = dir;
-    if (a.key === 'ping') return;
+    if (!a.key.startsWith('char_')) return;
     a.sprite.stop();
     a.sprite.setFrame(FRAME_BASE[dir]);
     a.sprite.setFlipX(dir === 'right');
@@ -273,7 +318,7 @@ export class WorldScene extends Phaser.Scene {
     for (const e of this.def.entities) {
       if (e.x !== x || e.y !== y) continue;
       if (e.kind === 'warp') return void this.doWarp(e.to.map, e.to.x, e.to.y, e.to.dir, true);
-      if (e.kind === 'trigger') return void this.run(e.script);
+      if (e.kind === 'trigger' && this.visible({ visibleIf: e.activeIf })) return void this.run(e.script);
     }
   }
 
@@ -282,14 +327,29 @@ export class WorldScene extends Phaser.Scene {
     const tx = this.player.x + dx;
     const ty = this.player.y + dy;
     const npc = this.npcs.find((n) => n.actor.x === tx && n.actor.y === ty);
+    const isPing = this.ping && this.ping.x === tx && this.ping.y === ty;
+    const ent = this.def.entities.find((e) => e.kind === 'interact' && e.x === tx && e.y === ty && this.visible(e)) as InteractDef | undefined;
+
+    // Mit aufgesetzter Brille: Objektkarte zeigen
+    if (this.net?.on) {
+      const scan: ScanData | undefined = npc?.def.scan ?? (isPing ? PING_SCAN : undefined) ?? ent?.scan;
+      if (scan) return void this.showScan(scan);
+    }
     if (npc) {
       const opposite: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', right: 'left' };
       this.face(npc.actor, opposite[this.player.dir]);
       return void this.run(npc.def.script);
     }
-    if (this.ping && this.ping.x === tx && this.ping.y === ty) return void this.run(this.hintScript());
-    const ent = this.def.entities.find((e) => e.kind === 'interact' && e.x === tx && e.y === ty);
-    if (ent && ent.kind === 'interact') return void this.run(ent.script);
+    if (isPing) return void this.run(this.hintScript());
+    if (ent) return void this.run(ent.script);
+  }
+
+  private async showScan(scan: ScanData) {
+    if (this.scriptRunning) return;
+    this.scriptRunning = true;
+    await this.modal<void>((r) => new ObjectCard(this, scan, r));
+    this.scriptRunning = false;
+    if (!this.state.flags.has('scan_erklaert')) void this.run(SCAN_ERKLAERUNG);
   }
 
   private toggleNet() {
@@ -328,8 +388,15 @@ export class WorldScene extends Phaser.Scene {
       await runScript(script, this.host());
     } finally {
       this.scriptRunning = false;
-      if (this.pingVisible() && !this.ping) this.placePing();
+      this.refreshAfterScript();
     }
+  }
+
+  private refreshAfterScript() {
+    this.refreshEntities();
+    if (this.pingVisible() && !this.ping) this.placePing();
+    this.hud.setTime(zeitLabel(this.state));
+    this.applyTint();
   }
 
   private runEnterScript() {
@@ -381,6 +448,17 @@ export class WorldScene extends Phaser.Scene {
       turnPlayer: (dir) => this.face(this.player, dir),
       calendar: () => this.calendar(),
       save: () => this.saveDialog(),
+      interlude: (text) => this.modal<void>((r) => new Interlude(this, text, r)),
+      minigame: async (id) => {
+        const mg = MINIGAMES[id];
+        if (!mg) throw new Error(`Minispiel ${id} fehlt`);
+        await mg({ scene: this, input: this.inp, state: this.state, push: (m) => this.ui.push(m) });
+      },
+      faceNpc: (id, dir) => {
+        const n = this.npcs.find((x) => x.def.id === id);
+        if (n) this.face(n.actor, dir);
+      },
+      refresh: () => this.refreshAfterScript(),
     };
   }
 

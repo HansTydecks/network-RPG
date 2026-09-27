@@ -6,4 +6,8 @@ export const SPEAKERS: Record<string, string> = {
   mama: 'Mama',
   papa: 'Papa',
   alex: 'Alex',
+  krause: 'Frau Krause',
+  oezdemir: 'Herr Özdemir',
+  morse: 'Morse',
+  unbekannt: '???',
 };

@@ -35,7 +35,14 @@ export async function walk(page: Page, dir: Dir, n = 1) {
       { timeout: 3000 },
     );
     await page.keyboard.up(KEY[dir]);
-    await page.waitForFunction(() => !(window as any).__netzblick.scene.getPlayerTile().moving, undefined, { timeout: 3000 });
+    await page.waitForFunction(
+      () => {
+        const sc = (window as any).__netzblick.scene;
+        return !sc.getPlayerTile().moving && !sc.isBusy();
+      },
+      undefined,
+      { timeout: 5000 },
+    );
     await page.waitForTimeout(30);
   }
 }
@@ -46,4 +53,36 @@ export async function face(page: Page, dir: Dir) {
   await page.waitForTimeout(40);
   await page.keyboard.up(KEY[dir]);
   await page.waitForTimeout(80);
+}
+
+/** Spielt ein laufendes Minispiel mit den Tasten, die es selbst als richtig meldet. */
+export async function playMinigame(page: Page, maxSteps = 200) {
+  await page.waitForFunction(() => (window as any).__minigame, undefined, { timeout: 5000 });
+  for (let i = 0; i < maxSteps; i++) {
+    const keys: string[] | null = await page.evaluate(() => {
+      const m = (window as any).__minigame;
+      return m ? m.solutionKeys() : null;
+    });
+    if (keys === null) return;
+    if (keys.length === 0) await page.waitForTimeout(150);
+    for (const k of keys) {
+      await page.keyboard.press(k);
+      await page.waitForTimeout(70);
+    }
+  }
+  throw new Error('Minispiel endet nicht');
+}
+
+/** Wartet, bis ein Script ein Minispiel startet, drückt dabei Dialoge weiter. */
+export async function advanceUntilMinigame(page: Page, max = 60) {
+  for (let i = 0; i < max; i++) {
+    if (await page.evaluate(() => Boolean((window as any).__minigame))) return;
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(120);
+  }
+  throw new Error('Kein Minispiel gestartet');
+}
+
+export async function flags(page: Page): Promise<string[]> {
+  return page.evaluate(() => [...(window as any).__netzblick.state.flags]);
 }

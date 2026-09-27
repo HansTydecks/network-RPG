@@ -39,7 +39,7 @@ function files(dir: string): string[] {
 describe('Schrift deckt alle Spieltexte ab', () => {
   it('jedes Zeichen in String-Literalen der Inhalte und UI existiert als Glyphe', () => {
     const missing = new Set<string>();
-    for (const f of [...files('src/content'), ...files('src/engine/ui'), ...files('src/engine/scenes')]) {
+    for (const f of [...files('src/content'), ...files('src/engine/ui'), ...files('src/engine/scenes'), ...files('src/minigames')]) {
       if (f.includes('/art/')) continue;
       const src = readFileSync(f, 'utf8');
       for (const m of src.matchAll(/'((?:[^'\\\n]|\\.)*)'|`([^`]*)`/g)) {

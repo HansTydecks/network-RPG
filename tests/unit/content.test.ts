@@ -8,9 +8,11 @@ import { QUESTS } from '../../src/content/quests';
 import { SPEAKERS } from '../../src/content/speakers';
 import type { Command, Script } from '../../src/engine/script/Script';
 import { NETZBLICK_ERSTMALS } from '../../src/content/dialog/netzblick';
+import { MINIGAME_META as MINIGAMES } from '../../src/minigames/meta';
+import { TILE_INDEX } from '../../src/content/art/tiles';
 
 /** Kapitel je Karte → höchste erlaubte Klassenstufe (Spiralcurriculum). */
-const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7 };
+const MAP_STUFE: Record<string, number> = { alex_zimmer: 7, kabelitz: 7, wohnzimmer: 7, briefzentrum: 7 };
 
 function* walk(script: Script): Generator<Command> {
   for (const c of script) {
@@ -69,6 +71,10 @@ describe('Inhalte', () => {
         }
       });
 
+      it('Gegenstände nutzen vorhandene Kacheln', () => {
+        for (const e of def.entities) if (e.kind === 'interact' && e.tile) expect(TILE_INDEX[e.tile], e.tile).toBeDefined();
+      });
+
       it('Kabel verlaufen waagerecht/senkrecht und verbinden bekannte Geräte', () => {
         const ids = new Set(def.net?.devices.map((d) => d.id));
         for (const c of def.net?.cables ?? []) {
@@ -86,6 +92,11 @@ describe('Inhalte', () => {
           for (const c of walk(s)) {
             if (c.op === 'say' && c.who) expect(SPEAKERS[c.who], c.who).toBeDefined();
             if (c.op === 'lexicon') expect(LEXICON[c.id].stufe, `${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
+            if (c.op === 'minigame') {
+              expect(MINIGAMES[c.id], `Minispiel ${c.id}`).toBeDefined();
+              expect(MINIGAMES[c.id].stufe, `Minispiel ${c.id} zu früh`).toBeLessThanOrEqual(MAP_STUFE[id]);
+            }
+            if (c.op === 'warp') expect(parseMap(MAPS[c.map]).solid[c.y][c.x], `Script-Warp ${c.map}`).toBe(false);
           }
       });
     });

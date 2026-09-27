@@ -4,6 +4,7 @@ import { BootScene } from './engine/scenes/BootScene';
 import { TitleScene } from './engine/scenes/TitleScene';
 import { WorldScene } from './engine/scenes/WorldScene';
 import { ContactSheetScene } from './engine/scenes/ContactSheetScene';
+import { PrologScene } from './engine/scenes/PrologScene';
 import { PAL } from './engine/gfx/palette';
 
 const W = 320;
@@ -26,7 +27,7 @@ const game = new Phaser.Game({
   backgroundColor: PAL.nacht,
   scale: { mode: Phaser.Scale.NONE, zoom: zoomFor(), autoCenter: Phaser.Scale.CENTER_BOTH },
   input: { keyboard: false },
-  scene: [BootScene, TitleScene, WorldScene, ContactSheetScene],
+  scene: [BootScene, TitleScene, PrologScene, WorldScene, ContactSheetScene],
 });
 
 game.registry.set('input', input);

@@ -183,3 +183,90 @@ export function netzblickIcon(): PixBuf {
   b.vline(0, 6, 2, PAL.ink).vline(15, 6, 2, PAL.ink);
   return b;
 }
+
+CHARACTERS.push(
+  { id: 'krause', colors: { s: PAL.haut1, h: PAL.rot2, c: PAL.gelb, p: PAL.blau1, f: PAL.ink } },
+  { id: 'oezdemir', colors: { s: PAL.haut2, h: PAL.ink, c: PAL.blau2, p: PAL.grau1, f: PAL.braun1 } },
+);
+
+/** Opa Werners Katze Morse (grau getigert). Frames: 0 sitzen, 1 Schwanz schwingt. */
+const MORSE_ROWS = [
+  [
+    '................',
+    '................',
+    '................',
+    '....o...o.......',
+    '...ogo.ogo......',
+    '...ogggggo......',
+    '...ogegegoo.....',
+    '...ogggpggo.....',
+    '....oggggo......',
+    '...ogdgdggo.....',
+    '..oggggggggo....',
+    '..ogdggggdgo..o.',
+    '..oggggggggo.ogo',
+    '..ogggggggggoggo',
+    '...owwooowwoooo.',
+    '................',
+  ],
+  [
+    '................',
+    '................',
+    '................',
+    '....o...o.......',
+    '...ogo.ogo......',
+    '...ogggggo......',
+    '...ogegegoo.....',
+    '...ogggpggo.....',
+    '....oggggo....o.',
+    '...ogdgdggo..ogo',
+    '..oggggggggo.ogo',
+    '..ogdggggdgo.ogo',
+    '..oggggggggoggo.',
+    '..ogggggggggoo..',
+    '...owwooowwo....',
+    '................',
+  ],
+];
+
+export function morseFrames(): PixBuf[] {
+  const legend = { o: PAL.ink, g: PAL.grau3, d: PAL.grau2, e: PAL.gruen4, p: PAL.rot3, w: PAL.weiss };
+  return MORSE_ROWS.map((r) => new PixBuf(16, 16).grid(r, legend));
+}
+
+export function briefIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(1, 4, 14, 9, PAL.weiss).frame(1, 4, 14, 9, PAL.ink);
+  for (let i = 0; i < 6; i++) b.set(2 + i, 5 + Math.floor(i / 2), PAL.grau2).set(13 - i, 5 + Math.floor(i / 2), PAL.grau2);
+  b.hline(4, 10, 7, PAL.grau3);
+  return b;
+}
+
+export function markeIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(3, 2, 10, 12, PAL.weiss);
+  for (let x = 3; x < 13; x += 2) b.set(x, 2, null).set(x, 13, null);
+  for (let y = 2; y < 14; y += 2) b.set(3, y, null).set(12, y, null);
+  b.rect(5, 4, 6, 8, PAL.blau3);
+  b.rect(6, 7, 3, 2, PAL.grau3).set(9, 7, PAL.grau4).set(6, 6, PAL.grau3).set(5, 7, PAL.orange);
+  return b;
+}
+
+export function zettelIcon(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.rect(3, 1, 10, 14, PAL.creme).frame(3, 1, 10, 14, PAL.braun3);
+  b.vline(8, 3, 5, PAL.ink).hline(6, 4, 5, PAL.ink).hline(7, 6, 3, PAL.ink);
+  for (let i = 0; i < 6; i++) b.set(5 + i, 3 + i, PAL.rot3);
+  b.hline(5, 10, 6, PAL.grau2).hline(5, 12, 5, PAL.grau2);
+  return b;
+}
+
+/** Das Zeichen von FUNKSTILLE: eine durchgestrichene Antenne. */
+export function funkstilleSymbol(): PixBuf {
+  const b = new PixBuf(16, 16);
+  b.vline(7, 4, 11, PAL.grau4).vline(8, 4, 11, PAL.grau4);
+  b.hline(4, 6, 8, PAL.grau4).hline(5, 9, 6, PAL.grau4);
+  b.rect(6, 14, 4, 2, PAL.grau4);
+  for (let i = 0; i < 14; i++) b.set(1 + i, 1 + i, PAL.rot3).set(2 + i, 1 + i, PAL.rot3);
+  return b;
+}

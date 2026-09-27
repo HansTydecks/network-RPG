@@ -61,7 +61,9 @@ export class NetVision {
   }
 
   private broken(c: NetCable) {
-    return c.brokenFlag ? this.isBroken(c.brokenFlag) : false;
+    if (c.brokenFlag && this.isBroken(c.brokenFlag)) return true;
+    if (c.brokenUnless && !this.isBroken(c.brokenUnless)) return true;
+    return false;
   }
 
   private points(c: NetCable): Phaser.Math.Vector2[] {

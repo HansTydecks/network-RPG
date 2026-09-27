@@ -25,7 +25,12 @@ export type Command =
   | { op: 'turn'; dir: Dir }
   | { op: 'toast'; text: string }
   | { op: 'calendar' }
-  | { op: 'save' };
+  | { op: 'save' }
+  | { op: 'take'; item: ItemId }
+  | { op: 'interlude'; text: string }
+  | { op: 'minigame'; id: string }
+  | { op: 'face'; npc: string; dir: Dir }
+  | { op: 'refresh' };
 
 export type Script = Command[];
 
@@ -46,6 +51,10 @@ export const lexicon = (id: LexiconId): Command => ({ op: 'lexicon', id });
 export const wait = (ms: number): Command => ({ op: 'wait', ms });
 export const warp = (map: MapId, x: number, y: number, dir: Dir): Command => ({ op: 'warp', map, x, y, dir });
 export const toast = (text: string): Command => ({ op: 'toast', text });
+export const take = (item: ItemId): Command => ({ op: 'take', item });
+export const interlude = (text: string): Command => ({ op: 'interlude', text });
+export const minigame = (id: string): Command => ({ op: 'minigame', id });
+export const faceNpc = (npc: string, dir: Dir): Command => ({ op: 'face', npc, dir });
 
 export function evalCond(c: Cond, s: GameState): boolean {
   if ('flag' in c) return s.flags.has(c.flag);

@@ -10,7 +10,7 @@ Alex lebt im sächsischen Dorf Kabelitz und bekommt von Tante Ada eine Brille, d
 
 ## Status
 
-**Testversion M0:** Das technische Fundament steht und ist spielbar (Alex' Zimmer und ein Stück Kabelitz). Die echten Kapitel folgen ab M1.
+**Testversion M1:** Prolog und der Anfang von Kapitel 1 (Klasse 7) sind spielbar, von der Brief-Quest bis zur fertig gebauten Netzblick-Brille und dem aufgebrochenen grauen Kasten. Der Rest von Kapitel 1 folgt mit M2.
 
 ## Spielen und entwickeln
 

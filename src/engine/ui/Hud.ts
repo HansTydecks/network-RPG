@@ -10,13 +10,19 @@ export class Hud {
   private panel: Phaser.GameObjects.Graphics;
   private text: Phaser.GameObjects.BitmapText;
   private netTag: Phaser.GameObjects.BitmapText;
+  private timeTag: Phaser.GameObjects.BitmapText;
 
   constructor(scene: Phaser.Scene) {
     this.root = screenContainer(scene, 900);
     this.panel = scene.add.graphics();
     this.text = uiText(scene, 10, 7, '');
     this.netTag = uiText(scene, 250, 166, 'NETZBLICK AN', PAL.netzKabel).setVisible(false);
-    this.root.add([this.panel, this.text, this.netTag]);
+    this.timeTag = uiText(scene, 0, 170, '', PAL.creme);
+    this.root.add([this.panel, this.text, this.netTag, this.timeTag]);
+  }
+
+  setTime(label: string) {
+    this.timeTag.setText(label).setX(4);
   }
 
   setQuest(title: string | null) {

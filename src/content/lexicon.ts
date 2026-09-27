@@ -24,4 +24,34 @@ export const LEXICON: Record<LexiconId, LexiconEntry> = {
     stufe: 7,
     lehrplan: 'SN Kl. 7 LB 2 (Informatiksysteme) – Einblick',
   },
+  information_daten: {
+    titel: 'Information und Daten',
+    text: 'Auf dem Papier stehen nur Zeichen: Das sind Daten. Erst wenn jemand sie liest und versteht, werden daraus Informationen. Damit Lina weiß, wann und wo gefeiert wird, müssen die Daten vollständig und eindeutig sein.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Begriffe Informationen und Daten',
+  },
+  uebertragung: {
+    titel: 'Übertragung braucht Zeit',
+    text: 'Dein Brief reiste vom Briefkasten über das Postauto und das Briefzentrum bis zu Linas Briefkasten: 2 Tage und 3 Stunden. Wie lange Daten unterwegs sind, hängt vom Weg und vom Transportmittel ab.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Übertragungsrate (Einstieg)',
+  },
+  eva: {
+    titel: 'Eingabe – Verarbeitung – Ausgabe',
+    text: 'Jedes Informatiksystem arbeitet nach dem EVA-Prinzip: Eingabegeräte (Kamera, Mikrofon, Taster) nehmen etwas auf, der Prozessor verarbeitet es, Ausgabegeräte (Display, Lautsprecher) geben ein Ergebnis aus. Damit sich ein Gerät etwas dauerhaft merken kann, braucht es zusätzlich einen Speicher.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 2 – EVA-Modell, Erweiterung um Speichern',
+  },
+  betriebssystem: {
+    titel: 'Betriebssystem',
+    text: 'Das Betriebssystem ist das wichtigste Programm eines Computers. Es verwaltet den Speicher, steuert die Geräte an, ordnet Dateien und startet und beendet Programme. Handys, Laptops und sogar die Brille haben eins.',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 2 – Aufgaben des Betriebssystems',
+  },
+  objekt: {
+    titel: 'Objekt und Klasse',
+    text: 'Morse ist ein Objekt der Klasse „Katze". Eine Klasse ist der Bauplan, ein Objekt ein konkretes Ding. Objekte haben Attribute mit Werten (Farbe = grau) und Methoden, also Dinge, die sie tun können (miauen()).',
+    stufe: 7,
+    lehrplan: 'SN Kl. 7 LB 1 – Objektorientierung: Klasse, Objekt, Attribut, Methode',
+  },
 };

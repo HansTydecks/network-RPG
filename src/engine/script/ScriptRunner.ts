@@ -16,6 +16,10 @@ export interface ScriptHost {
   turnPlayer(dir: Dir): void;
   calendar(): Promise<void>;
   save(): Promise<void>;
+  interlude(text: string): Promise<void>;
+  minigame(id: string): Promise<void>;
+  faceNpc(npc: string, dir: Dir): void;
+  refresh(): void;
 }
 
 export async function runScript(script: Script, host: ScriptHost): Promise<void> {
@@ -69,6 +73,21 @@ export async function runScript(script: Script, host: ScriptHost): Promise<void>
         break;
       case 'save':
         await host.save();
+        break;
+      case 'take':
+        host.state.items.delete(cmd.item);
+        break;
+      case 'interlude':
+        await host.interlude(cmd.text);
+        break;
+      case 'minigame':
+        await host.minigame(cmd.id);
+        break;
+      case 'face':
+        host.faceNpc(cmd.npc, cmd.dir);
+        break;
+      case 'refresh':
+        host.refresh();
         break;
     }
   }

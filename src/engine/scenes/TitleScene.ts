@@ -35,7 +35,7 @@ export class TitleScene extends Phaser.Scene {
     title.setX(Math.round(160 - (measureText('NETZBLICK') * 3) / 2)).setOrigin(0, 0);
     const sub = 'Alex und die Funkstille';
     this.add.bitmapText(Math.round(160 - measureText(sub) / 2), 62, FONT_KEY, sub).setTint(hexToInt(PAL.gelb));
-    const foot = 'Ein Informatik-Abenteuer · Testversion M0';
+    const foot = 'Ein Informatik-Abenteuer · Testversion M1';
     this.add.bitmapText(Math.round(160 - measureText(foot) / 2), 168, FONT_KEY, foot).setTint(hexToInt(PAL.grau2));
     this.ping = this.add.sprite(-20, 90, 'ping', 2).play('ping_flap');
     if (isTouchDevice()) addTouchControls(this, this.inp).setDpadVisible(false);
@@ -69,8 +69,10 @@ export class TitleScene extends Phaser.Scene {
 
   private start(state: GameState) {
     this.registry.set('state', state);
+    const next = state.flags.has('prolog_gesehen') ? 'World' : 'Prolog';
+    if (next === 'Prolog') state.flags.add('prolog_gesehen');
     this.cameras.main.fadeOut(300);
-    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('World'));
+    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(next));
   }
 
   update(_time: number, dt: number) {

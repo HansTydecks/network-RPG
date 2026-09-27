@@ -415,6 +415,222 @@ export const TILES: TileDef[] = [
       b.rect(3, 7, 4, 2, PAL.gruen3).rect(8, 8, 5, 1, PAL.gruen3);
     },
   },
+  // --- Erdgeschoss (Kapitel 1) ---
+  {
+    id: 'treppe',
+    layer: 'ground',
+    draw: (b) => {
+      planks(b);
+      for (let y = 1; y < T; y += 4) {
+        b.rect(1, y, 14, 3, PAL.braun4).hline(1, y + 3, 14, PAL.braun1);
+      }
+      b.vline(0, 0, T, PAL.braun1).vline(15, 0, T, PAL.braun1);
+    },
+  },
+  {
+    id: 'fliesen',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.grau4);
+      b.rect(0, 0, 8, 8, PAL.weiss).rect(8, 8, 8, 8, PAL.weiss);
+      b.hline(0, 7, T, PAL.grau3).vline(7, 0, T, PAL.grau3).hline(0, 15, T, PAL.grau3).vline(15, 0, T, PAL.grau3);
+    },
+  },
+  {
+    id: 'sofa_l',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 3, 15, 12, PAL.gruen2).rect(1, 3, 4, 12, PAL.gruen1);
+      b.rect(5, 9, 11, 5, PAL.gruen3);
+      b.frame(1, 3, 16, 12, PAL.ink).vline(5, 4, 10, PAL.ink);
+      b.rect(2, 15, 2, 1, PAL.braun1);
+    },
+  },
+  {
+    id: 'sofa_r',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 3, 15, 12, PAL.gruen2).rect(11, 3, 4, 12, PAL.gruen1);
+      b.rect(0, 9, 11, 5, PAL.gruen3);
+      b.frame(-1, 3, 16, 12, PAL.ink).vline(10, 4, 10, PAL.ink);
+      b.rect(12, 15, 2, 1, PAL.braun1);
+    },
+  },
+  {
+    id: 'esstisch',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 5, 16, 6, PAL.braun3).hline(0, 5, 16, PAL.braun4).hline(0, 10, 16, PAL.braun1);
+      b.rect(1, 11, 2, 5, PAL.braun2).rect(13, 11, 2, 5, PAL.braun2);
+    },
+  },
+  {
+    id: 'tisch_laptop',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 5, 16, 6, PAL.braun3).hline(0, 5, 16, PAL.braun4).hline(0, 10, 16, PAL.braun1);
+      b.rect(1, 11, 2, 5, PAL.braun2).rect(13, 11, 2, 5, PAL.braun2);
+      b.rect(4, 0, 9, 6, PAL.grau1).rect(5, 1, 7, 4, PAL.blau2);
+      b.set(8, 2, PAL.rot3).set(7, 3, PAL.rot3).set(9, 3, PAL.rot3);
+      b.rect(3, 6, 11, 2, PAL.grau3);
+    },
+  },
+  {
+    id: 'kueche',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 4, 16, 12, PAL.weiss).hline(0, 4, 16, PAL.grau3).rect(0, 5, 16, 2, PAL.grau2);
+      b.frame(2, 9, 5, 6, PAL.grau3).frame(9, 9, 5, 6, PAL.grau3);
+      b.disc(4.5, 5.5, 1.5, PAL.ink).disc(11.5, 5.5, 1.5, PAL.ink);
+      b.hline(0, 15, 16, PAL.ink);
+    },
+  },
+  {
+    id: 'kuehlschrank',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(2, 0, 12, 16, PAL.weiss).frame(2, 0, 12, 16, PAL.ink);
+      b.hline(3, 6, 10, PAL.grau3).vline(11, 2, 3, PAL.grau2).vline(11, 8, 4, PAL.grau2);
+      b.rect(5, 9, 3, 3, PAL.gelb).rect(4, 2, 2, 2, PAL.rot3);
+    },
+  },
+  {
+    id: 'fernseher',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 2, 14, 9, PAL.ink).rect(2, 3, 12, 7, PAL.grau1);
+      b.set(4, 4, PAL.grau2).set(5, 4, PAL.grau2);
+      b.rect(3, 11, 10, 5, PAL.braun2).hline(3, 11, 10, PAL.braun3);
+    },
+  },
+  {
+    id: 'router',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(3, 6, 10, 5, PAL.weiss).frame(3, 6, 10, 5, PAL.ink);
+      b.vline(5, 2, 4, PAL.grau1).vline(10, 2, 4, PAL.grau1);
+      b.set(5, 8, PAL.gruen3).set(7, 8, PAL.gruen3).set(9, 8, PAL.rot3).set(11, 8, PAL.grau3);
+      b.hline(4, 11, 8, PAL.braun1);
+    },
+  },
+  // --- Briefzentrum ---
+  {
+    id: 'beton',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.grau3);
+      speckle(b, 41, [PAL.grau2, PAL.grau4], 0.08);
+      b.hline(0, 15, T, PAL.grau2).vline(15, 0, T, PAL.grau2);
+    },
+  },
+  {
+    id: 'hallenwand',
+    layer: 'ground',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.grau2);
+      for (let y = 2; y < 12; y += 3) b.hline(0, y, T, PAL.grau1);
+      b.rect(0, 12, T, 4, PAL.gelb);
+      for (let x = 0; x < T; x += 4) b.rect(x, 12, 2, 4, PAL.ink);
+    },
+  },
+  {
+    id: 'band',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 4, 16, 9, PAL.ink).rect(0, 5, 16, 7, PAL.grau1);
+      for (let x = 1; x < 16; x += 4) b.vline(x, 5, 7, PAL.grau2);
+      b.rect(2, 13, 2, 3, PAL.grau2).rect(12, 13, 2, 3, PAL.grau2);
+      b.rect(5, 6, 6, 4, PAL.weiss).frame(5, 6, 6, 4, PAL.grau3);
+    },
+  },
+  {
+    id: 'fach',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.blau1);
+      for (const [x, y] of [[1, 1], [8, 1], [1, 8], [8, 8]] as const) {
+        b.rect(x, y, 7, 6, PAL.ink);
+        b.rect(x + 1, y + 2, 5, 4, PAL.weiss);
+      }
+      b.frame(0, 0, 16, 16, PAL.ink);
+    },
+  },
+  {
+    id: 'briefkiste',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(1, 6, 14, 9, PAL.gelb).frame(1, 6, 14, 9, PAL.ink);
+      for (let x = 3; x < 14; x += 3) b.rect(x, 3, 2, 5, x % 2 ? PAL.weiss : PAL.creme).frame(x, 3, 2, 5, PAL.grau3);
+      b.hline(2, 10, 12, PAL.orange);
+    },
+  },
+  {
+    id: 'maschine_l',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.grau4).frame(0, 0, 17, 16, PAL.ink);
+      b.rect(2, 2, 10, 6, PAL.ink).rect(3, 3, 8, 4, PAL.gruen1);
+      b.hline(4, 4, 5, PAL.netzDefekt);
+      b.rect(2, 10, 3, 3, PAL.rot3).rect(7, 10, 3, 3, PAL.gruen3);
+    },
+  },
+  {
+    id: 'maschine_r',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      b.rect(0, 0, 16, 16, PAL.grau4).frame(-1, 0, 17, 16, PAL.ink);
+      for (let y = 2; y < 14; y += 3) b.hline(2, y, 12, PAL.grau2);
+      b.rect(10, 11, 4, 4, PAL.gelb);
+    },
+  },
+  {
+    id: 'tor',
+    layer: 'ground',
+    draw: (b) => {
+      b.rect(0, 0, T, T, PAL.grau3);
+      for (let x = -16; x < 16; x += 6) for (let y = 0; y < T; y++) b.set(x + y, y, PAL.gelb).set(x + y + 1, y, PAL.gelb).set(x + y + 2, y, PAL.gelb);
+    },
+  },
+  // --- Außen, Kapitel 1 ---
+  {
+    id: 'postauto_l',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(1, 3, 15, 10, PAL.gelb).rect(2, 4, 6, 4, PAL.blau4);
+      s.hline(1, 9, 15, PAL.orange);
+      s.disc(5, 13, 2.5, PAL.ink).disc(5, 13, 1, PAL.grau3);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
+  {
+    id: 'postauto_r',
+    layer: 'deco',
+    solid: true,
+    draw: (b) => {
+      const s = new PixBuf(T, T);
+      s.rect(0, 1, 14, 12, PAL.gelb);
+      s.hline(0, 9, 14, PAL.orange);
+      s.rect(4, 3, 6, 4, PAL.orange).rect(5, 4, 4, 2, PAL.gelb);
+      s.disc(10, 13, 2.5, PAL.ink).disc(10, 13, 1, PAL.grau3);
+      b.blit(s.outline(PAL.ink));
+    },
+  },
 ];
 
 export const TILE_INDEX: Record<string, number> = Object.fromEntries(TILES.map((t, i) => [t.id, i]));

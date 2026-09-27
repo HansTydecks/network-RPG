@@ -22,7 +22,7 @@ export class InfoPanel implements Modal {
   constructor(private scene: Phaser.Scene, heading: string, private entries: InfoEntry[], emptyText: string, private onClose: () => void = () => {}) {
     this.root = screenContainer(scene, 1250);
     const g = scene.add.graphics();
-    drawPanel(g, 0, 0, 320, 180);
+    drawPanel(g, 0, 0, 320, 180, PAL.ink, 1);
     g.lineStyle(1, 0x566c86, 1).lineBetween(110.5, 20, 110.5, 168);
     this.root.add(g);
     this.root.add(uiText(scene, 12, 10, heading, PAL.gelb));

@@ -2,19 +2,23 @@
 
 ## Stand der Umsetzung
 
-**M0 „Fundament" ist fertig** (Testversion, noch ohne echte Kapitelinhalte):
+**M0 „Fundament" ist fertig:** Phaser 4 + TypeScript + Vite, alle Grafiken und die Schrift aus Code, Kachelbewegung, Dialoge, Menü, Script-System, Hilfe von Ping, Netzblick-Brille, Speichercode, Schulkalender mit Lehrkraft-Codes, Touch-Steuerung.
 
-- Phaser 4 + TypeScript + Vite, alle Grafiken und die Schrift werden beim Start aus Code erzeugt (`src/content/art`, `src/engine/gfx`)
-- Kachelbewegung wie bei Pokémon (kurz tippen = drehen, halten = laufen, B halten = rennen), Kamera, Türen/Warps
-- Dialogfenster mit Schreibmaschinen-Effekt, Auswahlmenüs, Menü (Rucksack, Netzbuch, Speichern)
-- Script-System für Story-Ereignisse (`src/engine/script`), Aufgabenzeile, Hilfe von Ping mit drei Hinweisstufen (Taste H)
-- Netzblick-Brille v1 (Taste N): Kabel, Glasfaser, Geräte, wandernde Datenpakete
-- Speichercode (Hefter-tauglich, mit Prüfsumme) + Autosave, Schulkalender mit Lehrkraft-Codes (nur Hashes im Code)
-- Touch-Steuerung für Tablets
-- Testkarten: Alex' Zimmer und ein Stück Kabelitz mit Opa Werner, grauem Kasten, Briefkasten, Taubenschlag
-- Tests: 35 Unit-Tests (u. a. Speichercode, Kalender-Codes, Script-Runner, Kartenprüfung, Schriftabdeckung), 3 Browser-Tests (komplettes Durchspielen, Speichercode, Kalender)
+**M1 „Vertical Slice" ist fertig** (ca. 30–45 Minuten Spielzeit):
 
-Nächster Schritt: **M1 Vertical Slice** (Prolog + Kapitel 1 bis zur Brille).
+- Prolog im Keller (FUNKSTILLE tippt, Hinweise im Bild: Klappenschrank, Taubenkäfig, Tasse, Strickjacke)
+- Quest 1.1: Mama im Homeoffice, Papa nach der Nachtschicht, das Internet ist weg, Lina soll eingeladen werden
+- Quest 1.2: Opa Werners Idee, Minispiel „Brief an Lina" (Information vs. Daten, Umschlag beschriften), Briefmarke von Opa, Briefkasten, Zeitsprung
+- Frau Krause bringt Tante Adas Paket und nimmt Alex mit ins Briefzentrum: Minispiel „Sortiermaschine" (3 Runden nach Postleitzahl) und „Reise des Briefs" (2 Tage 3 Stunden)
+- Quest 1.3: Minispiele „Brille zusammenbauen" (EVA + Speichern) und „NetzBlick OS" (Aufgaben des Betriebssystems)
+- Erster Netzblick: Die Kabel sind tot, der graue Kasten ist aufgebrochen, FUNKSTILLEs Caesar-Zettel
+- Objekt-Scan mit der Brille (Objektkarten mit Klasse, Attributen, Methoden) an Katze Morse, Ping, Briefkasten, Antenne, Geräten im Haus
+- Tageszeit (Tag 1/2, Vormittag/Nachmittag) mit Einfärbung draußen
+- 7 Netzbuch-Einträge, alle Klasse 7
+
+Tests: 57 Unit-Tests (u. a. Minispiel-Logik, Caesar-Zettel, Kartenprüfung, Klassenstufen-Grenzen, Schriftabdeckung aller Texte) und 3 Browser-Tests, darunter ein kompletter Durchlauf von Kapitel 1 mit allen Minispielen.
+
+Nächster Schritt: **M2 – Kapitel 1 komplett** (Museum und Binärzahlen, Krümel und Blockprogrammierung, Dorfladen und Einheiten, Dorffest, Reparatur des grauen Kastens).
 
 ## Entwickeln
 

@@ -8,8 +8,8 @@ export const SCREEN_W = 320;
 export const SCREEN_H = 180;
 
 /** Fenster im Stil alter Konsolen-RPGs: dunkler Grund, heller Doppelrahmen. */
-export function drawPanel(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, fill: string = PAL.ink) {
-  g.fillStyle(hexToInt(fill), 0.96).fillRect(x, y, w, h);
+export function drawPanel(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, fill: string = PAL.ink, alpha = 0.96) {
+  g.fillStyle(hexToInt(fill), alpha).fillRect(x, y, w, h);
   g.lineStyle(1, hexToInt(PAL.weiss), 1).strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
   g.lineStyle(1, hexToInt(PAL.grau2), 1).strokeRect(x + 3.5, y + 3.5, w - 7, h - 7);
 }

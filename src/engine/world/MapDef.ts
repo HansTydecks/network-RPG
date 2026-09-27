@@ -1,6 +1,6 @@
 import type { Dir } from '../state/GameState';
 import type { MapId } from '../../content/registry';
-import type { Script } from '../script/Script';
+import type { Cond, Script } from '../script/Script';
 
 /**
  * Kartenformat: ASCII-Raster je Ebene + Legende + Entities + Netzgraph.
@@ -19,22 +19,36 @@ export interface MapDef {
   onEnter?: Script;
   /** Zusätzlich blockierte Kacheln (z. B. verschlossene Türen). */
   extraSolid?: [number, number][];
+  /** Draußen: Tageszeit färbt die Karte ein. */
+  outdoor?: boolean;
   /** Hintergrundfarbe außerhalb kleiner Karten. */
   outside?: string;
 }
 
 export type EntityDef = NpcDef | InteractDef | WarpDef | TriggerDef;
 
+/** Objektkarte, die die Brille beim Anschauen zeigt (Klasse – Objekt – Attribut – Methode). */
+export interface ScanData {
+  name: string;
+  klasse: string;
+  attribute: [string, string][];
+  methoden: string[];
+}
+
 export interface NpcDef {
   kind: 'npc';
   id: string;
+  /** Figur (char_…) oder Tier-Sprite mit eigener Animation. */
   sprite: string;
+  /** Für Tiere: Animationsname statt Laufanimation. */
+  anim?: string;
   x: number;
   y: number;
   dir: Dir;
   script: Script;
   /** Nur sichtbar, wenn diese Bedingung erfüllt ist. */
-  visibleIf?: (flags: ReadonlySet<string>) => boolean;
+  visibleIf?: Cond;
+  scan?: ScanData;
 }
 
 /** Etwas zum Untersuchen (A-Taste davor), z. B. Schild, Kalender, Computer. */
@@ -44,6 +58,10 @@ export interface InteractDef {
   x: number;
   y: number;
   script: Script;
+  /** Optional als Gegenstand gezeichnet (Kachel-ID); blockiert dann den Weg. */
+  tile?: string;
+  visibleIf?: Cond;
+  scan?: ScanData;
 }
 
 export interface WarpDef {
@@ -60,6 +78,8 @@ export interface TriggerDef {
   x: number;
   y: number;
   script: Script;
+  /** Nur aktiv, wenn diese Bedingung erfüllt ist. */
+  activeIf?: Cond;
 }
 
 export interface NetDevice {
@@ -77,6 +97,8 @@ export interface NetCable {
   medium: 'kupfer' | 'glasfaser';
   /** Solange dieses Flag gesetzt ist, ist das Kabel unterbrochen. */
   brokenFlag?: string;
+  /** Das Kabel ist unterbrochen, bis dieses Flag gesetzt ist. */
+  brokenUnless?: string;
 }
 
 export interface NetDef {

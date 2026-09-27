@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import { PixBuf } from './pixbuf';
 import { CELL_H, LETTER_SPACING, allFontChars, glyphBitmap } from './fontGlyphs';
 import { TILES } from '../../content/art/tiles';
-import { CHARACTERS, characterFrames, netzblickIcon, packetSprite, pingFrames } from '../../content/art/characters';
+import { CHARACTERS, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
+import { prologBackground, prologHand } from '../../content/art/prolog';
 
 export const FONT_KEY = 'kabelitz';
 export const TILESET_KEY = 'tileset';
@@ -92,6 +93,19 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addSheet(scene, 'ping', pingFrames());
   addImage(scene, 'paket_netz', packetSprite());
   addImage(scene, 'icon_netzblick_v1', netzblickIcon());
+  addImage(scene, 'icon_brief', briefIcon());
+  addImage(scene, 'icon_briefmarke', markeIcon());
+  addImage(scene, 'icon_zettel', zettelIcon());
+  addImage(scene, 'funkstille', funkstilleSymbol());
+  addSheet(scene, 'morse', morseFrames());
+  addImage(scene, 'prolog_bg', prologBackground());
+  addSheet(scene, 'prolog_hand', [prologHand(0), prologHand(1)]);
+  // Einzelne Kacheln auch als eigene Bilder (für Gegenstände, die erst später auftauchen)
+  TILES.forEach((t) => {
+    const b = new PixBuf(16, 16);
+    t.draw(b);
+    addImage(scene, `tile_${t.id}`, b);
+  });
   const px = new PixBuf(1, 1, '#ffffff');
   addImage(scene, 'pixel', px);
 }
@@ -110,5 +124,6 @@ export function buildAnimations(scene: Phaser.Scene) {
     }
   }
   scene.anims.create({ key: 'ping_idle', frames: [0, 0, 0, 1].map((f) => ({ key: 'ping', frame: f })), frameRate: 3, repeat: -1 });
+  scene.anims.create({ key: 'morse_idle', frames: [0, 1, 0, 0].map((f) => ({ key: 'morse', frame: f })), frameRate: 2, repeat: -1 });
   scene.anims.create({ key: 'ping_flap', frames: [2, 3].map((f) => ({ key: 'ping', frame: f })), frameRate: 10, repeat: -1 });
 }

@@ -1,9 +1,10 @@
 import type { MapDef } from '../../engine/world/MapDef';
-import { lexicon, narrate, quest, say, setFlag, when } from '../../engine/script/Script';
+import { give, interlude, lexicon, narrate, quest, say, setFlag, take, warp, when } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
   id: 'kabelitz',
   name: 'Kabelitz',
+  outdoor: true,
   legend: {
     '.': 'gras', ',': 'gras2', '=': 'weg', '*': 'blumen', '#': 'strasse', '~': 'strasse_mitte',
     T: 'baum_ol', Y: 'baum_or', U: 'baum_ul', I: 'baum_ur', b: 'busch', z: 'zaun',
@@ -60,7 +61,7 @@ export const kabelitz: MapDef = {
     [24, 12],
   ],
   entities: [
-    { kind: 'warp', x: 6, y: 7, to: { map: 'alex_zimmer', x: 4, y: 6, dir: 'up' } },
+    { kind: 'warp', x: 6, y: 7, to: { map: 'wohnzimmer', x: 5, y: 7, dir: 'up' } },
     {
       kind: 'npc',
       id: 'opa',
@@ -68,34 +69,116 @@ export const kabelitz: MapDef = {
       x: 17,
       y: 9,
       dir: 'down',
+      script: opaScript(),
+    },
+    {
+      kind: 'npc',
+      id: 'morse',
+      sprite: 'morse',
+      anim: 'morse_idle',
+      x: 20,
+      y: 6,
+      dir: 'down',
+      script: [say('morse', 'Miau.'), narrate('Morse, Opa Werners Katze, streicht dir um die Beine und schnurrt.')],
+      scan: {
+        name: 'morse',
+        klasse: 'Katze',
+        attribute: [['farbe', 'grau getigert'], ['alter', '9 Jahre'], ['besitzer', 'Opa Werner']],
+        methoden: ['miauen', 'schnurren', 'schlafen', 'maeusejagen'],
+      },
+    },
+    {
+      kind: 'interact',
+      id: 'postauto_l',
+      x: 8,
+      y: 9,
+      tile: 'postauto_l',
+      visibleIf: { all: [{ flag: 'tag2' }, { not: { flag: 'krause_getroffen' } }] },
+      script: [narrate('Das gelbe Postauto von Frau Krause. Es ist voller Pakete.')],
+      scan: { name: 'postauto', klasse: 'Auto', attribute: [['farbe', 'gelb'], ['ladung', '38 Pakete']], methoden: ['fahren', 'hupen', 'beladen'] },
+    },
+    {
+      kind: 'interact',
+      id: 'postauto_r',
+      x: 9,
+      y: 9,
+      tile: 'postauto_r',
+      visibleIf: { all: [{ flag: 'tag2' }, { not: { flag: 'krause_getroffen' } }] },
+      script: [narrate('Das gelbe Postauto von Frau Krause. Es ist voller Pakete.')],
+    },
+    { kind: 'interact', id: 'opa_tuer', x: 16, y: 7, script: [narrate('Opa Werners Haustür. Abgeschlossen – Opa ist ja draußen.')] },
+    { kind: 'interact', id: 'emil_tuer', x: 24, y: 12, script: [narrate('Hier wohnt Emil mit seinen Eltern. Niemand öffnet.')] },
+    {
+      kind: 'interact',
+      id: 'schild',
+      x: 3,
+      y: 13,
+      script: [narrate('„Kabelitz – Bitte fahren Sie vorsichtig."')],
+      scan: { name: 'ortsschild', klasse: 'Schild', attribute: [['text', 'Kabelitz'], ['einwohner', '214']], methoden: [] },
+    },
+    {
+      kind: 'interact',
+      id: 'briefkasten',
+      x: 19,
+      y: 13,
+      scan: {
+        name: 'briefkasten',
+        klasse: 'Briefkasten',
+        attribute: [['farbe', 'gelb'], ['leerung', '17:00 Uhr'], ['inhalt', '3 Briefe']],
+        methoden: ['einwerfen', 'leeren'],
+      },
       script: [
         when(
-          { flag: 'opa_begruesst' },
+          { all: [{ flag: 'marke_erhalten' }, { not: { flag: 'brief_eingeworfen' } }] },
           [
-            when(
-              { item: 'netzblick_v1' },
-              [
-                say('opa', 'Was hast du denn da für \'ne Brille, Kind? Sieht aus wie aus\'m Fernsehen.'),
-                say('opa', 'Na ja … Hauptsache, du setzt sie auch mal ab und guckst dir die echte Welt an. Hehe.'),
-              ],
-              [say('opa', 'Früher, da hat man sich noch Briefe geschrieben. Mit Briefmarke und allem. Das war noch was!')],
-            ),
+            narrate('Du klebst die Taubenbriefmarke auf den Umschlag und wirfst den Brief ein. Plopp!'),
+            take('brief'),
+            take('briefmarke'),
+            setFlag('brief_eingeworfen'),
+            say('ping', 'Und jetzt? Jetzt muss der Brief erst mal zu Lina reisen. Mal sehen, wie lange das dauert …'),
+            interlude('Um 17 Uhr holt die Postbotin die Briefe aus dem Kasten …'),
+            interlude('Am nächsten Morgen'),
+            setFlag('tag2'),
+            warp('alex_zimmer', 3, 3, 'down'),
+            say('ping', 'Ping! Guten Morgen! Hörst du das? Es hat an der Haustür geklingelt!'),
+            quest('q1_tuer'),
           ],
           [
-            say('opa', 'Na, Alex! Schon wach? Ping hat mich heute früh schon besucht, die olle Taube.'),
-            say('opa', 'Die fliegt immer noch zu meinem Taubenschlag. Kann eben nicht vergessen, wo sie herkommt.'),
-            say('ping', 'Gurr …'),
-            setFlag('opa_begruesst'),
+            when(
+              { all: [{ flag: 'brief_geschrieben' }, { not: { flag: 'marke_erhalten' } }] },
+              [narrate('Ohne Briefmarke nimmt die Post den Brief nicht mit.')],
+              [narrate('Ein gelber Briefkasten. „Leerung: 17:00 Uhr".')],
+            ),
           ],
         ),
       ],
     },
-    { kind: 'interact', id: 'opa_tuer', x: 16, y: 7, script: [narrate('Opa Werners Haustür. Abgeschlossen – Opa ist ja draußen.')] },
-    { kind: 'interact', id: 'emil_tuer', x: 24, y: 12, script: [narrate('Hier wohnt Emil mit seinen Eltern. Niemand öffnet.')] },
-    { kind: 'interact', id: 'schild', x: 3, y: 13, script: [narrate('„Kabelitz – Bitte fahren Sie vorsichtig."')] },
-    { kind: 'interact', id: 'briefkasten', x: 19, y: 13, script: [narrate('Ein gelber Briefkasten. „Leerung: 17:00 Uhr".')] },
-    { kind: 'interact', id: 'antenne', x: 21, y: 4, script: [narrate('Eine große Antenne in Opa Werners Garten. „Für den Wetterbericht", sagt Opa immer.')] },
-    { kind: 'interact', id: 'taubenschlag', x: 23, y: 5, script: [narrate('Opa Werners Taubenschlag. An der Tür ist ein Tastenfeld: „Nur für Tauben". Seltsam …')] },
+    {
+      kind: 'interact',
+      id: 'antenne',
+      x: 21,
+      y: 4,
+      script: [narrate('Eine große Antenne in Opa Werners Garten. „Für den Wetterbericht", sagt Opa immer.')],
+      scan: {
+        name: 'antenne',
+        klasse: 'Antenne',
+        attribute: [['hoehe', '6 m'], ['besitzer', 'Opa Werner'], ['zweck', 'Wetterbericht (sagt Opa)']],
+        methoden: ['empfangen', 'senden'],
+      },
+    },
+    {
+      kind: 'interact',
+      id: 'taubenschlag',
+      x: 23,
+      y: 5,
+      script: [narrate('Opa Werners Taubenschlag. An der Tür ist ein Tastenfeld: „Nur für Tauben". Seltsam …')],
+      scan: {
+        name: 'taubenschlag',
+        klasse: 'Taubenschlag',
+        attribute: [['bewohner', '12 Tauben'], ['schloss', 'Tastenfeld']],
+        methoden: ['oeffnen (gesperrt)'],
+      },
+    },
     {
       kind: 'interact',
       id: 'verteilerkasten',
@@ -105,15 +188,25 @@ export const kabelitz: MapDef = {
         when(
           { item: 'netzblick_v1' },
           [
-            narrate('Mit der Brille siehst du es: Aus jedem Haus im Dorf läuft ein Kabel hierher!'),
-            narrate('Und aus dem Kasten führt eine dicke Leitung weiter Richtung Stadt.'),
-            say('ping', 'Gurr! Hier laufen alle Kabel von Kabelitz zusammen. Deshalb stehen diese grauen Kästen überall!'),
-            lexicon('kabelverzweiger'),
-            setFlag('kvz_gesehen'),
-            quest('m0_fertig'),
-            narrate('Du hast das Ende der Testversion erreicht. In Kapitel 1 geht es richtig los!'),
+            when(
+              { flag: 'zettel_gefunden' },
+              [narrate('Der aufgebrochene graue Kasten. Hier laufen alle Kabel von Kabelitz zusammen – und hier ist etwas kaputtgemacht worden.')],
+              [
+                narrate('Der graue Kasten ist aufgebrochen! Die Tür hängt schief, drinnen sind Kabel herausgerissen und vertauscht.'),
+                say('ping', 'Gurr! Das war kein Unfall. Das hat jemand mit Absicht gemacht!'),
+                narrate('Hier laufen die Kabel aus allen Häusern zusammen. Ist der Kasten kaputt, ist das ganze Dorf offline.'),
+                lexicon('kabelverzweiger'),
+                narrate('An der Innenseite der Tür klebt ein Zettel. Darauf eine durchgestrichene Antenne – und Buchstabensalat.'),
+                give('zettel_funkstille'),
+                setFlag('zettel_gefunden'),
+                say('ping', '„WUHIISXQNW DOWHV IHUQPHOGHDPW"? Das ist doch kein Deutsch! Vielleicht eine Geheimschrift …'),
+                say('ping', 'Wer macht so was? Und warum? Gurr …'),
+                quest('q1_fortsetzung'),
+                narrate('Ende der Testversion. Wie es mit dem grauen Kasten weitergeht, erfährst du in der nächsten Version!'),
+              ],
+            ),
           ],
-          [narrate('Ein grauer Kasten. Die stehen überall herum – aber was ist da eigentlich drin?')],
+          [narrate('Ein grauer Kasten. Die stehen überall herum – aber was ist da eigentlich drin? Die Tür steht einen Spalt offen. Komisch.')],
         ),
       ],
     },
@@ -122,7 +215,7 @@ export const kabelitz: MapDef = {
       id: 'ortsausgang',
       x: 29,
       y: 15,
-      script: [say('ping', 'Da geht es nach Knotenburg. Aber das kommt erst später. Gurr!'), { op: 'turn', dir: 'left' }],
+      script: [say('ping', 'Da geht es nach Knotenburg. Aber heute bleiben wir in Kabelitz. Gurr!'), { op: 'turn', dir: 'left' }],
     },
   ],
   net: {
@@ -134,10 +227,85 @@ export const kabelitz: MapDef = {
       { id: 'stadt', x: 29, y: 15, label: 'Richtung Knotenburg' },
     ],
     cables: [
-      { from: 'alex', to: 'kvz', medium: 'kupfer', path: [[5, 7], [5, 14], [11, 14], [11, 13]] },
-      { from: 'opa', to: 'kvz', medium: 'kupfer', path: [[15, 7], [15, 14], [11, 14], [11, 13]] },
-      { from: 'emil', to: 'kvz', medium: 'kupfer', path: [[23, 12], [23, 14], [11, 14], [11, 13]] },
-      { from: 'kvz', to: 'stadt', medium: 'glasfaser', path: [[11, 13], [11, 15], [29, 15]] },
+      { from: 'alex', to: 'kvz', medium: 'kupfer', brokenUnless: 'kvz_repariert', path: [[5, 7], [5, 14], [11, 14], [11, 13]] },
+      { from: 'opa', to: 'kvz', medium: 'kupfer', brokenUnless: 'kvz_repariert', path: [[15, 7], [15, 14], [11, 14], [11, 13]] },
+      { from: 'emil', to: 'kvz', medium: 'kupfer', brokenUnless: 'kvz_repariert', path: [[23, 12], [23, 14], [11, 14], [11, 13]] },
+      { from: 'kvz', to: 'stadt', medium: 'glasfaser', brokenUnless: 'kvz_repariert', path: [[11, 13], [11, 15], [29, 15]] },
     ],
   },
 };
+
+function opaScript() {
+  return [
+    when(
+      { not: { flag: 'mama_gesprochen' } },
+      [
+        say('opa', 'Na, Alex! Schon wach? Ping hat mich heute früh schon besucht, die olle Taube.'),
+        say('opa', 'Die fliegt immer noch zu meinem Taubenschlag. Kann eben nicht vergessen, wo sie herkommt.'),
+        say('ping', 'Gurr …'),
+        setFlag('opa_begruesst'),
+      ],
+      [
+        when(
+          { not: { flag: 'idee_brief' } },
+          [
+            say('opa', 'Na, das Internet ist wohl weg, was?'),
+            narrate('(Woher weiß Opa Werner das eigentlich?)'),
+            narrate('Du erzählst ihm von deinem Geburtstag und dass du Lina einladen willst.'),
+            say('opa', 'Dann schreib Lina doch einen Brief! Wie früher. Mit Papier, Umschlag und Briefmarke.'),
+            say('opa', 'So ein Brief kommt immer an. Ganz ohne Internet. Hehe.'),
+            say('ping', 'Einen Brief? Gute Idee! An deinem Schreibtisch oben liegt Papier.'),
+            setFlag('idee_brief'),
+            quest('q1_brief'),
+          ],
+          [
+            when(
+              { not: { flag: 'brief_geschrieben' } },
+              [say('opa', 'Na los, schreib deinen Brief! Und vergiss die Adresse nicht.')],
+              [
+                when(
+                  { not: { flag: 'marke_erhalten' } },
+                  [
+                    say('opa', 'Eine Briefmarke? Aber sicher doch!'),
+                    narrate('Opa Werner holt ein dickes Album aus dem Haus. Hunderte Briefmarken, sauber einsortiert.'),
+                    say('opa', 'Hier, die mit der Brieftaube. Die passt zu dir.'),
+                    give('briefmarke'),
+                    setFlag('marke_erhalten'),
+                    say('opa', 'Endlich schreibt mal wieder einer richtige Briefe! Früher, da hat man sich Mühe gegeben. Heute tippen alle nur noch auf ihren Handys rum.'),
+                    say('opa', 'Der Briefkasten ist unten am Weg. Um fünf wird geleert.'),
+                    quest('q1_einwerfen'),
+                  ],
+                  [
+                    when(
+                      { not: { flag: 'brief_eingeworfen' } },
+                      [say('opa', 'Um fünf wird der Briefkasten geleert. Nicht trödeln!')],
+                      [
+                        when(
+                          { item: 'netzblick_v1' },
+                          [
+                            when(
+                              { flag: 'zettel_gefunden' },
+                              [
+                                say('opa', 'Der graue Kasten? Aufgebrochen, sagst du? Na so was.'),
+                                say('opa', 'Tja … vielleicht ist das ja ein Zeichen. Ein bisschen Ruhe tut uns allen gut.'),
+                              ],
+                              [
+                                say('opa', 'Was hast du denn da für \'ne Brille, Kind? Sieht aus wie aus\'m Fernsehen.'),
+                                say('opa', 'Na ja … Hauptsache, du setzt sie auch mal ab und guckst dir die echte Welt an.'),
+                              ],
+                            ),
+                          ],
+                          [say('opa', 'Na, hat die Post deinen Brief abgeholt? Wirst sehen, Lina freut sich mehr darüber als über jede Nachricht auf dem Handy.')],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ];
+}

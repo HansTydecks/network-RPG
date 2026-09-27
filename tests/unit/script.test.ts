@@ -18,6 +18,10 @@ function mockHost(choices: number[] = []) {
     turnPlayer: () => {},
     calendar: async () => void log.push('kalender'),
     save: async () => void log.push('speichern'),
+    interlude: async (t) => void log.push(`zwischen ${t}`),
+    minigame: async (id) => void log.push(`minispiel ${id}`),
+    faceNpc: () => {},
+    refresh: () => {},
   };
   return { host, log };
 }
