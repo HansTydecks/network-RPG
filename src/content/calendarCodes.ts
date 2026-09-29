@@ -1,9 +1,9 @@
 import type { CalendarEntry } from '../engine/state/CalendarCodes';
 
-/** Nur Hashwerte! Die Klartext-Codes stehen ausschließlich im Lehrerhandbuch. */
+/** Hashwerte der Kalender-Codes. Die Codes selbst stehen offen in docs/KALENDER-CODES.md. */
 export const CALENDAR_CODES: readonly CalendarEntry[] = [
-  { stufe: 8, hash: '93b194cf4f5af7489eadda8916a1c8bb8624bb2165ba675a2147ee538060e7ba' },
-  { stufe: 9, hash: 'a20180daff5a93c24286f9a3194ec1a643a82d3527babefb796cccef04be5730' },
-  { stufe: 10, hash: 'f7b87e7b74f791e71d300d66e6b532445ce059e3a345eb9c9302689a847e282c' },
-  { stufe: 11, hash: '86431eca0b2127c83853520d0fb0b4107c8ff7b5a5a06429bd0800c9a6df80a5' },
+  { stufe: 8, hash: '2e89df1b4d2fa385e9e659181664f86d8ed297ab1dd4b1638220ee1b6c68a539' },
+  { stufe: 9, hash: '74ce8bab7368b23cf7c559ddcee66d1a4a7a5cda8e7283b3efa53e80404377fe' },
+  { stufe: 10, hash: 'd419029517bde24f549d92f3e7b8f8482bd0eee7a9886c5e657dc2d57a444626' },
+  { stufe: 11, hash: 'acbd8c3b6ca51738eae8d80ba572cb411975447a2aec91f9e71cc4d948159820' },
 ];

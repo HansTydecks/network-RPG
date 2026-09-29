@@ -91,7 +91,7 @@ Hilfreiche URL-Parameter: `?kontaktbogen` zeigt alle Grafiken auf einer Seite.
 
 **Veröffentlichen:** Bei jedem Push auf `main` baut `.github/workflows/deploy.yml` das Spiel und stellt es auf GitHub Pages. Einmalig nötig: Repository → Settings → Pages → Source: „GitHub Actions".
 
-**Kalender-Codes ändern:** `node tools/kalender-code.mjs` schlägt einen neuen Code vor und gibt den Hash aus; `node tools/kalender-code.mjs ABCD-1234` hasht einen eigenen Code. Den Hash in `src/content/calendarCodes.ts` eintragen. Klartext-Codes nie committen.
+**Kalender-Codes ändern:** `node tools/kalender-code.mjs` schlägt einen neuen Code vor und gibt den Hash aus; `node tools/kalender-code.mjs ABCD-1234` hasht einen eigenen Code. Den Hash in `src/content/calendarCodes.ts` eintragen und den Code in `docs/KALENDER-CODES.md` ändern (ein Test prüft, dass beides zusammenpasst).
 
 **Register nur erweitern:** In `src/content/registry.ts` (Karten, Items, Flags, Netzbuch, Aufgaben) nur hinten anfügen, nie umsortieren – sonst werden Speichercodes in den Heftern ungültig.
 
@@ -185,7 +185,7 @@ network-RPG/
   - An der Wand in Alex' Zimmer hängt ein **Schulkalender**. Ping erklärt ihn schon im Prolog: „Wenn ein neues Schuljahr anfängt, blätterst du hier um – aber nur mit dem Code deiner Lehrkraft."
   - Beim Umblättern erscheint eine Code-Eingabe im Retro-Stil (z. B. 8 Zeichen). Richtiger Code → Zwischensequenz „Ein Jahr später …", Alex erhält den definierten Startzustand des Kapitels (alle Items/Wissen der vorherigen Kapitel) und einen Rückblick „Was bisher geschah" (= Wiederholung). So kann eine 9. Klasse direkt mit Kap. 3 starten, auch ohne alten Spielstand.
   - Am Ende jedes Kapitels verweist die Geschichte auf den Kalender („Das Schuljahr ist vorbei. Wenn es weitergeht, weiß deine Lehrkraft, wie du umblätterst.").
-  - **Die Codes kennt nur die Lehrkraft**: Im Spielcode stehen sie nur als gesalzene Hashwerte, nie im Klartext. Die Klartext-Codes stehen ausschließlich im Lehrerhandbuch, das **nicht** im öffentlichen Repo liegt, sondern separat an Lehrkräfte geht. Einschränkung, ehrlich benannt: Ein reines Browserspiel ohne Server kann Codes nicht absolut geheim halten; der Hash macht Erraten und Nachschlagen aber praktisch unmöglich. Einmal eingegebene Codes gelten dauerhaft für den Spielstand.
+  - **Die Codes stehen offen in `docs/KALENDER-CODES.md`** (Entscheidung der Lehrkraft: „So geheim sollen sie nicht sein“). Im Spielcode stehen sie weiterhin als gesalzene Hashwerte. Einmal eingegebene Codes gelten dauerhaft für den Spielstand.
   - Jede Klassenstufe hat einen eigenen Code (Kl. 8, 9, 10, Oberstufe); ein Code springt direkt an den Anfang des passenden Kapitels. Frühere Kapitel bleiben zum Wiederholen begehbar.
 - JSON-Export/Import als Backup.
 

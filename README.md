@@ -41,9 +41,10 @@ Mehr in [`docs/TECHNIK.md`](docs/TECHNIK.md#entwickeln).
 |---|---|
 | [`docs/TECHNIK.md`](docs/TECHNIK.md) | Technischer Plan, Architektur, Meilensteine, Tests |
 | [`docs/LEHRPLAN.md`](docs/LEHRPLAN.md) | Zuordnung Lehrplan ↔ Kapitel |
+| [`docs/KALENDER-CODES.md`](docs/KALENDER-CODES.md) | Codes für den Schulkalender (Kapitel direkt starten) |
 | [`docs/MINISPIELE.md`](docs/MINISPIELE.md) | Alle Minispiele mit Klassenstufe und Lehrplanbezug |
 | [`docs/NETZBUCH.md`](docs/NETZBUCH.md) | Alle Netzbuch-Einträge (Merksätze) |
 | [`docs/PLOT.md`](docs/PLOT.md) | Figuren und vollständiger Plot mit allen Quests (**Spoiler!**) |
 | [`docs/ITEMS_UND_HILFE.md`](docs/ITEMS_UND_HILFE.md) | Hilfesystem, Items, Backtracking-Rätsel, Minispiel-Katalog |
 
-Die Codes für den Klassenstufen-Sprung (Schulkalender im Spiel) stehen bewusst **nicht** in diesem Repository. Sie gehen nur an Lehrkräfte.
+Die Codes für den Klassenstufen-Sprung (Schulkalender im Spiel) stehen in [`docs/KALENDER-CODES.md`](docs/KALENDER-CODES.md).

@@ -1,6 +1,6 @@
 // Erzeugt den Hashwert für einen Kalender-Code (Klassenstufen-Sprung).
 // Aufruf: node tools/kalender-code.mjs ABCD-1234   → Hash in src/content/calendarCodes.ts eintragen.
-// Ohne Argument wird ein neuer Zufallscode vorgeschlagen. Klartext-Codes NIE committen.
+// Ohne Argument wird ein neuer Zufallscode vorgeschlagen. Code danach auch in docs/KALENDER-CODES.md eintragen.
 import { createHash, randomInt } from 'node:crypto';
 
 const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
