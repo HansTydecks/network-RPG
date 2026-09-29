@@ -2,7 +2,7 @@ import type { MapDef } from '../../engine/world/MapDef';
 import { opaK3 } from '../dialog/kapitel3';
 import { emilK4 } from '../dialog/kapitel4';
 import { busKabelitzK5, opaEpilog, taubenschlagFinale } from '../dialog/kapitel5';
-import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, type Command } from '../../engine/script/Script';
+import { choice, give, interlude, lexicon, minigame, narrate, quest, say, setFlag, take, toast, warp, when, zaehle, type Command } from '../../engine/script/Script';
 
 export const kabelitz: MapDef = {
   id: 'kabelitz',
@@ -175,7 +175,12 @@ export const kabelitz: MapDef = {
       x: 20,
       y: 6,
       dir: 'down',
-      script: [say('morse', 'Miau.'), narrate('Morse, Opa Werners Katze, streicht dir um die Beine und schnurrt.')],
+      script: [
+        say('morse', 'Miau.'),
+        narrate('Morse, Opa Werners Katze, streicht dir um die Beine und schnurrt.'),
+        // Geheimnis: Wer Morse oft genug streichelt, bekommt ein Geschenk
+        zaehle('morse', 10, undefined, [narrate('Morse verschwindet kurz im Gebüsch und kommt mit etwas im Maul zurück. Sie legt es dir feierlich vor die Füße.'), give('morse_geschenk')]),
+      ],
       scan: {
         name: 'morse',
         klasse: 'Katze',

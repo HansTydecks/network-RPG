@@ -257,6 +257,14 @@ export const opaFinale: Script = [
 ];
 
 export const opaEpilog: Script = [
+  // Geheimnis: alle goldenen Federn gefunden
+  when({ all: [{ flag: 'federzahl_8' }, { not: { flag: 'taubenring_erhalten' } }] }, [
+    say('opa', 'Nu guck mal an – das sind ja meine alten Siegerfedern! Die hat Ping mir über die Jahre stibitzt, dieses Luder.'),
+    say('opa', 'Alle acht hast du gefunden? Dann gehört dir das hier. Mein Siegerring vom großen Taubenflug 1979.'),
+    give('taubenring_gold'),
+    setFlag('taubenring_erhalten'),
+    say('ping', 'Gurr … ich hab sie nur ausgeliehen. Ehrlich.'),
+  ]),
   say('opa', 'Na, Alex? Soll ich dir mal erzählen, wie wir früher im Fernmeldeamt Gespräche gestöpselt haben? Mit Kabeln, von Hand!'),
   say('opa', 'Das Internet macht das heute mit Paketen. Millionen pro Sekunde. Nu, gloar – auch nicht schlecht.'),
 ];

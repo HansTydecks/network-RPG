@@ -10,6 +10,7 @@ import { grubenlampeIcon, netzblickV3Icon, schluesselpaarIcon } from '../../cont
 import { caesarScheibeIcon, echtheitslupeIcon, fremderStickIcon, netzblickV2Icon, schluessel7Icon, taubenfederIcon } from '../../content/art/characters';
 import { CHARACTERS, kabelbinderIcon, usbIcon, binaerKarteIcon, fernbedienungIcon, fotoIcon, kruemelFrames, schluesselIcon, briefIcon, funkstilleSymbol, characterFrames, markeIcon, morseFrames, netzblickIcon, packetSprite, pingFrames, zettelIcon } from '../../content/art/characters';
 import { prologBackground, prologHand } from '../../content/art/prolog';
+import { blattFrames, bluetenFrames, enteFrames, flockeBild, gluehwurmBild, goldfederIcon, hundFrames, moeweFrames, morseGeschenkIcon, pingCoolFrames, schmetterlingFrames, taubenringIcon, tropfenBild, wolkenschatten } from '../../content/art/flavor';
 
 export const FONT_KEY = 'kabelitz';
 export const TILESET_KEY = 'tileset';
@@ -128,6 +129,21 @@ export function buildAllTextures(scene: Phaser.Scene) {
   addImage(scene, 'icon_maske', subnetzmaskeIcon());
   addImage(scene, 'icon_kompass', kompassIcon());
   for (const [key, bild] of Object.entries(EXPONAT_BILDER)) addImage(scene, key, bild());
+  // Flavor: Tiere, Umgebung, Geheimnisse
+  addSheet(scene, 'hund', hundFrames());
+  addSheet(scene, 'ente', enteFrames());
+  addSheet(scene, 'ping_cool', pingCoolFrames());
+  addSheet(scene, 'amb_blatt', blattFrames());
+  addSheet(scene, 'amb_bluete', bluetenFrames());
+  addSheet(scene, 'amb_falter', schmetterlingFrames());
+  addSheet(scene, 'amb_moewe', moeweFrames());
+  addImage(scene, 'amb_flocke', flockeBild());
+  addImage(scene, 'amb_gluehwurm', gluehwurmBild());
+  addImage(scene, 'amb_wolke', wolkenschatten());
+  addImage(scene, 'amb_tropfen', tropfenBild());
+  addImage(scene, 'icon_goldfeder', goldfederIcon());
+  addImage(scene, 'icon_morse_geschenk', morseGeschenkIcon());
+  addImage(scene, 'icon_taubenring', taubenringIcon());
   addSheet(scene, 'kruemel', kruemelFrames());
   addSheet(scene, 'morse', morseFrames());
   addImage(scene, 'prolog_bg', prologBackground());
@@ -156,4 +172,10 @@ export function buildAnimations(scene: Phaser.Scene) {
   scene.anims.create({ key: 'morse_idle', frames: [0, 1, 0, 0].map((f) => ({ key: 'morse', frame: f })), frameRate: 2, repeat: -1 });
   scene.anims.create({ key: 'kruemel_idle', frames: [0, 1].map((f) => ({ key: 'kruemel', frame: f })), frameRate: 2, repeat: -1 });
   scene.anims.create({ key: 'ping_flap', frames: [2, 3].map((f) => ({ key: 'ping', frame: f })), frameRate: 10, repeat: -1 });
+  scene.anims.create({ key: 'ping_cool_idle', frames: [0, 0, 0, 1].map((f) => ({ key: 'ping_cool', frame: f })), frameRate: 3, repeat: -1 });
+  scene.anims.create({ key: 'ping_cool_flap', frames: [2, 3].map((f) => ({ key: 'ping_cool', frame: f })), frameRate: 10, repeat: -1 });
+  scene.anims.create({ key: 'hund_idle', frames: [0, 0, 1, 0].map((f) => ({ key: 'hund', frame: f })), frameRate: 3, repeat: -1 });
+  scene.anims.create({ key: 'ente_idle', frames: [0, 1].map((f) => ({ key: 'ente', frame: f })), frameRate: 2, repeat: -1 });
+  scene.anims.create({ key: 'amb_falter_flug', frames: [0, 1].map((f) => ({ key: 'amb_falter', frame: f })), frameRate: 8, repeat: -1 });
+  scene.anims.create({ key: 'amb_moewe_flug', frames: [0, 1].map((f) => ({ key: 'amb_moewe', frame: f })), frameRate: 4, repeat: -1 });
 }

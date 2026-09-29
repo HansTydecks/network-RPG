@@ -33,6 +33,9 @@ import { addTouchControls, isTouchDevice, type TouchControls } from '../ui/Touch
 import type { InteractDef, MapDef, NpcDef, ScanData } from '../world/MapDef';
 import { parseMap, ueberlagerungen, type ParsedMap } from '../world/mapUtil';
 import { audio } from '../audio/Audio';
+import { Ambiente, ambienteFuer } from '../world/Ambiente';
+import { wanderSchritt } from '../world/wandern';
+import { pingMitSonnenbrille } from '../state/geheimnisse';
 import { KARTEN_LIED, type LiedId } from '../audio/musikLogic';
 import { SPIEL_DEFS } from '../../content/spiele';
 
@@ -83,6 +86,8 @@ export class WorldScene extends Phaser.Scene {
   private touch?: TouchControls;
   private turnedAt = -1000;
   private lastStepEnd = -1000;
+  private wanderPause = new Map<string, number>();
+  private ambiente?: Ambiente;
 
   constructor() {
     super('World');
@@ -128,6 +133,7 @@ export class WorldScene extends Phaser.Scene {
     deco.putTilesAt(this.parsed.deco, 0, 0);
     this.tilemap = map;
     this.cameras.main.setBackgroundColor(this.def.outside ?? PAL.gruen1);
+    for (const d of this.def.dekor ?? []) this.mapObjects.push(this.add.image(d.x * TILE, d.y * TILE, `tile_${d.tile}`).setOrigin(0).setDepth(3));
 
     this.player = this.makeActor('char_alex', x, y, dir);
     this.refreshEntities();
@@ -140,6 +146,9 @@ export class WorldScene extends Phaser.Scene {
     this.hud.setNet(false);
     this.hud.setTime(zeitLabel(this.state));
     this.updateCamera();
+    this.ambiente?.destroy();
+    const arten = ambienteFuer(id, !!this.def.outdoor, aktuelleTageszeit(this.state) === 'nacht');
+    this.ambiente = new Ambiente(this, arten, this.parsed.width * TILE, this.parsed.height * TILE);
   }
 
   private makeActor(key: string, x: number, y: number, dir: Dir, anim?: string, list = this.mapObjects): Actor {
@@ -171,7 +180,8 @@ export class WorldScene extends Phaser.Scene {
       px = this.player.x;
       py = this.player.y;
     }
-    const sprite = this.add.sprite(px * TILE, py * TILE, 'ping', 0).setOrigin(0, 0).play('ping_idle');
+    const cool = pingMitSonnenbrille();
+    const sprite = this.add.sprite(px * TILE, py * TILE, cool ? 'ping_cool' : 'ping', 0).setOrigin(0, 0).play(cool ? 'ping_cool_idle' : 'ping_idle');
     const schatten = this.add.image(0, 0, 'schatten').setOrigin(0).setDepth(5).setScale(0.75, 1);
     this.mapObjects.push(sprite, schatten);
     this.ping = { sprite, schatten, key: 'ping', x: px, y: py, dir: 'down', moving: false, fromX: px, fromY: py, t: 0, dur: WALK_MS };
@@ -247,8 +257,9 @@ export class WorldScene extends Phaser.Scene {
     a.dur = dur;
     a.moving = true;
     a.dir = dir;
-    if (a.key === 'ping') {
-      a.sprite.setFlipX(dir === 'right');
+    if (!a.key.startsWith('char_')) {
+      // Ping und Tiere schauen nach links; nach rechts wird gespiegelt
+      if (dir === 'left' || dir === 'right') a.sprite.setFlipX(dir === 'right');
       return;
     }
     const anim = `${a.key}_walk_${dir === 'right' ? 'left' : dir}`;
@@ -269,11 +280,49 @@ export class WorldScene extends Phaser.Scene {
     }
     this.stepActor(this.player, dt, true);
     if (this.ping) this.stepActor(this.ping, dt, false);
+    this.wandern(dt);
+    this.ambiente?.update(dt);
     this.net?.update(dt, this.player.x, this.player.y);
     const tint = this.net?.on ? 0x9aa8ff : 0xffffff;
     this.player.sprite.setTint(tint);
     for (const n of this.npcs) n.actor.sprite.setTint(tint);
     this.updateCamera();
+  }
+
+  /** Figuren mit `wandern` machen ab und zu einen Schritt – nur, wenn gerade nichts passiert. */
+  private wandern(dt: number) {
+    // In automatischen Browser-Tests stehen alle still, damit die Wege planbar bleiben.
+    if (navigator.webdriver) return;
+    const ruhig = !this.ui.active && !this.scriptRunning;
+    for (const n of this.npcs) {
+      const r = n.def.wandern;
+      if (!r) continue;
+      const a = n.actor;
+      if (a.moving) {
+        a.t += dt;
+        if (a.t >= a.dur) {
+          a.moving = false;
+          this.face(a, a.dir);
+        }
+        this.syncActor(a);
+        continue;
+      }
+      if (!ruhig) continue;
+      const rest = (this.wanderPause.get(n.def.id) ?? 1000 + Math.random() * 2500) - dt;
+      if (rest > 0) {
+        this.wanderPause.set(n.def.id, rest);
+        continue;
+      }
+      this.wanderPause.set(n.def.id, 1500 + Math.random() * 3500);
+      const frei = (x: number, y: number) =>
+        !this.blocked(x, y) &&
+        !(this.player.x === x && this.player.y === y) &&
+        !(this.ping && this.ping.x === x && this.ping.y === y) &&
+        !this.def.entities.some((e) => (e.kind === 'warp' || e.kind === 'trigger') && e.x === x && e.y === y);
+      const dir = wanderSchritt({ x: n.def.x, y: n.def.y }, a, r, frei);
+      if (dir) this.startMove(a, dir, 420);
+      else if (Math.random() < 0.5) this.face(a, (['up', 'down', 'left', 'right'] as const)[Math.floor(Math.random() * 4)]);
+    }
   }
 
   private stepActor(a: Actor, dt: number, isPlayer: boolean) {

@@ -35,7 +35,12 @@ export type Command =
   /** Zeigt ein Bild neben dem Dialog (null blendet es aus). */
   | { op: 'bild'; key: string | null }
   | { op: 'earn'; amount: number }
-  | { op: 'pay'; amount: number };
+  | { op: 'pay'; amount: number }
+  /**
+   * Zähler über Flags `<praefix>_1 … <praefix>_<bis>`: setzt das nächste freie Flag,
+   * zeigt `je[n-1]` (letzter Text gilt weiter, {n} = Zählerstand) und führt beim letzten Mal `dann` aus.
+   */
+  | { op: 'zaehle'; praefix: string; bis: number; je?: string[]; dann?: Script };
 
 export type Script = Command[];
 
@@ -62,7 +67,8 @@ export const minigame = (id: string): Command => ({ op: 'minigame', id });
 export const earn = (amount: number): Command => ({ op: 'earn', amount });
 export const pay = (amount: number): Command => ({ op: 'pay', amount });
 export const bild = (key: string | null): Command => ({ op: 'bild', key });
-export const faceNpc = (npc: string, dir: Dir): Command => ({ op: 'face', npc, dir });
+export const zaehle = (praefix: string, bis: number, je?: string[], dann?: Script): Command => ({ op: 'zaehle', praefix, bis, je, dann });
+export const faceNpc =(npc: string, dir: Dir): Command => ({ op: 'face', npc, dir });
 
 export function evalCond(c: Cond, s: GameState): boolean {
   if ('flag' in c) return s.flags.has(c.flag);

@@ -22,8 +22,9 @@ import { island } from './island';
 import { tokio } from './tokio';
 import { sydney } from './sydney';
 import { opas_keller } from './opas_keller';
+import { mitFlavor } from '../flavor';
 
-export const MAPS: Record<MapId, MapDef> = {
+export const MAPS: Record<MapId, MapDef> = mitFlavor({
   alex_zimmer: alexZimmer,
   kabelitz,
   wohnzimmer,
@@ -46,4 +47,4 @@ export const MAPS: Record<MapId, MapDef> = {
   tokio,
   sydney,
   opas_keller,
-};
+});

@@ -1,4 +1,4 @@
-import type { ItemId, LexiconId, MapId, QuestId } from '../../content/registry';
+import type { FlagId, ItemId, LexiconId, MapId, QuestId } from '../../content/registry';
 import type { Dir, GameState } from '../state/GameState';
 import { evalCond, type Script } from './Script';
 
@@ -102,6 +102,16 @@ export async function runScript(script: Script, host: ScriptHost): Promise<void>
         host.state.bytes = Math.max(0, host.state.bytes - cmd.amount);
         await host.bytesChanged(-cmd.amount);
         break;
+      case 'zaehle': {
+        let n = 1;
+        while (n <= cmd.bis && host.state.flags.has(`${cmd.praefix}_${n}` as FlagId)) n++;
+        if (n > cmd.bis) break;
+        host.state.flags.add(`${cmd.praefix}_${n}` as FlagId);
+        const text = cmd.je?.[Math.min(n, cmd.je.length) - 1];
+        if (text) await host.toast(text.replace('{n}', String(n)));
+        if (n === cmd.bis) await runScript(cmd.dann ?? [], host);
+        break;
+      }
     }
   }
 }

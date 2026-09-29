@@ -12,6 +12,7 @@ import { DialogBox } from '../ui/DialogBox';
 import { ListMenu } from '../ui/ListMenu';
 import { UiStack, type Modal } from '../ui/widgets';
 import { addTouchControls, isTouchDevice } from '../ui/TouchControls';
+import { konamiErkannt, pingMitSonnenbrille, setzePingSonnenbrille } from '../state/geheimnisse';
 
 /** Titelbild: nächtlicher Himmel, leuchtende Kabel, Ping fliegt vorbei. */
 export class TitleScene extends Phaser.Scene {
@@ -39,10 +40,31 @@ export class TitleScene extends Phaser.Scene {
     this.add.bitmapText(Math.round(160 - measureText(sub) / 2), 62, FONT_KEY, sub).setTint(hexToInt(PAL.gelb));
     const foot = 'Ein Informatik-Abenteuer · Kapitel 1 bis 5';
     this.add.bitmapText(Math.round(160 - measureText(foot) / 2), 168, FONT_KEY, foot).setTint(hexToInt(PAL.grau2));
-    this.ping = this.add.sprite(-20, 90, 'ping', 2).play('ping_flap');
+    this.ping = this.add.sprite(-20, 90, pingMitSonnenbrille() ? 'ping_cool' : 'ping', 2).play(pingMitSonnenbrille() ? 'ping_cool_flap' : 'ping_flap');
     if (isTouchDevice()) addTouchControls(this, this.inp).setDpadVisible(false);
+    this.konamiLauschen();
     this.cameras.main.fadeIn(400);
     this.showMenu();
+  }
+
+  /** Geheimnis: ↑↑↓↓←→←→ B A setzt Ping eine Sonnenbrille auf (oder ab). */
+  private konamiLauschen() {
+    const verlauf: string[] = [];
+    const taste = (e: KeyboardEvent) => {
+      verlauf.push(e.code);
+      if (verlauf.length > 20) verlauf.shift();
+      if (!konamiErkannt(verlauf)) return;
+      verlauf.length = 0;
+      const cool = !pingMitSonnenbrille();
+      setzePingSonnenbrille(cool);
+      this.ping.play(cool ? 'ping_cool_flap' : 'ping_flap');
+      audio.sfx('geschafft');
+      const text = cool ? 'Ping trägt jetzt eine Sonnenbrille. Sehr cool.' : 'Ping hat die Sonnenbrille wieder abgesetzt.';
+      const hinweis = this.add.bitmapText(Math.round(160 - measureText(text) / 2), 150, FONT_KEY, text).setTint(hexToInt(PAL.gelb));
+      this.time.delayedCall(3000, () => hinweis.destroy());
+    };
+    window.addEventListener('keydown', taste);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => window.removeEventListener('keydown', taste));
   }
 
   private modal<T>(make: (r: (v: T) => void) => Modal): Promise<T> {

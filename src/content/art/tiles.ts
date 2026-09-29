@@ -1,6 +1,7 @@
 import { PAL } from '../../engine/gfx/palette';
 import { PixBuf, rng, rows } from '../../engine/gfx/pixbuf';
 import { dunkler, heller, mitAlpha, mix } from '../../engine/gfx/farbe';
+import { FLAVOR_TILES } from './flavor';
 
 /**
  * Alle Kacheln (16×16) von NETZBLICK – selbst gezeichnet, als Code.
@@ -1279,6 +1280,8 @@ export const TILES: TileDef[] = [
       b.rect(6, 5, 3, 3, PAL.weiss);
     },
   },
+  // ---------- Flavor-Deko (siehe flavor.ts) ----------
+  ...FLAVOR_TILES,
   // ---------- Überlagerungen (werden automatisch gesetzt, nie in Karten) ----------
   ...kantenKacheln(),
   {

@@ -35,6 +35,10 @@ export const ITEM_IDS = [
   'netzblick_v4',
   'subnetzmaske',
   'traceroute_kompass',
+  // Geheimnisse (ohne Lehrplanbezug)
+  'goldfedern',
+  'morse_geschenk',
+  'taubenring_gold',
 ] as const;
 
 export const FLAG_IDS = [
@@ -202,7 +206,25 @@ export const FLAG_IDS = [
   'k5_streit',
   'k5_stecker',
   'spiel_ende',
+  // Geheimnisse (ohne Lehrplanbezug): Fundorte der goldenen Federn und Zähler
+  'feder_kabelitz',
+  'feder_dorfplatz',
+  'feder_museum',
+  'feder_knotenburg',
+  'feder_bibliothek',
+  'feder_silberbach',
+  'feder_stollen',
+  'feder_tokio',
+  ...zaehler('federzahl', 8),
+  ...zaehler('morse', 10),
+  ...zaehler('brunnen', 10),
+  'taubenring_erhalten',
 ] as const;
+
+/** Flags `<praefix>_1 … <praefix>_<n>` für den Script-Befehl `zaehle`. */
+function zaehler<P extends string>(praefix: P, n: number): `${P}_${number}`[] {
+  return Array.from({ length: n }, (_, i) => `${praefix}_${i + 1}` as `${P}_${number}`);
+}
 
 export const LEXICON_IDS = [
   'kabel',

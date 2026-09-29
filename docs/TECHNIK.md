@@ -77,6 +77,14 @@ Browser-Tests: Kapitel 1 komplett, Kapitel 2 Teil 1, Kapitel 5 (Weltkarte, Frank
 - Ton (`src/engine/audio/`): eigener Chiptune-Synth über WebAudio, keine Audiodateien. `musikLogic.ts` enthält die zwölf Lieder als Daten (Akkorde je Takt, handgeschriebene Melodie, Muster für Bass, Begleitung und Schlagzeug) und die Zuordnung Karte → Lied; `Audio.ts` spielt sie mit Vorausplanung ab und erzeugt die Geräusche (Sprech-Blips je Figur, Gurren von Ping, Menü, Türen, Gegenstände, richtig/falsch, geschafft, Brille). Minispiele und Kämpfe legen ihr eigenes Lied darüber, nachts und im Finale wechselt die Musik. Musik und Geräusche sind im Menü getrennt abschaltbar (gespeichert im Browser). `musik.test.ts` prüft Taktlängen, Tonumfang und dass jeder Takt mit einem Akkordton beginnt.
 - Grafik: `src/engine/gfx/veredeln.ts` gibt allen Objekt-Kacheln automatisch Licht oben links, Schatten unten rechts und einen weichen Schlagschatten; Figuren haben schattierte Haare, Wangen, Kleidung und einen Bodenschatten. Neu gezeichnet: Gras, Wege, Kopfsteinpflaster, Dielen, Parkett, Fels, Meer. `ueberlagerungen()` in `mapUtil.ts` berechnet je Karte Grasränder über Wegen, Küsten am Meer und Schatten unter Wänden (eigene Ebenen zwischen Boden und Objekten).
 
+**Flavor und Geheimnisse:**
+- `src/content/flavor/index.ts` hängt beim Laden Figuren ohne Aufgabe, Deko-Gegenstände (mit kurzen Texten), Boden-Deko (`MapDef.dekor`) und Geheimnisse an die Karten (`mitFlavor()` in `maps/index.ts`); die Story-Karten bleiben unverändert. Neue Kacheln, Figuren, Tiere und Umgebungs-Sprites stehen in `src/content/art/flavor.ts`.
+- Figuren mit `wandern: n` laufen im Radius n umher (`src/engine/world/wandern.ts`), nie auf Warps und nur, wenn gerade kein Dialog läuft.
+- `src/engine/world/Ambiente.ts`: Blätter, Schmetterlinge, Glühwürmchen, Staub, Tropfen, Möwen, Wolkenschatten je nach Karte und Tageszeit (`ambienteLogic.ts`).
+- Script-Befehl `zaehle(praefix, bis, texte, dann)` zählt über Flags `praefix_1 … praefix_bis` (goldene Federn, Morse, Wunschbrunnen). Neue Flags nur hinten im Register anfügen.
+- Konami-Code auf dem Titelbild (Sonnenbrille für Ping) wird nur im Browser gespeichert (`src/engine/state/geheimnisse.ts`).
+- Lösungen für Lehrkräfte: `docs/GEHEIMNISSE.md`. `flavor.test.ts` prüft u. a., dass Flavor-Gegenstände keine Wege versperren.
+
 ## Entwickeln
 
 ```bash

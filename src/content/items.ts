@@ -127,6 +127,21 @@ export const ITEMS: Record<ItemId, ItemDef> = {
     beschreibung: 'Eine echte Maske von Tante Ada. Aufgesetzt verdeckt sie den Geräte-Teil jeder IP-Adresse – übrig bleibt der Netz-Teil.',
     icon: 'icon_maske',
   },
+  goldfedern: {
+    name: 'Goldene Taubenfedern',
+    beschreibung: 'Glänzende Federn, versteckt an seltsamen Orten. Wer hat die bloß verloren? Ping tut sehr unschuldig.',
+    icon: 'icon_goldfeder',
+  },
+  morse_geschenk: {
+    name: 'Geschenk von Morse',
+    beschreibung: 'Eine Stoffmaus, etwas angekaut. Morse hat sie dir vor die Füße gelegt. Das ist bei Katzen eine große Ehre.',
+    icon: 'icon_morse_geschenk',
+  },
+  taubenring_gold: {
+    name: 'Goldener Taubenring',
+    beschreibung: 'Opa Werners Siegerring vom Taubenflug 1979. Für die beste Spürnase von Kabelitz.',
+    icon: 'icon_taubenring',
+  },
   traceroute_kompass: {
     name: 'Traceroute-Kompass',
     beschreibung: 'Zeigt Hop für Hop, welchen Weg ein Paket genommen hat – und wie lange jeder Abschnitt dauerte.',

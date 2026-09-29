@@ -23,6 +23,8 @@ export interface MapDef {
   outdoor?: boolean;
   /** Hintergrundfarbe außerhalb kleiner Karten. */
   outside?: string;
+  /** Reine Deko auf dem Boden (Pfützen, Laub …), begehbar und ohne Script. */
+  dekor?: { x: number; y: number; tile: string }[];
 }
 
 export type EntityDef = NpcDef | InteractDef | WarpDef | TriggerDef;
@@ -49,6 +51,8 @@ export interface NpcDef {
   /** Nur sichtbar, wenn diese Bedingung erfüllt ist. */
   visibleIf?: Cond;
   scan?: ScanData;
+  /** Läuft in diesem Radius um den Startpunkt herum (Figuren ohne feste Aufgabe). */
+  wandern?: number;
 }
 
 /** Etwas zum Untersuchen (A-Taste davor), z. B. Schild, Kalender, Computer. */
