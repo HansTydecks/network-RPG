@@ -15,6 +15,7 @@ describe('Kalender-Codes in docs/KALENDER-CODES.md', () => {
   for (const [, name, code] of zeilen)
     it(`${name}: ${code} schaltet genau diese Stufe frei`, () => {
       expect(checkCalendarCode(code, CALENDAR_CODES)).toBe(STUFE[name]);
-      expect(checkCalendarCode(code.toLowerCase().replace('-', ' '), CALENDAR_CODES)).toBe(STUFE[name]);
+      expect(checkCalendarCode(code.toLowerCase(), CALENDAR_CODES)).toBe(STUFE[name]);
+      expect(code).toMatch(/^[A-Z0-9]{4,12}$/);
     });
 });

@@ -561,7 +561,7 @@ export class WorldScene extends Phaser.Scene {
       'Lieber nicht',
     ]);
     if (c !== 0) return;
-    const code = await this.modal<string | null>((r) => new CodeInput(this, 'Code deiner Lehrkraft:', 8, r, this.inp));
+    const code = await this.modal<string | null>((r) => new CodeInput(this, 'Code deiner Lehrkraft:', 12, r, this.inp, { woerter: true }));
     if (!code) return;
     const stufe = checkCalendarCode(code, CALENDAR_CODES);
     if (stufe === null) return h.say('ping', 'Hmm, der Code stimmt nicht. Frag deine Lehrkraft nach dem richtigen Code. Gurr!');

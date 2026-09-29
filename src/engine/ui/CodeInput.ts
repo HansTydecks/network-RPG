@@ -6,7 +6,12 @@ import type { Input } from '../input/Input';
 import { drawPanel, screenContainer, setWrapped, uiText, type Modal } from './widgets';
 
 const COLS = 8;
-const KEYS = [...ALPHABET, '⌫', 'OK'];
+/** Kalender-Codes sind Wörter (z. B. ROUTER): volles Alphabet ohne Umschreiben. */
+const WORT_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+export interface CodeInputOptions {
+  woerter?: boolean;
+}
 
 /**
  * Code-Eingabe im Retro-Stil (für Kalender-Codes und Speichercodes).
@@ -21,8 +26,19 @@ export class CodeInput implements Modal {
   private cursor: Phaser.GameObjects.Graphics;
   private keyPos: { x: number; y: number; w: number }[] = [];
   private blink = 0;
+  private keys: string[];
+  private alphabet: string;
 
-  constructor(scene: Phaser.Scene, title: string, private maxLen: number, private resolve: (code: string | null) => void, private input: Input) {
+  constructor(
+    scene: Phaser.Scene,
+    title: string,
+    private maxLen: number,
+    private resolve: (code: string | null) => void,
+    private input: Input,
+    private opts: CodeInputOptions = {},
+  ) {
+    this.alphabet = opts.woerter ? WORT_ALPHABET : ALPHABET;
+    this.keys = [...this.alphabet, '⌫', 'OK'];
     input.textMode = true;
     input.takeTyped();
     this.root = screenContainer(scene, 1300);
@@ -36,11 +52,11 @@ export class CodeInput implements Modal {
     this.root.add(uiText(scene, x + 10, y + 8, title, PAL.gelb));
     this.display = uiText(scene, x + 10, y + 24, '', PAL.netzKabel);
     this.root.add(this.display);
-    KEYS.forEach((k, i) => {
+    this.keys.forEach((k, i) => {
       const col = i % COLS;
       const row = Math.floor(i / COLS);
       const kx = x + 14 + col * 26;
-      const ky = y + 50 + row * 14;
+      const ky = y + 46 + row * 14;
       const kw = k.length > 1 ? 22 : 10;
       this.keyPos.push({ x: kx, y: ky, w: kw });
       const t = uiText(scene, kx + 2, ky + 2, k);
@@ -59,15 +75,15 @@ export class CodeInput implements Modal {
 
   private refresh() {
     // Vierergruppen mit Leerzeichen, damit lange Codes umbrechen statt über den Rand zu laufen
-    const shown = groupCode(this.value).replace(/-/g, ' ');
+    const shown = this.opts.woerter ? this.value : groupCode(this.value).replace(/-/g, ' ');
     setWrapped(this.display, shown + (this.value.length < this.maxLen && Math.floor(this.blink / 400) % 2 === 0 ? '_' : ''), 216);
     const k = this.keyPos[this.sel];
     this.cursor.clear().lineStyle(1, 0xffcd75, 1).strokeRect(k.x - 1.5, k.y - 0.5, k.w + 4, 13);
   }
 
   private add(ch: string) {
-    const n = normalizeCode(ch);
-    if (n.length === 1 && ALPHABET.includes(n) && this.value.length < this.maxLen) this.value += n;
+    const n = this.opts.woerter ? ch.toUpperCase() : normalizeCode(ch);
+    if (n.length === 1 && this.alphabet.includes(n) && this.value.length < this.maxLen) this.value += n;
   }
 
   private finish(code: string | null) {
@@ -78,7 +94,7 @@ export class CodeInput implements Modal {
   }
 
   private press() {
-    const k = KEYS[this.sel];
+    const k = this.keys[this.sel];
     if (k === '⌫') this.value = this.value.slice(0, -1);
     else if (k === 'OK') this.finish(this.value);
     else this.add(k);
@@ -93,10 +109,11 @@ export class CodeInput implements Modal {
       else if (ch === '\n') return this.finish(this.value);
       else this.add(ch);
     }
-    if (input.consume('left')) this.sel = (this.sel - 1 + KEYS.length) % KEYS.length;
-    if (input.consume('right')) this.sel = (this.sel + 1) % KEYS.length;
+    const n = this.keys.length;
+    if (input.consume('left')) this.sel = (this.sel - 1 + n) % n;
+    if (input.consume('right')) this.sel = (this.sel + 1) % n;
     if (input.consume('up')) this.sel = Math.max(0, this.sel - COLS);
-    if (input.consume('down')) this.sel = Math.min(KEYS.length - 1, this.sel + COLS);
+    if (input.consume('down')) this.sel = Math.min(n - 1, this.sel + COLS);
     if (input.consume('a')) this.press();
     if (input.consume('b')) return this.finish(null);
     this.refresh();
